@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d1a64a07af0549da8465c5a231e9ea84" Name="Diagram1">
+        <EntityTypeShape EntityType="ParkingBaseModel.Address" Width="1.5" PointX="1.5" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.City" Width="1.5" PointX="1.5" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.Parking" Width="1.5" PointX="0.75" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.ParkingPlace" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.ParkingPlaceReservation" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.ParkingType" Width="1.5" PointX="1.5" PointY="20" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.PaymentHistory" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.User" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.UserCar" Width="1.5" PointX="5.25" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ParkingBaseModel.UserType" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
+        <AssociationConnector Association="ParkingBaseModel.FK_Address_City" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_Parking_Address" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_Parking_ParkingType" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_ParkingPlace_Parking" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_ParkingPlaceReservation_ParkingPlace" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_ParkingPlaceReservation_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_PaymentHistory_User" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_User_UserType" ManuallyRouted="false" />
+        <AssociationConnector Association="ParkingBaseModel.FK_UserCar_User" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

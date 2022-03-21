@@ -46,9 +46,19 @@ namespace ParkingSolution.ImportApp
                 {
                     user.UserCar.Add(new UserCar
                     {
-                        CarNumber = string.Join("", Enumerable.Repeat(new string[] { "Р", "В", "Н", "У" }.ElementAt(random.Next(0, 4)), 2))
-                        + random.Next(100, 1000) + new string[] { "Р", "В", "Н", "У" }.ElementAt(random.Next(0, 4)) 
-                        + new string[] { "105", "54" }.ElementAt(random.Next(0, 2)),
+                        CarNumber = string
+                            .Join("", Enumerable
+                                .Repeat(new string[] { "Р", "В", "Н", "У" }
+                                    .ElementAt(
+                                        random.Next(0, 4)), 2))
+                        + random
+                            .Next(100, 1000) 
+                        + new string[] { "Р", "В", "Н", "У" }
+                            .ElementAt(
+                                random.Next(0, 4))
+                        + new string[] { "105", "54" }
+                            .ElementAt(
+                                random.Next(0, 2)),
                         CarType = _carTypes
                             .ElementAt(
                                 random.Next(0, _carTypes.Count)),
