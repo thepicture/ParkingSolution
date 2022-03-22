@@ -26,7 +26,7 @@ namespace ParkingSolution.WebAPI.Controllers
         }
 
         // GET: api/Parkings/5
-        [ResponseType(typeof(Parking))]
+        [ResponseType(typeof(SerializedParking))]
         public async Task<IHttpActionResult> GetParking(int id)
         {
             Parking parking = await db.Parking.FindAsync(id);
@@ -35,7 +35,9 @@ namespace ParkingSolution.WebAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(parking);
+            return Ok(
+                new SerializedParking(parking)
+            );
         }
 
         // PUT: api/Parkings/5

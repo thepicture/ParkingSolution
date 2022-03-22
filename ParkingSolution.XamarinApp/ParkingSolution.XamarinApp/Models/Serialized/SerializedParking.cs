@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ParkingSolution.XamarinApp.Models.Serialized
 {
@@ -13,5 +14,6 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public string Address { get; set; }
         public string ParkingType { get; set; }
         public int NumberOfParkingPlaces { get; set; }
+        public IEnumerable<int> ParkingPlacesIds { get; set; }
     }
 }

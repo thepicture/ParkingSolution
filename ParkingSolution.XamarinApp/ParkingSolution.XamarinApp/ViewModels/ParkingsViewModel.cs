@@ -2,6 +2,7 @@
 using ParkingSolution.XamarinApp.Models.Helpers;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
+using ParkingSolution.XamarinApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,16 +11,22 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
 namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class ParkingsViewModel : BaseViewModel
     {
+        public SerializedParking Parking { get; set; }
         internal void OnAppearing()
         {
             Parkings = new ObservableCollection<ParkingHelper>();
-            Task.Run(() => LoadParkingsAsync());
+            Task.Run(() =>
+            {
+                LoadParkingsAsync();
+            });
         }
 
         private async void LoadParkingsAsync()
@@ -87,6 +94,34 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             get => selectedParking;
             set => SetProperty(ref selectedParking, value);
+        }
+
+        private Command goToParkingPlacesCommand;
+
+        public ICommand GoToParkingPlacesCommand
+        {
+            get
+            {
+                if (goToParkingPlacesCommand == null)
+                {
+                    goToParkingPlacesCommand = new Command(GoToParkingPlacesAsync);
+                }
+
+                return goToParkingPlacesCommand;
+            }
+        }
+
+        private async void GoToParkingPlacesAsync()
+        {
+            await Shell
+              .Current
+              .Navigation
+              .PushAsync(
+                  new ParkingPlacesPage(
+                      new ParkingPlacesViewModel(
+                          SelectedParking.Parking)
+                      )
+                  );
         }
     }
 }

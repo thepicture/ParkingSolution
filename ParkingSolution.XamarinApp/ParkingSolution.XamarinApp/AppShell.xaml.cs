@@ -13,6 +13,7 @@ namespace ParkingSolution.XamarinApp
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
             Routing.RegisterRoute(nameof(ParkingsPage), typeof(ParkingsPage));
+            Routing.RegisterRoute(nameof(ParkingPlacesPage), typeof(ParkingPlacesPage));
 
             if (IsLoggedIn())
             {

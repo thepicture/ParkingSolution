@@ -41,9 +41,12 @@
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="Center"
                          Grid.Row="1">
-                <material:MaterialButton Text="Забронировать"
+                <material:MaterialButton Command="{Binding GoToParkingPlacesCommand}"
+                                         Text="Начать парковку"
                                          FontSize="10"
-                                         Style="{StaticResource BaseButton}" />
+                                         Style="{StaticResource BaseButton}"
+                                         IsEnabled="{Binding SelectedParking.Parking.Id, FallbackValue=False}">
+                </material:MaterialButton>
                 <material:MaterialButton Text="Добавить автостоянку"
                                          FontSize="10"
                                          Style="{StaticResource BackgroundButton}">

@@ -1,5 +1,7 @@
 ﻿using ParkingSolution.WebAPI.Models.Entities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ParkingSolution.WebAPI.Models.Serialized
 {
@@ -18,6 +20,7 @@ namespace ParkingSolution.WebAPI.Models.Serialized
                       + parking.Address.City.Name;
             ParkingType = parking.ParkingType.Name;
             NumberOfParkingPlaces = parking.ParkingPlace.Count;
+            ParkingPlacesIds = parking.ParkingPlace.Select(pp => pp.Id);
         }
 
         public int Id { get; set; }
@@ -29,5 +32,6 @@ namespace ParkingSolution.WebAPI.Models.Serialized
         public string Address { get; set; }
         public string ParkingType { get; set; }
         public int NumberOfParkingPlaces { get; set; }
+        public IEnumerable<int> ParkingPlacesIds { get; set; }
     }
 }
