@@ -11,7 +11,7 @@
         <ToolbarItem Text="Добавить"
                      Command="{Binding GoToAddCarPage}" />
     </ContentPage.ToolbarItems>
-    <ScrollView>
+    <ScrollView Margin="0">
         <StackLayout BindableLayout.ItemsSource="{Binding Cars}">
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="serialized:SerializedUserCar">
@@ -24,34 +24,33 @@
                                    FontAttributes="Bold"
                                    HorizontalTextAlignment="Center" />
                             <Grid ColumnDefinitions="4*, 2*">
-                                
-                            <BoxView Color="WhiteSmoke"
-                                     HeightRequest="1" />
-                            <Frame CornerRadius="1"
-                                   BorderColor="Black">
-                            <Label FontAttributes="Bold"
-                                   HorizontalTextAlignment="Center"
-                                   VerticalTextAlignment="Center">
-                                <Label.Text>
-                                    <MultiBinding StringFormat="{}{0}{1}{2}">
-                                        <Binding Path="SeriesPartOne"/>
-                                        <Binding Path="RegistrationCode" />
-                                        <Binding Path="SeriesPartTwo" />
-                                    </MultiBinding>
-                                </Label.Text>
-                            </Label>
-                            </Frame>
+                                <BoxView Color="WhiteSmoke"
+                                         HeightRequest="1" />
+                                <Frame CornerRadius="1"
+                                       BorderColor="Black">
+                                    <Label FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}{0}{1}{2}">
+                                                <Binding Path="SeriesPartOne" />
+                                                <Binding Path="RegistrationCode" />
+                                                <Binding Path="SeriesPartTwo" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                </Frame>
                                 <Frame CornerRadius="1"
                                        BorderColor="Black"
                                        Grid.Column="1">
                                     <Grid RowDefinitions="*,*">
-                                    <Label Text="{Binding RegionCode}"
-                                           FontAttributes="Bold"
-                                           HorizontalTextAlignment="Center" />
+                                        <Label Text="{Binding RegionCode}"
+                                               FontAttributes="Bold"
+                                               HorizontalTextAlignment="Center" />
                                         <Label Text="{Binding Country}"
                                                FontAttributes="Bold"
                                                HorizontalTextAlignment="Center"
-                                               Grid.Row="1"/>
+                                               Grid.Row="1" />
                                     </Grid>
                                 </Frame>
                             </Grid>

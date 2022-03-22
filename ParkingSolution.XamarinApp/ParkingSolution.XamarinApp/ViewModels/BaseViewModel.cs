@@ -11,6 +11,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         bool isBusy = false;
+        public IDataStore<SerializedUserCar> CarDataStore =>
+            DependencyService.Get<IDataStore<SerializedUserCar>>();
         public IFeedbackService FeedbackService =>
             DependencyService.Get<IFeedbackService>();
         public IAuthenticatorService AuthenticatorService =>

@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:serialized="clr-namespace:ParkingSolution.XamarinApp.Models.Serialized"
+             x:DataType="viewmodels:AddCarViewModel"
+             x:Class="ParkingSolution.XamarinApp.Views.AddCarPage"
+             Title="Добавление автомобиля">
+    <StackLayout Margin="10,10,10,0">
+        <Picker Title="Тип автомобиля"
+                SelectedItem="{Binding SelectedCarType}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>A</x:String>
+                    <x:String>B</x:String>
+                    <x:String>C</x:String>
+                    <x:String>D</x:String>
+                    <x:String>E</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+        <Grid ColumnDefinitions="4*, 2*">
+            <Grid.Resources>
+                <Style TargetType="Entry">
+                    <Setter Property="FontSize"
+                            Value="12" />
+                </Style>
+            </Grid.Resources>
+            <BoxView Color="WhiteSmoke"
+                     HeightRequest="1"/>
+            <Frame CornerRadius="1"
+                   BorderColor="Black">
+                <Grid ColumnDefinitions="*,*,*"
+                      VerticalOptions="Center">
+                    <Entry Text="{Binding SeriesPartOne}"
+                           MaxLength="1"
+                           Keyboard="Text" 
+                           Placeholder="Серия"/>
+                    <Entry Text="{Binding RegistrationCode}"
+                           Grid.Column="1"
+                           MaxLength="3"
+                           Keyboard="Numeric" 
+                           Placeholder="Код"/>
+                    <Entry Text="{Binding SeriesPartTwo}"
+                           Grid.Column="2"
+                           MaxLength="2"
+                           Keyboard="Text" 
+                           Placeholder="Серия"/>
+                </Grid>
+            </Frame>
+            <Frame CornerRadius="1"
+                   BorderColor="Black"
+                   Grid.Column="1">
+                <Grid RowDefinitions="*,*">
+                    <Entry Text="{Binding RegionCode}"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"
+                           MaxLength="2"
+                           Keyboard="Numeric" 
+                           Placeholder="Код региона"/>
+                    <Entry Text="{Binding Country}"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"
+                           Grid.Row="1"
+                           MaxLength="3"
+                           Keyboard="Text" 
+                           Placeholder="Регион"/>
+                </Grid>
+            </Frame>
+        </Grid>
+        <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                 Text="Сохранить"
+                                 VerticalOptions="EndAndExpand"
+                                 Style="{StaticResource BaseButton}" />
+    </StackLayout>
+</ContentPage>

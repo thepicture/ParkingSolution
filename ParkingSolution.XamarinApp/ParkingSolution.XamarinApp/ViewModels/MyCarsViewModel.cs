@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
+using ParkingSolution.XamarinApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,8 +32,12 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
         }
 
-        private void PerformGoToAddCarPage()
+        private async void PerformGoToAddCarPage()
         {
+            await Shell
+            .Current
+            .GoToAsync(
+                $"{nameof(AddCarPage)}");
         }
 
         internal void OnAppearing()
