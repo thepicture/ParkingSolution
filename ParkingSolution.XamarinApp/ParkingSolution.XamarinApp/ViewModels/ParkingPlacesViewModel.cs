@@ -40,11 +40,11 @@ namespace ParkingSolution.XamarinApp.ViewModels
                         .Result
                         .Content
                         .ReadAsStringAsync();
-                    IEnumerable<SerializedParkingPlace> parkingPlacesResponse =
+                    IEnumerable<SerializedUserCar> parkingPlacesResponse =
                         JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedParkingPlace>>
+                        <IEnumerable<SerializedUserCar>>
                         (response);
-                    foreach (SerializedParkingPlace parkingPlace
+                    foreach (SerializedUserCar parkingPlace
                         in parkingPlacesResponse)
                     {
                         await Task.Delay(500);
@@ -63,10 +63,10 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
         }
 
-        private ObservableCollection<SerializedParkingPlace> parkingPlaces;
+        private ObservableCollection<SerializedUserCar> parkingPlaces;
 
         public SerializedParking Parking { get; set; }
-        public ObservableCollection<SerializedParkingPlace> ParkingPlaces
+        public ObservableCollection<SerializedUserCar> ParkingPlaces
         {
             get => parkingPlaces;
             set => SetProperty(ref parkingPlaces, value);
@@ -77,7 +77,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
         public ParkingPlacesViewModel(SerializedParking serializedParking)
         {
             Parking = serializedParking;
-            ParkingPlaces = new ObservableCollection<SerializedParkingPlace>();
+            ParkingPlaces = new ObservableCollection<SerializedUserCar>();
             Task.Run(() =>
             {
                 LoadParkingPlacesAsync();

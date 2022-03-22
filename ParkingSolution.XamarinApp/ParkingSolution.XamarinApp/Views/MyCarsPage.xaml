@@ -2,17 +2,63 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:serialized="clr-namespace:ParkingSolution.XamarinApp.Models.Serialized"
              x:DataType="viewmodels:MyCarsViewModel"
-             x:Class="ParkingSolution.XamarinApp.Views.MyCarsPage">
+             x:Class="ParkingSolution.XamarinApp.Views.MyCarsPage"
+             Title="Мои автомобили">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Добавить"
                      Command="{Binding GoToAddCarPage}" />
     </ContentPage.ToolbarItems>
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
+    <ScrollView>
+        <StackLayout BindableLayout.ItemsSource="{Binding Cars}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="serialized:SerializedUserCar">
+                    <material:MaterialCard Elevation="5"
+                                           Margin="10"
+                                           IsClickable="True">
+                        <StackLayout>
+                            <Label Text="{Binding CarType, 
+                                                  StringFormat='Автомобиль типа {0}'}"
+                                   FontAttributes="Bold"
+                                   HorizontalTextAlignment="Center" />
+                            <Grid ColumnDefinitions="4*, 2*">
+                                
+                            <BoxView Color="WhiteSmoke"
+                                     HeightRequest="1" />
+                            <Frame CornerRadius="1"
+                                   BorderColor="Black">
+                            <Label FontAttributes="Bold"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0}{1}{2}">
+                                        <Binding Path="SeriesPartOne"/>
+                                        <Binding Path="RegistrationCode" />
+                                        <Binding Path="SeriesPartTwo" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                            </Frame>
+                                <Frame CornerRadius="1"
+                                       BorderColor="Black"
+                                       Grid.Column="1">
+                                    <Grid RowDefinitions="*,*">
+                                    <Label Text="{Binding RegionCode}"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center" />
+                                        <Label Text="{Binding Country}"
+                                               FontAttributes="Bold"
+                                               HorizontalTextAlignment="Center"
+                                               Grid.Row="1"/>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </StackLayout>
+                    </material:MaterialCard>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
         </StackLayout>
-    </ContentPage.Content>
+    </ScrollView>
 </ContentPage>
