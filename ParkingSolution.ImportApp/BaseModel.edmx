@@ -81,9 +81,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CarNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CarType" Type="nvarchar" MaxLength="1" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="SeriesPartOne" Type="nvarchar" MaxLength="1" Nullable="false" />
+          <Property Name="SeriesPartTwo" Type="nvarchar" MaxLength="2" Nullable="false" />
+          <Property Name="RegistrationNumber" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="RegionCode" Type="int" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="3" Nullable="false" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -392,9 +396,13 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CarNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CarType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="SeriesPartOne" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="SeriesPartTwo" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationNumber" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="RegionCode" Type="Int32" Nullable="false" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="ParkingBaseModel.FK_UserCar_User" FromRole="UserCar" ToRole="User" />
         </EntityType>
         <EntityType Name="UserType">
@@ -601,9 +609,13 @@
           <EntitySetMapping Name="UserCar">
             <EntityTypeMapping TypeName="ParkingBaseModel.UserCar">
               <MappingFragment StoreEntitySet="UserCar">
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="RegionCode" ColumnName="RegionCode" />
+                <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
+                <ScalarProperty Name="SeriesPartTwo" ColumnName="SeriesPartTwo" />
+                <ScalarProperty Name="SeriesPartOne" ColumnName="SeriesPartOne" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="CarType" ColumnName="CarType" />
-                <ScalarProperty Name="CarNumber" ColumnName="CarNumber" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

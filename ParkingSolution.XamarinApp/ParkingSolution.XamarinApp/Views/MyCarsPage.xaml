@@ -4,11 +4,15 @@
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
              x:DataType="viewmodels:MyCarsViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.MyCarsPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Добавить"
+                     Command="{Binding GoToAddCarPage}" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

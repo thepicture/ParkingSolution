@@ -27,6 +27,11 @@ namespace ParkingSolution.ImportApp
             "Плоскостная",
         };
 
+        private static readonly IList<string> _carSeriesLetters = new List<string>
+        {
+            "А", "В", "Е", "К", "М", "Н", "О", "Р", "С", "Т", "У", "Х"
+        };
+
         private static readonly Random random = new Random();
         static void Main()
         {
@@ -44,24 +49,36 @@ namespace ParkingSolution.ImportApp
             {
                 foreach (User user in entities.User)
                 {
+                    string seriesPartOne = _carSeriesLetters.ElementAt(
+                        random.Next(0, _carSeriesLetters.Count));
+                    string seriesPartTwo = "";
+                    for (int i = 0; i < 2; i++)
+                    {
+                        seriesPartTwo += _carSeriesLetters.ElementAt(
+                        random.Next(0, _carSeriesLetters.Count));
+                    }
+                    string registrationCode = random.Next(0, 1000)
+                        .ToString();
+                    int regionCode = 77;
+                    string country = "RUS";
+                    if (registrationCode.Length == 1)
+                    {
+                        registrationCode = "00" + registrationCode;
+                    }
+                    else if (registrationCode.Length == 2)
+                    {
+                        registrationCode = "0" + registrationCode;
+                    }
                     user.UserCar.Add(new UserCar
                     {
-                        CarNumber = string
-                            .Join("", Enumerable
-                                .Repeat(new string[] { "Р", "В", "Н", "У" }
-                                    .ElementAt(
-                                        random.Next(0, 4)), 2))
-                        + random
-                            .Next(100, 1000) 
-                        + new string[] { "Р", "В", "Н", "У" }
-                            .ElementAt(
-                                random.Next(0, 4))
-                        + new string[] { "105", "54" }
-                            .ElementAt(
-                                random.Next(0, 2)),
-                        CarType = _carTypes
-                            .ElementAt(
-                                random.Next(0, _carTypes.Count)),
+                        CarType = _carTypes.ElementAt(
+                            random.Next(0, _carTypes.Count)),
+                        UserId = user.Id,
+                        SeriesPartOne = seriesPartOne,
+                        SeriesPartTwo = seriesPartTwo,
+                        RegistrationNumber = registrationCode,
+                        RegionCode = regionCode,
+                        Country = country
                     });
                 }
                 entities.SaveChanges();

@@ -15,9 +15,13 @@ namespace ParkingSolution.ImportApp
     public partial class UserCar
     {
         public int Id { get; set; }
-        public string CarNumber { get; set; }
         public string CarType { get; set; }
         public int UserId { get; set; }
+        public string SeriesPartOne { get; set; }
+        public string SeriesPartTwo { get; set; }
+        public string RegistrationNumber { get; set; }
+        public int RegionCode { get; set; }
+        public string Country { get; set; }
     
         public virtual User User { get; set; }
     }
