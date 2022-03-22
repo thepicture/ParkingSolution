@@ -101,6 +101,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="App.config" />
     <EntityDeploy Include="BaseModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

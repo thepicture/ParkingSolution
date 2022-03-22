@@ -14,7 +14,7 @@ namespace ParkingSolution.WebAPI.Controllers
 {
     public class UsersController : ApiController
     {
-        private ParkingBaseEntities db = new ParkingBaseEntities();
+        private readonly ParkingBaseEntities db = new ParkingBaseEntities();
 
         // GET: api/Users
         public IQueryable<User> GetUser()

@@ -7,6 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingSolution.ImportApp",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingSolution.WebAPI", "ParkingSolution.WebAPI\ParkingSolution.WebAPI.csproj", "{CA5B37A2-350A-4E03-8E05-D95C998EA871}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingSolution.XamarinApp.Android", "ParkingSolution.XamarinApp\ParkingSolution.XamarinApp.Android\ParkingSolution.XamarinApp.Android.csproj", "{B81ED1A4-8CEB-4B61-8558-017683642EBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingSolution.XamarinApp", "ParkingSolution.XamarinApp\ParkingSolution.XamarinApp\ParkingSolution.XamarinApp.csproj", "{F4FE9F2E-0D2B-4AA2-9784-5519A89E23FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5594A102-1B2A-41D5-AD5A-5C5611645387}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +30,16 @@ Global
 		{CA5B37A2-350A-4E03-8E05-D95C998EA871}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA5B37A2-350A-4E03-8E05-D95C998EA871}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA5B37A2-350A-4E03-8E05-D95C998EA871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B81ED1A4-8CEB-4B61-8558-017683642EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B81ED1A4-8CEB-4B61-8558-017683642EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B81ED1A4-8CEB-4B61-8558-017683642EBF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B81ED1A4-8CEB-4B61-8558-017683642EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B81ED1A4-8CEB-4B61-8558-017683642EBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B81ED1A4-8CEB-4B61-8558-017683642EBF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F4FE9F2E-0D2B-4AA2-9784-5519A89E23FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4FE9F2E-0D2B-4AA2-9784-5519A89E23FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4FE9F2E-0D2B-4AA2-9784-5519A89E23FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4FE9F2E-0D2B-4AA2-9784-5519A89E23FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
