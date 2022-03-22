@@ -1,12 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ParkingSolution.XamarinApp.Views.RegisterPage">
-    <ContentPage.Content>
+             xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:serialized="clr-namespace:ParkingSolution.XamarinApp.Models.Serialized"
+             x:DataType="viewmodels:RegisterViewModel"
+             x:Class="ParkingSolution.XamarinApp.Views.RegisterPage"
+             Title="Регистрация">
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Picker Title="Тип пользователя"
+                    SelectedItem="{Binding CurrentUserType}">
+                <Picker.ItemDisplayBinding>
+                    <Binding Path="Name"
+                             x:DataType="serialized:SerializedUserType" />
+                </Picker.ItemDisplayBinding>
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type serialized:SerializedUserType}">
+                        <serialized:SerializedUserType Id="1"
+                                                       Name="Клиент" />
+                        <serialized:SerializedUserType Id="2"
+                                                       Name="Сотрудник" />
+                        <serialized:SerializedUserType Id="3"
+                                                       Name="Администратор" />
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+            <material:MaterialTextField Text="{Binding PhoneNumber}"
+                                        Placeholder="Введите номер телефона"
+                                        LeadingIcon="call"
+                                        InputType="Text"
+                                        MaxLength="50"
+                                        AlwaysShowUnderline="True"
+                                        TintColor="{StaticResource Primary}"
+                                        HelperText="* Обязательно" />
+            <material:MaterialTextField Text="{Binding Password}"
+                                        Placeholder="Введите пароль"
+                                        LeadingIcon="write_letter"
+                                        InputType="Password"
+                                        MaxLength="50"
+                                        AlwaysShowUnderline="True"
+                                        TintColor="{StaticResource Primary}"
+                                        HelperText="* Обязательно" />
+            <material:MaterialButton Command="{Binding RegisterCommand}"
+                                     Text="Зарегистрироваться"
+                                     VerticalOptions="EndAndExpand"
+                                     Style="{StaticResource BaseButton}" />
+            <Label Text="* Регистрируясь, вы даёте согласие на политику приложения"
+                   HorizontalTextAlignment="Center"
+                   Padding="10" />
         </StackLayout>
-    </ContentPage.Content>
 </ContentPage>

@@ -17,8 +17,8 @@ namespace ParkingSolution.XamarinApp.Views
 
         protected override void OnAppearing()
         {
-            _viewModel.OnAppearing();
             base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }

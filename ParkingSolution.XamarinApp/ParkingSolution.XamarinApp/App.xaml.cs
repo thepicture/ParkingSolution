@@ -16,6 +16,7 @@ namespace ParkingSolution.XamarinApp
 
             DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<ApiAuthenticatorService>();
+            DependencyService.Register<ApiRegistrationService>();
 
             MainPage = new AppShell();
         }

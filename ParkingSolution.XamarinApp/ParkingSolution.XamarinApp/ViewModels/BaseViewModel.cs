@@ -1,4 +1,5 @@
-﻿using ParkingSolution.XamarinApp.Services;
+﻿using ParkingSolution.XamarinApp.Models.Serialized;
+using ParkingSolution.XamarinApp.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
             DependencyService.Get<IFeedbackService>();
         public IAuthenticatorService AuthenticatorService =>
             DependencyService.Get<IAuthenticatorService>();
+        public IRegistrationService<SerializedUser> RegistrationService =>
+           DependencyService.Get<IRegistrationService<SerializedUser>>();
         public bool IsBusy
         {
             get { return isBusy; }
