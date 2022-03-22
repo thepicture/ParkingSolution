@@ -19,7 +19,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class ParkingsViewModel : BaseViewModel
     {
-        public SerializedParking Parking { get; set; }
+        private bool showAsMap = true;
         internal void OnAppearing()
         {
             Parkings = new ObservableCollection<ParkingHelper>();
@@ -63,12 +63,15 @@ namespace ParkingSolution.XamarinApp.ViewModels
                             );
                         Position position = approximateLocations
                             .FirstOrDefault();
-                        Parkings.Add(new ParkingHelper
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            Address = parking.Address,
-                            Description = parking.ParkingType,
-                            Position = position,
-                            Parking = parking
+                            Parkings.Add(new ParkingHelper
+                            {
+                                Address = parking.Address,
+                                Description = parking.ParkingType,
+                                Position = position,
+                                Parking = parking
+                            });
                         });
                     }
                 }
@@ -111,8 +114,18 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
         }
 
-        private async void GoToParkingPlacesAsync()
+        public bool IsShowAsMap
         {
+            get => showAsMap;
+            set => SetProperty(ref showAsMap, value);
+        }
+
+        private async void GoToParkingPlacesAsync(object param)
+        {
+            if (param != null)
+            {
+                SelectedParking = param as ParkingHelper;
+            }
             await Shell
               .Current
               .Navigation
@@ -122,6 +135,26 @@ namespace ParkingSolution.XamarinApp.ViewModels
                           SelectedParking.Parking)
                       )
                   );
+        }
+
+        private Command toggleViewTypeCommand;
+
+        public ICommand ToggleViewTypeCommand
+        {
+            get
+            {
+                if (toggleViewTypeCommand == null)
+                {
+                    toggleViewTypeCommand = new Command(ToggleViewType);
+                }
+
+                return toggleViewTypeCommand;
+            }
+        }
+
+        private void ToggleViewType()
+        {
+            IsShowAsMap = !IsShowAsMap;
         }
     }
 }
