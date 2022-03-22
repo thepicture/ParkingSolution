@@ -14,10 +14,6 @@ namespace ParkingSolution.XamarinApp
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
             Routing.RegisterRoute(nameof(ParkingsPage), typeof(ParkingsPage));
 
-            if (VersionTracking.IsFirstLaunchForCurrentBuild)
-            {
-                SecureStorage.RemoveAll();
-            }
             if (IsLoggedIn())
             {
                 SetShellStacksDependingOnRole();

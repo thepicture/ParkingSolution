@@ -6,52 +6,59 @@
              x:DataType="viewmodels:LoginViewModel"
              Title="Авторизация"
              x:Class="ParkingSolution.XamarinApp.Views.LoginPage">
-    <ScrollView Margin="0,40,0,0">
-        <StackLayout Padding="10,0,10,0"
-                     VerticalOptions="Fill">
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="Center">
-                <Image Source="logo"
-                       WidthRequest="110" />
-                <StackLayout VerticalOptions="Center">
-                    <Label Text="АВТОСТОЯНКА"
-                           Grid.Column="1"
-                           FontSize="20"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-                    <Label Text="Просто паркуйся"
-                           Margin="0,-5,0,0"
-                           VerticalTextAlignment="Start"
-                           Grid.Row="1"
-                           Grid.Column="1" />
-                </StackLayout>
+    <StackLayout Padding="10"
+                 VerticalOptions="Fill">
+        <StackLayout Orientation="Horizontal"
+                     HorizontalOptions="Center">
+            <Image Source="logo"
+                   WidthRequest="110" />
+            <StackLayout VerticalOptions="Center">
+                <Label Text="АВТОСТОЯНКА"
+                       Grid.Column="1"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="Black" />
+                <Label Text="Просто паркуйся"
+                       Margin="0,-5,0,0"
+                       VerticalTextAlignment="Start"
+                       Grid.Row="1"
+                       Grid.Column="1" />
             </StackLayout>
-            <material:MaterialTextField Text="{Binding PhoneNumber}"
-                                        Placeholder="Введите номер телефона"
-                                        InputType="Telephone"
-                                        MaxLength="50"
-                                        LeadingIcon="call"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}" />
-            <material:MaterialTextField Text="{Binding Password}"
-                                        Placeholder="Введите пароль"
-                                        InputType="Password"
-                                        MaxLength="50"
-                                        LeadingIcon="write_letter"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}" />
-            <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
-                                       Text="Запомнить" />
-            <Grid ColumnDefinitions="*,*"
-                         VerticalOptions="EndAndExpand">
+        </StackLayout>
+        <material:MaterialTextField Text="{Binding PhoneNumber}"
+                                    Placeholder="Введите номер телефона"
+                                    InputType="Telephone"
+                                    MaxLength="50"
+                                    LeadingIcon="call"
+                                    AlwaysShowUnderline="True"
+                                    TintColor="{StaticResource Primary}" />
+        <material:MaterialTextField Text="{Binding Password}"
+                                    Placeholder="Введите пароль"
+                                    InputType="Password"
+                                    MaxLength="50"
+                                    LeadingIcon="write_letter"
+                                    AlwaysShowUnderline="True"
+                                    TintColor="{StaticResource Primary}" />
+        <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
+                                   Text="Запомнить" />
+        <Grid ColumnDefinitions="*,*"
+              VerticalOptions="EndAndExpand">
             <material:MaterialButton Command="{Binding LoginCommand}"
                                      Text="Войти"
-                                     Style="{StaticResource BaseButton}" />
+                                     Style="{StaticResource BaseButton}">
+                <material:MaterialButton.Triggers>
+                    <DataTrigger TargetType="material:MaterialButton"
+                                 Binding="{Binding IsBusy}"
+                                 Value="True">
+                        <Setter Property="IsEnabled"
+                                Value="False" />
+                    </DataTrigger>
+                </material:MaterialButton.Triggers>
+            </material:MaterialButton>
             <material:MaterialButton Command="{Binding ExitCommand}"
                                      Text="Выход"
-                                     Style="{StaticResource BackgroundButton}" 
-                                     Grid.Column="1"/>
-            </Grid>
-        </StackLayout>
-    </ScrollView>
+                                     Style="{StaticResource BackgroundButton}"
+                                     Grid.Column="1" />
+        </Grid>
+    </StackLayout>
 </ContentPage>

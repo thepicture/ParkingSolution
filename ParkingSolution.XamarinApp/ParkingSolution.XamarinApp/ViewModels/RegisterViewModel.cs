@@ -47,6 +47,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void RegisterAsync()
         {
+            IsBusy = true;
             StringBuilder validationErrors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(PhoneNumber))
             {
@@ -100,6 +101,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 await FeedbackService.InformError(
                     RegistrationService.ValidationResult);
             }
+            IsBusy = false;
         }
 
         private string password;

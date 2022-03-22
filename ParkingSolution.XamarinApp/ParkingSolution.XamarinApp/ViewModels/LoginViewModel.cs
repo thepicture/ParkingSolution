@@ -48,6 +48,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void LoginAsync()
         {
+            IsBusy = true;
             StringBuilder validationErrors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(PhoneNumber))
             {
@@ -106,6 +107,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 await FeedbackService.InformError("Неверный логин или пароль");
             }
+            IsBusy = false;
         }
 
         private Command exitCommand;
