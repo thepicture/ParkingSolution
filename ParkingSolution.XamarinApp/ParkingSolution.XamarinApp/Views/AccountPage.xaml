@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             x:DataType="viewmodels:AccountViewModel"
+             x:Class="ParkingSolution.XamarinApp.Views.AccountPage"
+             Title="Мой аккаунт">
+    <ui:MaterialCard HorizontalOptions="FillAndExpand"
+                     Margin="20"
+                     Elevation="5"
+                     IsClickable="True">
+        <StackLayout>
+            <Label Text="{Binding PhoneNumber, StringFormat='+{0}'}"
+                   HorizontalTextAlignment="Center"
+                   FontAttributes="Bold"
+                   FontSize="Title" />
+            <BoxView Color="WhiteSmoke"
+                     HeightRequest="1" />
+            <Label Text="{Binding Role, StringFormat='Роль: {0}'}"
+                   HorizontalOptions="Center" />
+            <ui:MaterialButton Command="{Binding GoToMyCarsPageCommand}"
+                               Text="Мои автомобили"
+                               VerticalOptions="EndAndExpand" 
+                               Style="{StaticResource BaseButton}"/>
+            <ui:MaterialButton Command="{Binding ExitLoginCommand}"
+                               Text="Выйти из аккаунта"
+                               VerticalOptions="End"
+                               Style="{StaticResource BackgroundButton}"/>
+        </StackLayout>
+    </ui:MaterialCard>
+</ContentPage>

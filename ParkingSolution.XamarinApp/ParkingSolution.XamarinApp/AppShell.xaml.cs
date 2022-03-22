@@ -73,6 +73,14 @@ namespace ParkingSolution.XamarinApp
                 default:
                     break;
             }
+            CommonTabBar
+                       .Items.Add(new ShellContent
+                       {
+                           Route = nameof(AccountPage),
+                           Icon = "address",
+                           Title = "Аккаунт",
+                           ContentTemplate = new DataTemplate(typeof(AccountPage))
+                       });
         }
     }
 }
