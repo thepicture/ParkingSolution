@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:helpers="clr-namespace:ParkingSolution.XamarinApp.Models.Helpers"
+             xmlns:services="clr-namespace:ParkingSolution.XamarinApp.Services"
+             x:DataType="viewmodels:ParkingsViewModel"
+             x:Class="ParkingSolution.XamarinApp.Views.ParkingsPage"
+             Title="Автостоянки">
+    <Grid RowDefinitions="7*,2*"
+          x:DataType="viewmodels:ParkingsViewModel">
+        <maps:Map ItemsSource="{Binding Parkings}"
+                  IsShowingUser="True"
+                  x:Name="ParkingsMap">
+            <maps:Map.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type helpers:ParkingHelper}">
+                    <maps:Pin Position="{Binding Position}"
+                              Address="{Binding Address}"
+                              MarkerClicked="OnPinClicked">
+                        <maps:Pin.Label>
+                            <MultiBinding StringFormat="{}Зона {0} - {1}">
+                                <Binding Path="Parking.Id" />
+                                <Binding Path="Address" />
+                            </MultiBinding>
+                        </maps:Pin.Label>
+                    </maps:Pin>
+                </DataTemplate>
+            </maps:Map.ItemTemplate>
+        </maps:Map>
+        <StackLayout Grid.Row="1"
+                     VerticalOptions="CenterAndExpand">
+            <Label Text="{Binding SelectedParking.Parking.NumberOfParkingPlaces,
+                                  StringFormat='{}Число мест: {0}',
+                                  FallbackValue=Выберите автостоянку на карте}"
+                   HorizontalTextAlignment="Center"
+                   Margin="5"
+                   HorizontalOptions="Center" />
+            <StackLayout Orientation="Horizontal"
+                         VerticalOptions="EndAndExpand"
+                         HorizontalOptions="Center"
+                         Grid.Row="1">
+                <material:MaterialButton Text="Забронировать"
+                                         FontSize="10"
+                                         Style="{StaticResource BaseButton}" />
+                <material:MaterialButton Text="Добавить автостоянку"
+                                         FontSize="10"
+                                         Style="{StaticResource BackgroundButton}">
+                    <material:MaterialButton.Triggers>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                     Value="Клиент">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </material:MaterialButton.Triggers>
+                </material:MaterialButton>
+            </StackLayout>
+        </StackLayout>
+    </Grid>
+</ContentPage>

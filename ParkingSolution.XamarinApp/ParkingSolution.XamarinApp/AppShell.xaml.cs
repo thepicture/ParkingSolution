@@ -12,6 +12,7 @@ namespace ParkingSolution.XamarinApp
             InitializeComponent();
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
+            Routing.RegisterRoute(nameof(ParkingsPage), typeof(ParkingsPage));
 
             if (VersionTracking.IsFirstLaunchForCurrentBuild)
             {
@@ -63,6 +64,14 @@ namespace ParkingSolution.XamarinApp
                 case "Сотрудник":
                     break;
                 case "Клиент":
+                    CommonTabBar
+                        .Items.Add(new ShellContent
+                        {
+                            Route = nameof(ParkingsPage),
+                            Icon = "location",
+                            Title = "Парковки",
+                            ContentTemplate = new DataTemplate(typeof(ParkingsPage))
+                        });
                     break;
                 default:
                     break;

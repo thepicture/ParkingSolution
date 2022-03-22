@@ -22,6 +22,7 @@ namespace ParkingSolution.XamarinApp.Services
                 .Encode(phoneNumber, password);
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = TimeSpan.FromSeconds(10);
                 client.DefaultRequestHeaders.Authorization =
                      new AuthenticationHeaderValue("Basic",
                                                    encodedPhoneNumberAndPassword);
