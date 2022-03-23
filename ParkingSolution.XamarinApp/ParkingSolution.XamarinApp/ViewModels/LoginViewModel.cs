@@ -1,7 +1,7 @@
-﻿using ParkingSolution.XamarinApp.Services;
+﻿using ParkingSolution.XamarinApp.Models;
+using ParkingSolution.XamarinApp.Services;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -70,15 +70,9 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
 
             bool isAuthenticated;
+            string rawPhoneNumber = MaskDeleter.DeleteMask(PhoneNumber);
             try
             {
-                string rawPhoneNumber = PhoneNumber
-                    .Where(l =>
-                    {
-                        return char.IsDigit(l);
-                    })
-                    .Aggregate("",
-                               (l1, l2) => l1 + l2);
                 isAuthenticated = await AuthenticatorService
                 .IsCorrectAsync(rawPhoneNumber, Password);
             }
@@ -95,7 +89,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 string encodedLoginAndPassword =
                     PhoneNumberAndPasswordToBasicEncoder
-                    .Encode(PhoneNumber, Password);
+                    .Encode(rawPhoneNumber, Password);
                 if (IsRememberMe)
                 {
                     await SecureStorage

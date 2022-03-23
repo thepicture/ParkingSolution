@@ -1,4 +1,5 @@
-﻿using ParkingSolution.XamarinApp.Models.Serialized;
+﻿using ParkingSolution.XamarinApp.Models;
+using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -49,7 +50,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             IsBusy = true;
             StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(PhoneNumber))
+            if (string.IsNullOrWhiteSpace(PhoneNumber)
+                || PhoneNumber.Length != 18)
             {
                 _ = validationErrors.AppendLine("Введите номер телефона");
             }
@@ -66,12 +68,14 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 await FeedbackService.InformError(
                     validationErrors.ToString());
+                IsBusy = false;
                 return;
             }
 
+            string rawPhoneNumber = MaskDeleter.DeleteMask(PhoneNumber);
             SerializedUser identity = new SerializedUser
             {
-                PhoneNumber = PhoneNumber,
+                PhoneNumber = rawPhoneNumber,
                 Password = Password,
                 UserTypeId = CurrentUserType.Id
             };
@@ -88,6 +92,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 await FeedbackService.Inform("При регистрации " +
                     "возникла неизвестная ошибка. " +
                     "Проверьте подключение к сети");
+                IsBusy = false;
                 return;
             }
             if (isRegistered)

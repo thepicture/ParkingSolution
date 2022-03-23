@@ -4,6 +4,7 @@
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:serialized="clr-namespace:ParkingSolution.XamarinApp.Models.Serialized"
+             xmlns:behaviors="clr-namespace:ParkingSolution.XamarinApp.Behaviors"
              x:DataType="viewmodels:RegisterViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.RegisterPage"
              Title="Регистрация">
@@ -28,11 +29,15 @@
         <material:MaterialTextField Text="{Binding PhoneNumber}"
                                     Placeholder="Введите номер телефона"
                                     LeadingIcon="call"
-                                    InputType="Text"
-                                    MaxLength="50"
+                                    InputType="Telephone"
+                                    MaxLength="18"
                                     AlwaysShowUnderline="True"
                                     TintColor="{StaticResource Primary}"
-                                    HelperText="* Обязательно" />
+                                    HelperText="* Обязательно">
+            <material:MaterialTextField.Behaviors>
+                <behaviors:MaskedBehavior Mask="+X (XXX) XXX XX-XX"/>
+            </material:MaterialTextField.Behaviors>
+        </material:MaterialTextField>
         <material:MaterialTextField Text="{Binding Password}"
                                     Placeholder="Введите пароль"
                                     LeadingIcon="write_letter"
