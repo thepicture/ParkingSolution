@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:behaviors="clr-namespace:ParkingSolution.XamarinApp.Behaviors"
              x:DataType="viewmodels:LoginViewModel"
              Title="Авторизация"
              x:Class="ParkingSolution.XamarinApp.Views.LoginPage">
@@ -28,10 +29,14 @@
         <material:MaterialTextField Text="{Binding PhoneNumber}"
                                     Placeholder="Введите номер телефона"
                                     InputType="Telephone"
-                                    MaxLength="50"
+                                    MaxLength="18"
                                     LeadingIcon="call"
                                     AlwaysShowUnderline="True"
-                                    TintColor="{StaticResource Primary}" />
+                                    TintColor="{StaticResource Primary}">
+            <material:MaterialTextField.Behaviors>
+                <behaviors:MaskedBehavior Mask="+X (XXX) XXX-XX-XX"/>
+            </material:MaterialTextField.Behaviors>
+        </material:MaterialTextField>
         <material:MaterialTextField Text="{Binding Password}"
                                     Placeholder="Введите пароль"
                                     InputType="Password"

@@ -1,6 +1,7 @@
 ﻿using ParkingSolution.XamarinApp.Services;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -50,7 +51,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             IsBusy = true;
             StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(PhoneNumber))
+            if (string.IsNullOrWhiteSpace(PhoneNumber)
+                || PhoneNumber.Length != 18)
             {
                 _ = validationErrors.AppendLine("Введите номер телефона");
             }
@@ -63,14 +65,22 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 await FeedbackService.InformError(
                     validationErrors.ToString());
+                IsBusy = false;
                 return;
             }
 
             bool isAuthenticated;
             try
             {
+                string rawPhoneNumber = PhoneNumber
+                    .Where(l =>
+                    {
+                        return char.IsDigit(l);
+                    })
+                    .Aggregate("",
+                               (l1, l2) => l1 + l2);
                 isAuthenticated = await AuthenticatorService
-                .IsCorrectAsync(PhoneNumber, Password);
+                .IsCorrectAsync(rawPhoneNumber, Password);
             }
             catch (Exception ex)
             {
@@ -78,6 +88,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 await FeedbackService.Inform("Подключение к интернету " +
                      "отсутствует, проверьте подключение " +
                      "и попробуйте ещё раз");
+                IsBusy = false;
                 return;
             }
             if (isAuthenticated)
