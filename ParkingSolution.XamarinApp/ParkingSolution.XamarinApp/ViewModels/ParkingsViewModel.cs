@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microcharts;
+using Newtonsoft.Json;
 using ParkingSolution.XamarinApp.Models.Helpers;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
@@ -35,6 +36,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = TimeSpan.FromSeconds(10);
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",
                                                 AppIdentity.AuthorizationValue);
@@ -79,8 +81,16 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform("Парковки не подгружены. " +
-                        "Перезайдите на страницу");
+                    await FeedbackService.Inform("Парковки " +
+                        "не загружены в связи с изменением " +
+                        "бизнес-процессов. Обратитесь к " +
+                        "администратору");
+                }
+                catch (TimeoutException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    await FeedbackService.Inform("Время ожидания " +
+                        "загрузки истекло. Обновите страницу");
                 }
             }
             IsBusy = false;
@@ -165,6 +175,38 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private void ToggleViewType()
         {
             IsShowAsMap = !IsShowAsMap;
+        }
+
+        private Command goToParkingPriceCommand;
+
+        public ICommand GoToParkingPriceCommand
+        {
+            get
+            {
+                if (goToParkingPriceCommand == null)
+                {
+                    goToParkingPriceCommand = new Command(GoToParkingPriceAsync);
+                }
+
+                return goToParkingPriceCommand;
+            }
+        }
+
+        private async void GoToParkingPriceAsync(object param)
+        {
+            if (param != null)
+            {
+                SelectedParking = param as ParkingHelper;
+            }
+            await Shell
+           .Current
+           .Navigation
+           .PushAsync(
+               new ParkingPricePage(
+                   new ParkingPriceViewModel(
+                       SelectedParking.Parking)
+                   )
+               );
         }
     }
 }

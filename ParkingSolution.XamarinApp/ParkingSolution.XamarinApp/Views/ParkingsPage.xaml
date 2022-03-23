@@ -61,15 +61,25 @@
                                            HorizontalTextAlignment="Center" />
                                     <BoxView Color="WhiteSmoke"
                                              HeightRequest="1" />
-                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                 Path=BindingContext}"
-                                                             Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                               AncestorType={x:Type views:ParkingsPage}}, 
                                                                                               Path=BindingContext.GoToParkingPlacesCommand}"
-                                                             Text="Начать парковку"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BaseButton}">
-                                    </material:MaterialButton>
+                                                                 Text="Начать парковку"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BaseButton}">
+                                        </material:MaterialButton>
+                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                                Path=BindingContext}"
+                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                                              AncestorType={x:Type views:ParkingsPage}}, 
+                                                                                              Path=BindingContext.GoToParkingPriceCommand}"
+                                                                 Text="Стоимость"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 Grid.Column="1">
+                                        </material:MaterialButton>
                                 </StackLayout>
                             </material:MaterialCard>
                         </DataTemplate>
@@ -89,13 +99,13 @@
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="Center"
                          Grid.Row="1">
-                <material:MaterialButton Command="{Binding GoToParkingPlacesCommand}"
-                                         Text="Начать парковку"
-                                         FontSize="10"
-                                         Style="{StaticResource BaseButton}"
-                                         IsEnabled="{Binding SelectedParking.Parking.Id, 
+                    <material:MaterialButton Command="{Binding GoToParkingPlacesCommand}"
+                                             Text="Начать парковку"
+                                             FontSize="10"
+                                             Style="{StaticResource BaseButton}"
+                                             IsEnabled="{Binding SelectedParking.Parking.Id, 
                                                              FallbackValue=False}">
-                </material:MaterialButton>
+                    </material:MaterialButton>
                 <material:MaterialButton Text="Добавить автостоянку"
                                          FontSize="10"
                                          Style="{StaticResource BackgroundButton}">

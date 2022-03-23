@@ -2,6 +2,7 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:resources="clr-namespace:XF.Material.Forms.Resources;assembly=XF.Material"
              x:Class="ParkingSolution.XamarinApp.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -61,10 +62,15 @@
                 <Setter Property="BackgroundColor"
                         Value="White" />
             </Style>
-            <Style TargetType="material:MaterialCheckbox">
-                <Setter Property="SelectedColor"
-                        Value="{StaticResource Primary}" />
-            </Style>
+            <resources:MaterialConfiguration x:Key="CommonMaterial">
+                <resources:MaterialConfiguration.ColorConfiguration>
+                    <resources:MaterialColorConfiguration>
+                        <resources:MaterialColorConfiguration.Secondary>
+                            <Color>#C02F1D</Color>
+                        </resources:MaterialColorConfiguration.Secondary>
+                    </resources:MaterialColorConfiguration>
+                </resources:MaterialConfiguration.ColorConfiguration>
+            </resources:MaterialConfiguration>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

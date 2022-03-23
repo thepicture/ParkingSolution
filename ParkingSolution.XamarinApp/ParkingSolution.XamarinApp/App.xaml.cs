@@ -12,7 +12,15 @@ namespace ParkingSolution.XamarinApp
         public App()
         {
             InitializeComponent();
-            XF.Material.Forms.Material.Init(this);
+            XF.Material.Forms
+                .Material
+                .Init(
+                this,
+                (XF
+                .Material
+                .Forms
+                .Resources
+                .MaterialConfiguration)Resources["CommonMaterial"]);
 
             DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<ApiAuthenticatorService>();
