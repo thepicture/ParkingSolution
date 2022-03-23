@@ -76,7 +76,7 @@ namespace ParkingSolution.ImportApp
                         UserId = user.Id,
                         SeriesPartOne = seriesPartOne,
                         SeriesPartTwo = seriesPartTwo,
-                        RegistrationNumber = registrationCode,
+                        RegistrationCode = registrationCode,
                         RegionCode = regionCode,
                         Country = country
                     });

@@ -19,7 +19,29 @@
                             <Label Text="{Binding CarType, 
                                                   StringFormat='{}Тип машины: {0}'}"
                                    FontAttributes="Bold"
-                                   HorizontalTextAlignment="Center"/>
+                                   HorizontalTextAlignment="Center" />
+                            <BoxView Color="WhiteSmoke"
+                                     HeightRequest="1" />
+                            <StackLayout BindableLayout.ItemsSource="{Binding Reservations}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="serialized:SerializedParkingPlaceReservation">
+                                        <material:MaterialCard Elevation="5"
+                                                               Margin="10"
+                                                               IsClickable="True">
+                                            <Label HorizontalTextAlignment="Center">
+                                                <Label.Text>
+                                                    <MultiBinding StringFormat="Занято 
+                                                                  с {0:yyyy-MM-dd hh:mm} 
+                                                                  до {1:yyyy-MM-dd hh:mm}">
+                                                        <Binding Path="FromDateTime" />
+                                                        <Binding Path="ToDateTime" />
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                        </material:MaterialCard>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
                             <BoxView Color="WhiteSmoke"
                                      HeightRequest="1" />
                             <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 

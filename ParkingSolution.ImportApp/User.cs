@@ -17,7 +17,6 @@ namespace ParkingSolution.ImportApp
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.ParkingPlaceReservation = new HashSet<ParkingPlaceReservation>();
             this.PaymentHistory = new HashSet<PaymentHistory>();
             this.UserCar = new HashSet<UserCar>();
         }
@@ -27,8 +26,6 @@ namespace ParkingSolution.ImportApp
         public string Password { get; set; }
         public int UserTypeId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ParkingPlaceReservation> ParkingPlaceReservation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PaymentHistory> PaymentHistory { get; set; }
         public virtual UserType UserType { get; set; }

@@ -149,17 +149,19 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 ParkingPlace.Reservations
                 .Where(pp =>
                 {
-                    return (pp.ToDateTime == null
-                    && pp.FromDateTime > FromDateTime)
-                    || pp.FromDateTime < FromDateTime
-                    || pp.ToDateTime < ToDateTime;
+                    return pp.FromDateTime < FromDateTime
+                    && pp.ToDateTime > ToDateTime;
                 });
             if (conflictPlaces
                 .Count() > 0)
             {
-                await FeedbackService.InformError($"В назначенное время " +
-                    "уже есть бронировки. Попробуйте изменить дату начала " +
-                    $"начиная с {conflictPlaces.OrderBy(c => c.FromDateTime).Last().FromDateTime}");
+                DateTime recommendDateTime = conflictPlaces
+                    .OrderBy(cp => cp.ToDateTime)
+                    .Last()
+                    .ToDateTime;
+                await FeedbackService.InformError("В назначенное время " +
+                    "уже есть бронировки. Выберите дату начала " +
+                    $"начиная с {recommendDateTime:yyyy-MM-dd hh:mm}");
                 return;
             }
 
@@ -169,6 +171,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 new SerializedParkingPlaceReservation
                 {
                     FromDateTime = FromDateTime,
+                    ToDateTime = IsKnownToDate ? ToDateTime : FromDateTime.AddHours(1),
                     CarId = SelectedCar.Id,
                     ParkingPlaceId = ParkingPlace.Id
                 };
@@ -184,9 +187,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
             else
             {
-                await FeedbackService.InformError("В указанное время " +
-                    "парковочное место уже забронировано. " +
-                    "Измените интервал времени на более поздний");
+                await FeedbackService.InformError("При сохранении " +
+                    "произошла ошибка. Попробуйте ещё раз");
             }
 
             IsBusy = false;
@@ -272,7 +274,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             set => SetProperty(ref calculatedCostInRubles, value);
         }
 
-        private DateTime fromDateTime = DateTime.Now.AddHours(1);
+        private DateTime fromDateTime = DateTime.Now.AddMinutes(10);
 
         public DateTime FromDateTime
         {
@@ -286,7 +288,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
         }
 
-        private DateTime toDateTime = DateTime.Now.AddHours(2);
+        private DateTime toDateTime = DateTime.Now.AddHours(1);
 
         public DateTime ToDateTime
         {

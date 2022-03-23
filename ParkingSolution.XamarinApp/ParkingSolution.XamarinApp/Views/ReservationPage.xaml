@@ -67,7 +67,6 @@
                     </Label.Triggers>
                 </Label>
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
-                                         Text="Забронировать"
                                          VerticalOptions="EndAndExpand"
                                          Style="{StaticResource BaseButton}">
                     <material:MaterialButton.Triggers>
@@ -82,6 +81,18 @@
                                      Value="True">
                             <Setter Property="IsEnabled"
                                     Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding IsKnownToDate}"
+                                     Value="True">
+                            <Setter Property="Text"
+                                    Value="Забронировать" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding IsKnownToDate}"
+                                     Value="False">
+                            <Setter Property="Text"
+                                    Value="Забронировать на час" />
                         </DataTrigger>
                     </material:MaterialButton.Triggers>
                 </material:MaterialButton>

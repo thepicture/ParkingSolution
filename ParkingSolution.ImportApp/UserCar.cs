@@ -19,7 +19,7 @@ namespace ParkingSolution.ImportApp
         public int UserId { get; set; }
         public string SeriesPartOne { get; set; }
         public string SeriesPartTwo { get; set; }
-        public string RegistrationNumber { get; set; }
+        public string RegistrationCode { get; set; }
         public int RegionCode { get; set; }
         public string Country { get; set; }
     

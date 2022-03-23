@@ -17,11 +17,10 @@ namespace ParkingSolution.ImportApp
         public int Id { get; set; }
         public int ParkingPlaceId { get; set; }
         public System.DateTime FromDateTime { get; set; }
-        public Nullable<System.DateTime> ToDateTime { get; set; }
-        public int UserId { get; set; }
+        public System.DateTime ToDateTime { get; set; }
+        public int CarId { get; set; }
         public bool IsPayed { get; set; }
     
         public virtual ParkingPlace ParkingPlace { get; set; }
-        public virtual User User { get; set; }
     }
 }
