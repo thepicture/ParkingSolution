@@ -1,5 +1,6 @@
 ﻿using ParkingSolution.WebAPI.Models.Entities;
 using ParkingSolution.WebAPI.Models.Serialized;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -172,6 +173,24 @@ namespace ParkingSolution.WebAPI.Controllers
             {
                 return Unauthorized();
             }
+        }
+
+        [ResponseType(typeof(List<SerializedParkingPlace>))]
+        [Authorize(Roles = "Клиент")]
+        [HttpGet]
+        [Route("api/users/myparkingplaces")]
+        public IHttpActionResult GetMyParkingPlacesAsync()
+        {
+            return Ok(
+                db.ParkingPlaceReservation
+                .Where(ppr => !ppr.IsPayed
+                && ppr.UserCar.User.PhoneNumber
+                == HttpContext.Current.User.Identity.Name)
+                .ToList()
+                .ConvertAll(ppr =>
+                {
+                    return new SerializedParkingPlaceReservation(ppr);
+                }));
         }
     }
 }

@@ -65,7 +65,7 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Sum" Type="money" Nullable="false" />
-          <Property Name="ParkingPlaceId" Type="int" Nullable="false" />
+          <Property Name="ReservationId" Type="int" Nullable="false" />
           <Property Name="CardNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
@@ -157,15 +157,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PaymentHistory_ParkingPlace">
-          <End Role="ParkingPlace" Type="Self.ParkingPlace" Multiplicity="1" />
+        <Association Name="FK_ParkingPlaceReservation_UserCar">
+          <End Role="UserCar" Type="Self.UserCar" Multiplicity="1" />
+          <End Role="ParkingPlaceReservation" Type="Self.ParkingPlaceReservation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserCar">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ParkingPlaceReservation">
+              <PropertyRef Name="CarId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentHistory_ParkingPlaceReservation">
+          <End Role="ParkingPlaceReservation" Type="Self.ParkingPlaceReservation" Multiplicity="1" />
           <End Role="PaymentHistory" Type="Self.PaymentHistory" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ParkingPlace">
+            <Principal Role="ParkingPlaceReservation">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PaymentHistory">
-              <PropertyRef Name="ParkingPlaceId" />
+              <PropertyRef Name="ReservationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -236,8 +248,12 @@
             <End Role="ParkingPlace" EntitySet="ParkingPlace" />
             <End Role="ParkingPlaceReservation" EntitySet="ParkingPlaceReservation" />
           </AssociationSet>
-          <AssociationSet Name="FK_PaymentHistory_ParkingPlace" Association="Self.FK_PaymentHistory_ParkingPlace">
-            <End Role="ParkingPlace" EntitySet="ParkingPlace" />
+          <AssociationSet Name="FK_ParkingPlaceReservation_UserCar" Association="Self.FK_ParkingPlaceReservation_UserCar">
+            <End Role="UserCar" EntitySet="UserCar" />
+            <End Role="ParkingPlaceReservation" EntitySet="ParkingPlaceReservation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentHistory_ParkingPlaceReservation" Association="Self.FK_PaymentHistory_ParkingPlaceReservation">
+            <End Role="ParkingPlaceReservation" EntitySet="ParkingPlaceReservation" />
             <End Role="PaymentHistory" EntitySet="PaymentHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_PaymentHistory_User" Association="Self.FK_PaymentHistory_User">
@@ -288,8 +304,12 @@
             <End Role="ParkingPlace" EntitySet="ParkingPlace" />
             <End Role="ParkingPlaceReservation" EntitySet="ParkingPlaceReservation" />
           </AssociationSet>
-          <AssociationSet Name="FK_PaymentHistory_ParkingPlace" Association="ParkingBaseModel.FK_PaymentHistory_ParkingPlace">
-            <End Role="ParkingPlace" EntitySet="ParkingPlace" />
+          <AssociationSet Name="FK_ParkingPlaceReservation_UserCar" Association="ParkingBaseModel.FK_ParkingPlaceReservation_UserCar">
+            <End Role="UserCar" EntitySet="UserCar" />
+            <End Role="ParkingPlaceReservation" EntitySet="ParkingPlaceReservation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentHistory_ParkingPlaceReservation" Association="ParkingBaseModel.FK_PaymentHistory_ParkingPlaceReservation">
+            <End Role="ParkingPlaceReservation" EntitySet="ParkingPlaceReservation" />
             <End Role="PaymentHistory" EntitySet="PaymentHistory" />
           </AssociationSet>
           <AssociationSet Name="FK_PaymentHistory_User" Association="ParkingBaseModel.FK_PaymentHistory_User">
@@ -346,7 +366,6 @@
           <Property Name="CarType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Parking" Relationship="ParkingBaseModel.FK_ParkingPlace_Parking" FromRole="ParkingPlace" ToRole="Parking" />
           <NavigationProperty Name="ParkingPlaceReservation" Relationship="ParkingBaseModel.FK_ParkingPlaceReservation_ParkingPlace" FromRole="ParkingPlace" ToRole="ParkingPlaceReservation" />
-          <NavigationProperty Name="PaymentHistory" Relationship="ParkingBaseModel.FK_PaymentHistory_ParkingPlace" FromRole="ParkingPlace" ToRole="PaymentHistory" />
         </EntityType>
         <EntityType Name="ParkingPlaceReservation">
           <Key>
@@ -359,6 +378,8 @@
           <Property Name="CarId" Type="Int32" Nullable="false" />
           <Property Name="IsPayed" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ParkingPlace" Relationship="ParkingBaseModel.FK_ParkingPlaceReservation_ParkingPlace" FromRole="ParkingPlaceReservation" ToRole="ParkingPlace" />
+          <NavigationProperty Name="UserCar" Relationship="ParkingBaseModel.FK_ParkingPlaceReservation_UserCar" FromRole="ParkingPlaceReservation" ToRole="UserCar" />
+          <NavigationProperty Name="PaymentHistory" Relationship="ParkingBaseModel.FK_PaymentHistory_ParkingPlaceReservation" FromRole="ParkingPlaceReservation" ToRole="PaymentHistory" />
         </EntityType>
         <EntityType Name="ParkingType">
           <Key>
@@ -376,9 +397,9 @@
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Sum" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="ParkingPlaceId" Type="Int32" Nullable="false" />
+          <Property Name="ReservationId" Type="Int32" Nullable="false" />
           <Property Name="CardNumber" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ParkingPlace" Relationship="ParkingBaseModel.FK_PaymentHistory_ParkingPlace" FromRole="PaymentHistory" ToRole="ParkingPlace" />
+          <NavigationProperty Name="ParkingPlaceReservation" Relationship="ParkingBaseModel.FK_PaymentHistory_ParkingPlaceReservation" FromRole="PaymentHistory" ToRole="ParkingPlaceReservation" />
           <NavigationProperty Name="User" Relationship="ParkingBaseModel.FK_PaymentHistory_User" FromRole="PaymentHistory" ToRole="User" />
         </EntityType>
         <EntityType Name="User">
@@ -405,6 +426,7 @@
           <Property Name="RegistrationCode" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="RegionCode" Type="Int32" Nullable="false" />
           <Property Name="Country" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ParkingPlaceReservation" Relationship="ParkingBaseModel.FK_ParkingPlaceReservation_UserCar" FromRole="UserCar" ToRole="ParkingPlaceReservation" />
           <NavigationProperty Name="User" Relationship="ParkingBaseModel.FK_UserCar_User" FromRole="UserCar" ToRole="User" />
         </EntityType>
         <EntityType Name="UserType">
@@ -475,15 +497,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PaymentHistory_ParkingPlace">
-          <End Type="ParkingBaseModel.ParkingPlace" Role="ParkingPlace" Multiplicity="1" />
+        <Association Name="FK_ParkingPlaceReservation_UserCar">
+          <End Type="ParkingBaseModel.UserCar" Role="UserCar" Multiplicity="1" />
+          <End Type="ParkingBaseModel.ParkingPlaceReservation" Role="ParkingPlaceReservation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserCar">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ParkingPlaceReservation">
+              <PropertyRef Name="CarId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentHistory_ParkingPlaceReservation">
+          <End Type="ParkingBaseModel.ParkingPlaceReservation" Role="ParkingPlaceReservation" Multiplicity="1" />
           <End Type="ParkingBaseModel.PaymentHistory" Role="PaymentHistory" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ParkingPlace">
+            <Principal Role="ParkingPlaceReservation">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PaymentHistory">
-              <PropertyRef Name="ParkingPlaceId" />
+              <PropertyRef Name="ReservationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -591,7 +625,7 @@
             <EntityTypeMapping TypeName="ParkingBaseModel.PaymentHistory">
               <MappingFragment StoreEntitySet="PaymentHistory">
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
-                <ScalarProperty Name="ParkingPlaceId" ColumnName="ParkingPlaceId" />
+                <ScalarProperty Name="ReservationId" ColumnName="ReservationId" />
                 <ScalarProperty Name="Sum" ColumnName="Sum" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />

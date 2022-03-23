@@ -68,6 +68,14 @@ namespace ParkingSolution.XamarinApp
                             Title = "Парковки",
                             ContentTemplate = new DataTemplate(typeof(ParkingsPage))
                         });
+                    CommonTabBar
+                     .Items.Add(new ShellContent
+                     {
+                         Route = nameof(MyParkingPlacesPage),
+                         Icon = "write_letter",
+                         Title = "Бронировки",
+                         ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
+                     });
                     break;
                 default:
                     break;

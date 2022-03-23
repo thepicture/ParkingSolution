@@ -10,5 +10,7 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public DateTime ToDateTime { get; set; }
         public int CarId { get; set; }
         public bool IsPayed { get; set; }
+        public string CarType { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

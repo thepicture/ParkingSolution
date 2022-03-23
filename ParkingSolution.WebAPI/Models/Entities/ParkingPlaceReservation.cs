@@ -14,6 +14,12 @@ namespace ParkingSolution.WebAPI.Models.Entities
     
     public partial class ParkingPlaceReservation
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ParkingPlaceReservation()
+        {
+            this.PaymentHistory = new HashSet<PaymentHistory>();
+        }
+    
         public int Id { get; set; }
         public int ParkingPlaceId { get; set; }
         public System.DateTime FromDateTime { get; set; }
@@ -22,5 +28,8 @@ namespace ParkingSolution.WebAPI.Models.Entities
         public bool IsPayed { get; set; }
     
         public virtual ParkingPlace ParkingPlace { get; set; }
+        public virtual UserCar UserCar { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaymentHistory> PaymentHistory { get; set; }
     }
 }

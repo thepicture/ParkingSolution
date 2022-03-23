@@ -5,7 +5,7 @@ namespace ParkingSolution.WebAPI.Models.Serialized
 {
     public class SerializedParkingPlaceReservation
     {
-        public SerializedParkingPlaceReservation(ParkingPlaceReservation reservation) 
+        public SerializedParkingPlaceReservation(ParkingPlaceReservation reservation)
         {
             Id = reservation.Id;
             ParkingPlaceId = reservation.ParkingPlaceId;
@@ -13,6 +13,18 @@ namespace ParkingSolution.WebAPI.Models.Serialized
             ToDateTime = reservation.ToDateTime;
             CarId = reservation.CarId;
             IsPayed = reservation.IsPayed;
+
+            CarType = reservation.ParkingPlace.CarType;
+            for (DateTime dateTime = FromDateTime;
+                dateTime < ToDateTime;
+                dateTime = dateTime.AddHours(1))
+            {
+                if (dateTime.TimeOfDay > reservation.ParkingPlace.Parking.BeforePaidTime
+                    && dateTime.TimeOfDay < reservation.ParkingPlace.Parking.BeforeFreeTime)
+                {
+                    TotalPrice += reservation.ParkingPlace.Parking.CostInRubles;
+                }
+            }
         }
 
         public int Id { get; set; }
@@ -21,5 +33,8 @@ namespace ParkingSolution.WebAPI.Models.Serialized
         public DateTime ToDateTime { get; set; }
         public int CarId { get; set; }
         public bool IsPayed { get; set; }
+
+        public string CarType { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

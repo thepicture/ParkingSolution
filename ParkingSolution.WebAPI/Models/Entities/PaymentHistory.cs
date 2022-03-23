@@ -18,10 +18,10 @@ namespace ParkingSolution.WebAPI.Models.Entities
         public int UserId { get; set; }
         public System.DateTime Date { get; set; }
         public decimal Sum { get; set; }
-        public int ParkingPlaceId { get; set; }
+        public int ReservationId { get; set; }
         public string CardNumber { get; set; }
     
-        public virtual ParkingPlace ParkingPlace { get; set; }
+        public virtual ParkingPlaceReservation ParkingPlaceReservation { get; set; }
         public virtual User User { get; set; }
     }
 }

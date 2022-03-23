@@ -18,7 +18,6 @@ namespace ParkingSolution.WebAPI.Models.Entities
         public ParkingPlace()
         {
             this.ParkingPlaceReservation = new HashSet<ParkingPlaceReservation>();
-            this.PaymentHistory = new HashSet<PaymentHistory>();
         }
     
         public int Id { get; set; }
@@ -28,7 +27,5 @@ namespace ParkingSolution.WebAPI.Models.Entities
         public virtual Parking Parking { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ParkingPlaceReservation> ParkingPlaceReservation { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PaymentHistory> PaymentHistory { get; set; }
     }
 }

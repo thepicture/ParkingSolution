@@ -24,7 +24,8 @@ namespace ParkingSolution.WebAPI.Controllers
         [ResponseType(typeof(ParkingPlaceReservation))]
         public async Task<IHttpActionResult> GetParkingPlaceReservation(int id)
         {
-            ParkingPlaceReservation parkingPlaceReservation = await db.ParkingPlaceReservation.FindAsync(id);
+            ParkingPlaceReservation parkingPlaceReservation = 
+                await db.ParkingPlaceReservation.FindAsync(id);
             if (parkingPlaceReservation == null)
             {
                 return NotFound();
