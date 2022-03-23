@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
-             xmlns:serialized="clr-namespace:ParkingSolution.XamarinApp.Models.Serialized"
              x:DataType="viewmodels:AddCarViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.AddCarPage"
              Title="Добавление автомобиля">
@@ -28,25 +27,25 @@
                 </Style>
             </Grid.Resources>
             <BoxView Color="WhiteSmoke"
-                     HeightRequest="1"/>
+                     HeightRequest="1" />
             <Frame CornerRadius="1"
                    BorderColor="Black">
                 <Grid ColumnDefinitions="*,*,*"
                       VerticalOptions="Center">
                     <Entry Text="{Binding SeriesPartOne}"
                            MaxLength="1"
-                           Keyboard="Text" 
-                           Placeholder="Серия"/>
+                           Keyboard="Text"
+                           Placeholder="Серия" />
                     <Entry Text="{Binding RegistrationCode}"
                            Grid.Column="1"
                            MaxLength="3"
-                           Keyboard="Numeric" 
-                           Placeholder="Код"/>
+                           Keyboard="Numeric"
+                           Placeholder="Код" />
                     <Entry Text="{Binding SeriesPartTwo}"
                            Grid.Column="2"
                            MaxLength="2"
-                           Keyboard="Text" 
-                           Placeholder="Серия"/>
+                           Keyboard="Text"
+                           Placeholder="Серия" />
                 </Grid>
             </Frame>
             <Frame CornerRadius="1"
@@ -57,21 +56,36 @@
                            FontAttributes="Bold"
                            HorizontalTextAlignment="Center"
                            MaxLength="2"
-                           Keyboard="Numeric" 
-                           Placeholder="Код региона"/>
+                           Keyboard="Numeric"
+                           Placeholder="Код региона" />
                     <Entry Text="{Binding Country}"
                            FontAttributes="Bold"
                            HorizontalTextAlignment="Center"
                            Grid.Row="1"
                            MaxLength="3"
-                           Keyboard="Text" 
-                           Placeholder="Регион"/>
+                           Keyboard="Text"
+                           Placeholder="Регион" />
                 </Grid>
             </Frame>
         </Grid>
         <material:MaterialButton Command="{Binding SaveChangesCommand}"
                                  Text="Сохранить"
                                  VerticalOptions="EndAndExpand"
-                                 Style="{StaticResource BaseButton}" />
+                                 Style="{StaticResource BaseButton}">
+            <material:MaterialButton.Triggers>
+                <DataTrigger TargetType="material:MaterialButton"
+                             Binding="{Binding IsBusy}"
+                             Value="True">
+                    <Setter Property="IsEnabled"
+                            Value="False" />
+                </DataTrigger>
+                <DataTrigger TargetType="material:MaterialButton"
+                             Binding="{Binding IsBusy}"
+                             Value="False">
+                    <Setter Property="IsEnabled"
+                            Value="True" />
+                </DataTrigger>
+            </material:MaterialButton.Triggers>
+        </material:MaterialButton>
     </StackLayout>
 </ContentPage>

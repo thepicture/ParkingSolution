@@ -31,10 +31,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void LoadParkingsAsync()
         {
-            if (Parkings.Count != 0)
-            {
-                Parkings.Clear();
-            }
+            IsBusy = true;
 
             using (HttpClient client = new HttpClient())
             {
@@ -54,17 +51,21 @@ namespace ParkingSolution.XamarinApp.ViewModels
                         <IEnumerable<SerializedParking>>
                         (response);
                     Geocoder geoCoder = new Geocoder();
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Parkings.Clear();
+                    });
                     foreach (SerializedParking parking in parkings)
                     {
                         IEnumerable<Position> approximateLocations =
-                            await geoCoder
-                            .GetPositionsForAddressAsync(
-                            string.Format(parking.Address)
-                            );
-                        Position position = approximateLocations
-                            .FirstOrDefault();
+                                await geoCoder
+                                .GetPositionsForAddressAsync(
+                                string.Format(parking.Address)
+                                );
                         Device.BeginInvokeOnMainThread(() =>
                         {
+                            Position position = approximateLocations
+                                .FirstOrDefault();
                             Parkings.Add(new ParkingHelper
                             {
                                 Address = parking.Address,
@@ -82,6 +83,15 @@ namespace ParkingSolution.XamarinApp.ViewModels
                         "Перезайдите на страницу");
                 }
             }
+            IsBusy = false;
+        }
+
+        internal void OnRefreshing()
+        {
+            Task.Run(() =>
+            {
+                LoadParkingsAsync();
+            });
         }
 
         public ObservableCollection<ParkingHelper> Parkings

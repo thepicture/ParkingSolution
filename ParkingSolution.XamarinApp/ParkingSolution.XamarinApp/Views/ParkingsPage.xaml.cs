@@ -52,5 +52,10 @@ namespace ParkingSolution.XamarinApp.Views
           .SelectedParking = (sender as View)
           .BindingContext as ParkingHelper;
         }
+
+        private void OnRefreshing(object sender, EventArgs e)
+        {
+            _viewModel.OnRefreshing();
+        }
     }
 }

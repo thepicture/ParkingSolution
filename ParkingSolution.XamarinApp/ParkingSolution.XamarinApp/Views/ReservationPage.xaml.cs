@@ -32,5 +32,13 @@ namespace ParkingSolution.XamarinApp.Views
         {
             CommonLayout.ResolveLayoutChanges();
         }
+
+        private void OnRefreshing(object sender, System.EventArgs e)
+        {
+            if (!_viewModel.IsBusy)
+            {
+                (sender as RefreshView).IsRefreshing = false;
+            }
+        }
     }
 }

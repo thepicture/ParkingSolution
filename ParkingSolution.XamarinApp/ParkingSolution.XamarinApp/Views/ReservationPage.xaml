@@ -7,67 +7,85 @@
              x:DataType="viewmodels:ReservationViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.ReservationPage"
              Title="Бронирование места">
-    <ScrollView>
-        <StackLayout Margin="10,0,0,0"
-                     x:Name="CommonLayout">
-            <Label Text="* Укажите дату начала парковки" />
-            <controls:DateTimePicker DateTime="{Binding FromDateTime}" />
-            <material:MaterialCheckbox IsSelected="{Binding IsKnownToDate}"
-                                       Text="Знаю когда уеду"
-                                       SelectedChanged="OnSelectedChanged" />
-            <StackLayout IsVisible="{Binding IsKnownToDate}">
-                <Label Text="* Укажите дату окончания парковки" />
-                <controls:DateTimePicker DateTime="{Binding ToDateTime}" />
-            </StackLayout>
-            <Label Text="* Выберите автомобиль" />
-            <Picker ItemsSource="{Binding Cars}"
-                    SelectedItem="{Binding SelectedCar}"
-                    Title="Выберите автомобиль">
-                <Picker.ItemDisplayBinding>
-                    <Binding Path="StringRepresentation" />
-                </Picker.ItemDisplayBinding>
-            </Picker>
-            <material:MaterialButton Command="{Binding GoToAddCarPage}"
-                                     Text="Добавить автомобиль"
-                                     VerticalOptions="EndAndExpand"
-                                     Style="{StaticResource BaseButton}" />
-            <Label Text="{Binding Parking.CostInRubles,
+    <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                 Refreshing="OnRefreshing">
+        <ScrollView>
+            <StackLayout Margin="10,0,0,0"
+                         x:Name="CommonLayout">
+                <Label Text="* Укажите дату начала парковки" />
+                <controls:DateTimePicker DateTime="{Binding FromDateTime}" />
+                <material:MaterialCheckbox IsSelected="{Binding IsKnownToDate}"
+                                           Text="Знаю когда уеду"
+                                           SelectedChanged="OnSelectedChanged" />
+                <StackLayout IsVisible="{Binding IsKnownToDate}">
+                    <Label Text="* Укажите дату окончания парковки" />
+                    <controls:DateTimePicker DateTime="{Binding ToDateTime}" />
+                </StackLayout>
+                <Label Text="* Выберите автомобиль" />
+                <Picker ItemsSource="{Binding Cars}"
+                        SelectedItem="{Binding SelectedCar}"
+                        Title="Выберите автомобиль">
+                    <Picker.ItemDisplayBinding>
+                        <Binding Path="StringRepresentation" />
+                    </Picker.ItemDisplayBinding>
+                </Picker>
+                <material:MaterialButton Command="{Binding GoToAddCarPage}"
+                                         Text="Добавить автомобиль"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
+                <Label Text="{Binding Parking.CostInRubles,
                               StringFormat='{}{0:F0} руб./час',
                               TargetNullValue=X рублей/час}"
-                   FontSize="Large"
-                   HorizontalTextAlignment="Center">
-                <Label.Triggers>
-                    <DataTrigger TargetType="Label"
-                                 Binding="{Binding IsKnownToDate}"
-                                 Value="True">
-                        <Setter Property="IsVisible"
-                                Value="False" />
-                    </DataTrigger>
-                </Label.Triggers>
-            </Label>
-            <Label FontSize="Medium"
-                   IsVisible="{Binding IsKnownToDate}"
-                   HorizontalTextAlignment="Center">
-                <Label.Triggers>
-                    <DataTrigger TargetType="Label"
-                                 Binding="{Binding IsValidDateTimeSpanForCalculating}"
-                                 Value="False">
-                        <Setter Property="Text"
-                                Value="Даты некорректны" />
-                    </DataTrigger>
-                    <DataTrigger TargetType="Label"
-                                 Binding="{Binding IsValidDateTimeSpanForCalculating}"
-                                 Value="True">
-                        <Setter Property="Text"
-                                Value="{Binding CalculatedCostInRubles,
+                       FontSize="Large"
+                       HorizontalTextAlignment="Center">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding IsKnownToDate}"
+                                     Value="True">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label FontSize="Medium"
+                       IsVisible="{Binding IsKnownToDate}"
+                       HorizontalTextAlignment="Center">
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding IsValidDateTimeSpanForCalculating}"
+                                     Value="False">
+                            <Setter Property="Text"
+                                    Value="Даты некорректны" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding IsValidDateTimeSpanForCalculating}"
+                                     Value="True">
+                            <Setter Property="Text"
+                                    Value="{Binding CalculatedCostInRubles,
                                                 StringFormat='{}ИТОГО: {0:F0} руб.'}" />
-                    </DataTrigger>
-                </Label.Triggers>
-            </Label>
-            <material:MaterialButton Command="{Binding SaveChangesCommand}"
-                                     Text="Забронировать"
-                                     VerticalOptions="EndAndExpand"
-                                     Style="{StaticResource BaseButton}" />
-        </StackLayout>
-    </ScrollView>
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                         Text="Забронировать"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}">
+                    <material:MaterialButton.Triggers>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding IsBusy}"
+                                     Value="False">
+                            <Setter Property="IsEnabled"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding IsBusy}"
+                                     Value="True">
+                            <Setter Property="IsEnabled"
+                                    Value="False" />
+                        </DataTrigger>
+                    </material:MaterialButton.Triggers>
+                </material:MaterialButton>
+            </StackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>

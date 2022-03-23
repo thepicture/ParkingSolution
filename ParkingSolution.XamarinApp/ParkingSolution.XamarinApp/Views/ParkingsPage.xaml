@@ -31,49 +31,52 @@
                 </DataTemplate>
             </maps:Map.ItemTemplate>
         </maps:Map>
-        <ScrollView>
-            <ScrollView.Triggers>
-                <DataTrigger TargetType="ScrollView"
+        <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                     Refreshing="OnRefreshing">
+            <RefreshView.Triggers>
+                <DataTrigger TargetType="RefreshView"
                              Binding="{Binding IsShowAsMap}"
                              Value="True">
                     <Setter Property="IsVisible"
                             Value="False" />
                 </DataTrigger>
-            </ScrollView.Triggers>
-            <StackLayout BindableLayout.ItemsSource="{Binding Parkings}">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="helpers:ParkingHelper">
-                        <material:MaterialCard Elevation="5"
-                                               Margin="10"
-                                               IsClickable="True"
-                                               Clicked="OnListItemClicked">
-                            <StackLayout>
-                                <Label Text="{Binding Address, 
+            </RefreshView.Triggers>
+            <ScrollView>
+                <StackLayout BindableLayout.ItemsSource="{Binding Parkings}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="helpers:ParkingHelper">
+                            <material:MaterialCard Elevation="5"
+                                                   Margin="10"
+                                                   IsClickable="True"
+                                                   Clicked="OnListItemClicked">
+                                <StackLayout>
+                                    <Label Text="{Binding Address, 
                                                   StringFormat='Адрес: {0}'}"
-                                       FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center" />
-                                <BoxView Color="WhiteSmoke"
-                                         HeightRequest="1" />
-                                <Label Text="{Binding Parking.ParkingType, 
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center" />
+                                    <BoxView Color="WhiteSmoke"
+                                             HeightRequest="1" />
+                                    <Label Text="{Binding Parking.ParkingType, 
                                                   StringFormat='Тип: {0}'}"
-                                       HorizontalTextAlignment="Center" />
-                                <BoxView Color="WhiteSmoke"
-                                         HeightRequest="1" />
-                                <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                           HorizontalTextAlignment="Center" />
+                                    <BoxView Color="WhiteSmoke"
+                                             HeightRequest="1" />
+                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                 Path=BindingContext}"
-                                                         Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                             Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                               AncestorType={x:Type views:ParkingsPage}}, 
                                                                                               Path=BindingContext.GoToParkingPlacesCommand}"
-                                                         Text="Начать парковку"
-                                                         VerticalOptions="EndAndExpand"
-                                                         Style="{StaticResource BaseButton}">
-                                </material:MaterialButton>
-                            </StackLayout>
-                        </material:MaterialCard>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </StackLayout>
-        </ScrollView>
+                                                             Text="Начать парковку"
+                                                             VerticalOptions="EndAndExpand"
+                                                             Style="{StaticResource BaseButton}">
+                                    </material:MaterialButton>
+                                </StackLayout>
+                            </material:MaterialCard>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
         <StackLayout Grid.Row="1"
                      VerticalOptions="CenterAndExpand">
             <Label Text="{Binding SelectedParking.Parking.NumberOfParkingPlaces,

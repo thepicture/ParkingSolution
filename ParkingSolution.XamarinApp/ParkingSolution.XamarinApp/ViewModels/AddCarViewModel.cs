@@ -85,6 +85,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                     validationErrors.ToString());
                 return;
             }
+            IsBusy = true;
             CurrentCar.SeriesPartOne = SeriesPartOne.ToUpper();
             CurrentCar.RegistrationCode = registrationCode;
             CurrentCar.SeriesPartTwo = SeriesPartTwo.ToUpper();
@@ -101,6 +102,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 await FeedbackService.Inform("Не удалось " +
                     "добавить автомобиль. Проверьте подключение к интернету");
             }
+            IsBusy = false;
         }
 
         private string seriesPartOne;

@@ -151,8 +151,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 {
                     return (pp.ToDateTime == null
                     && pp.FromDateTime > FromDateTime)
-                    || (pp.FromDateTime < FromDateTime
-                    || pp.ToDateTime < ToDateTime);
+                    || pp.FromDateTime < FromDateTime
+                    || pp.ToDateTime < ToDateTime;
                 });
             if (conflictPlaces
                 .Count() > 0)
@@ -162,6 +162,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
                     $"начиная с {conflictPlaces.OrderBy(c => c.FromDateTime).Last().FromDateTime}");
                 return;
             }
+
+            IsBusy = true;
 
             SerializedParkingPlaceReservation reservation =
                 new SerializedParkingPlaceReservation
@@ -186,6 +188,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
                     "парковочное место уже забронировано. " +
                     "Измените интервал времени на более поздний");
             }
+
+            IsBusy = false;
         }
 
         private bool isKnownToDate;
