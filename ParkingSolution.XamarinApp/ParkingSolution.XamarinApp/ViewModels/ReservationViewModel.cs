@@ -126,12 +126,12 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 _ = validationErrors.AppendLine("Укажите автомобиль");
             }
-            if (FromDate + FromTime < DateTime.Now)
+            if (FromDateTime < DateTime.Now)
             {
                 _ = validationErrors.AppendLine("Парковка должна быть " +
                     "позднее текущей даты и времени");
             }
-            if (IsKnownToDate && (FromDate + FromTime >= ToDate + ToTime))
+            if (IsKnownToDate && (FromDateTime >= ToDateTime))
             {
                 _ = validationErrors.AppendLine("Дата начала " +
                     "должна быть раньше даты окончания");
@@ -147,13 +147,13 @@ namespace ParkingSolution.XamarinApp.ViewModels
             SerializedParkingPlaceReservation reservation =
                 new SerializedParkingPlaceReservation
                 {
-                    FromDateTime = FromDate + FromTime,
+                    FromDateTime = FromDateTime,
                     CarId = SelectedCar.Id,
                     ParkingPlaceId = ParkingPlace.Id
                 };
             if (IsKnownToDate)
             {
-                reservation.ToDateTime = ToDate + ToTime;
+                reservation.ToDateTime = ToDateTime;
             }
 
             if (await ReservationDataStore.AddItemAsync(reservation))
@@ -169,42 +169,40 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
         }
 
-        private DateTime fromDate = DateTime.Now.Date;
-
-        public DateTime FromDate
-        {
-            get => fromDate;
-            set => SetProperty(ref fromDate, value);
-        }
-
-        private TimeSpan fromTime = DateTime.Now.TimeOfDay;
-
-        public TimeSpan FromTime
-        {
-            get => fromTime;
-            set => SetProperty(ref fromTime, value);
-        }
-
-        private DateTime toDate = DateTime.Now.Date;
-
-        public DateTime ToDate
-        {
-            get => toDate;
-            set => SetProperty(ref toDate, value);
-        }
-
-        private TimeSpan toTime = DateTime.Now.TimeOfDay;
         private bool isKnownToDate;
+        private bool isValidDateTimeSpanForCalculating;
 
-        public TimeSpan ToTime
+        private void InvalidateCalculatedPrice()
         {
-            get => toTime;
-            set => SetProperty(ref toTime, value);
+            if (Parking != null && (FromDateTime < ToDateTime))
+            {
+                IsValidDateTimeSpanForCalculating = true;
+                CalculatedCostInRubles = 0;
+                for (DateTime dateTime = FromDateTime;
+                    dateTime < ToDateTime;
+                    dateTime = dateTime.AddHours(1))
+                {
+                    if (dateTime.TimeOfDay > Parking.BeforePaidTime
+                        && dateTime.TimeOfDay < Parking.BeforeFreeTime)
+                    {
+                        CalculatedCostInRubles += Parking.CostInRubles;
+                    }
+                }
+            }
+            else
+            {
+                IsValidDateTimeSpanForCalculating = false;
+            }
         }
+
         public bool IsKnownToDate
         {
             get => isKnownToDate;
-            set => SetProperty(ref isKnownToDate, value);
+            set
+            {
+                SetProperty(ref isKnownToDate, value);
+                InvalidateCalculatedPrice();
+            }
         }
 
         private Command goToAddCarPage;
@@ -241,6 +239,48 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             get => costInRubles;
             set => SetProperty(ref costInRubles, value);
+        }
+
+        private decimal calculatedCostInRubles;
+
+        public decimal CalculatedCostInRubles
+        {
+            get => calculatedCostInRubles;
+            set => SetProperty(ref calculatedCostInRubles, value);
+        }
+
+        private DateTime fromDateTime = DateTime.Now.AddHours(1);
+
+        public DateTime FromDateTime
+        {
+            get => fromDateTime;
+            set
+            {
+                if (SetProperty(ref fromDateTime, value))
+                {
+                    InvalidateCalculatedPrice();
+                }
+            }
+        }
+
+        private DateTime toDateTime = DateTime.Now.AddHours(2);
+
+        public DateTime ToDateTime
+        {
+            get => toDateTime;
+            set
+            {
+                if (SetProperty(ref toDateTime, value))
+                {
+                    InvalidateCalculatedPrice();
+                }
+            }
+        }
+
+        public bool IsValidDateTimeSpanForCalculating
+        {
+            get => isValidDateTimeSpanForCalculating;
+            set => SetProperty(ref isValidDateTimeSpanForCalculating, value);
         }
     }
 }
