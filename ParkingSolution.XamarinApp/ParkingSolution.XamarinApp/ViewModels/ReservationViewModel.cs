@@ -122,6 +122,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private async void SaveChangesAsync()
         {
             StringBuilder validationErrors = new StringBuilder();
+
             if (SelectedCar == null)
             {
                 _ = validationErrors.AppendLine("Укажите автомобиль");
@@ -144,6 +145,24 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 return;
             }
 
+            IEnumerable<SerializedParkingPlaceReservation> conflictPlaces =
+                ParkingPlace.Reservations
+                .Where(pp =>
+                {
+                    return (pp.ToDateTime == null
+                    && pp.FromDateTime > FromDateTime)
+                    || (pp.FromDateTime < FromDateTime
+                    || pp.ToDateTime < ToDateTime);
+                });
+            if (conflictPlaces
+                .Count() > 0)
+            {
+                await FeedbackService.InformError($"В назначенное время " +
+                    "уже есть бронировки. Попробуйте изменить дату начала " +
+                    $"начиная с {conflictPlaces.OrderBy(c => c.FromDateTime).Last().FromDateTime}");
+                return;
+            }
+
             SerializedParkingPlaceReservation reservation =
                 new SerializedParkingPlaceReservation
                 {
@@ -163,9 +182,9 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
             else
             {
-                await FeedbackService.Inform("Не удалось " +
-                    "забронировать парковочное место. " +
-                    "Проверьте подключение к интернету");
+                await FeedbackService.InformError("В указанное время " +
+                    "парковочное место уже забронировано. " +
+                    "Измените интервал времени на более поздний");
             }
         }
 

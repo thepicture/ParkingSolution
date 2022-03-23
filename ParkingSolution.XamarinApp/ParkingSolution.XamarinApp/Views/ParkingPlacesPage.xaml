@@ -28,9 +28,15 @@
                                                                                               AncestorType={x:Type views:ParkingPlacesPage}}, 
                                                                                               Path=BindingContext.ReserveParkingPlaceCommand}"
                                                      Text="Забронировать"
-                                                     VerticalOptions="EndAndExpand"
-                                                     Style="{StaticResource BaseButton}"
-                                                     IsEnabled="{Binding IsFree}">
+                                                     Style="{StaticResource BaseButton}">
+                                <material:MaterialButton.Triggers>
+                                    <DataTrigger TargetType="material:MaterialButton"
+                                                 Binding="{Binding IsFree}"
+                                                 Value="False">
+                                        <Setter Property="Text"
+                                                Value="Забронировано" />
+                                    </DataTrigger>
+                                </material:MaterialButton.Triggers>
                             </material:MaterialButton>
                         </StackLayout>
                     </material:MaterialCard>

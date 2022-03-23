@@ -219,6 +219,7 @@
     </Compile>
     <Compile Include="Models\Security\BasicAuthenticationAttribute.cs" />
     <Compile Include="Models\Security\SimpleAuthenticator.cs" />
+    <Compile Include="Models\Serialized\SerializedParkingPlaceReservation.cs" />
     <Compile Include="Models\Serialized\SerializedUserCar.cs" />
     <Compile Include="Models\Serialized\SerializedParking.cs" />
     <Compile Include="Models\Serialized\SerializedParkingPlace.cs" />

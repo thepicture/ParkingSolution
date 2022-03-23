@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AsyncCommands;
+using Newtonsoft.Json;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
@@ -73,7 +74,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             set => SetProperty(ref parkingPlaces, value);
         }
 
-        private Command reserveParkingPlaceCommand;
+        private AsyncCommand<SerializedParkingPlace> reserveParkingPlaceCommand;
 
         public ParkingPlacesViewModel(SerializedParking serializedParking)
         {
@@ -85,20 +86,27 @@ namespace ParkingSolution.XamarinApp.ViewModels
             });
         }
 
-        public ICommand ReserveParkingPlaceCommand
+        public AsyncCommand<SerializedParkingPlace> ReserveParkingPlaceCommand
         {
             get
             {
                 if (reserveParkingPlaceCommand == null)
                 {
-                    reserveParkingPlaceCommand = new Command(ReserveParkingPlaceAsync);
+                    reserveParkingPlaceCommand = new AsyncCommand<SerializedParkingPlace>
+                        (ReserveParkingPlaceAsync,
+                        CanReserveParkingPlaceExecute);
                 }
 
                 return reserveParkingPlaceCommand;
             }
         }
 
-        private async void ReserveParkingPlaceAsync(object param)
+        private bool CanReserveParkingPlaceExecute(SerializedParkingPlace arg)
+        {
+            return arg.IsFree;
+        }
+
+        private async Task ReserveParkingPlaceAsync(object param)
         {
             await Shell
               .Current
