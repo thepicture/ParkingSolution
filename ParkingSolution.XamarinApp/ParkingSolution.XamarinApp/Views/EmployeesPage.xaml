@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xamarinapp="clr-namespace:ParkingSolution.XamarinApp"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:serialized="clr-namespace:ParkingSolution.XamarinApp.Models.Serialized"
+             xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:views="clr-namespace:ParkingSolution.XamarinApp.Views"
+             xmlns:behaviors="clr-namespace:ParkingSolution.XamarinApp.Behaviors"
+             x:DataType="viewmodels:EmployeesViewModel"
+             x:Class="ParkingSolution.XamarinApp.Views.EmployeesPage"
+             Title="Сотрудники">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <StackLayout BindableLayout.ItemsSource="{Binding Employees}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="serialized:SerializedUser">
+                        <material:MaterialCard Elevation="5"
+                                               Margin="10"
+                                               IsClickable="True">
+                            <StackLayout>
+                                <Label Text="{Binding PhoneNumber, 
+                                                  StringFormat='Телефон: +{0}'}"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+                                <BoxView Color="WhiteSmoke"
+                                         HeightRequest="1" />
+                                <Label Text="{Binding UserType, 
+                                                  StringFormat='Роль: {0}'}"
+                                       HorizontalTextAlignment="Center" />
+                                <BoxView Color="WhiteSmoke"
+                                         HeightRequest="1" />
+                                <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                                Path=BindingContext}"
+                                                         Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                                              AncestorType={x:Type views:EmployeesPage}}, 
+                                                                                              Path=BindingContext.DeleteEmployeeCommand}"
+                                                         Text="Удалить"
+                                                         BackgroundColor="Red"
+                                                         VerticalOptions="EndAndExpand"
+                                                         Style="{StaticResource BaseButton}">
+                                </material:MaterialButton>
+                            </StackLayout>
+                        </material:MaterialCard>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

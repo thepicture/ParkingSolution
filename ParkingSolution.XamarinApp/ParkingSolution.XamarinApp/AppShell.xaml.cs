@@ -53,21 +53,29 @@ namespace ParkingSolution.XamarinApp
         public void SetShellStacksDependingOnRole()
         {
             CommonTabBar.Items.Clear();
+            CommonTabBar
+                       .Items.Add(new ShellContent
+                       {
+                           Route = nameof(ParkingsPage),
+                           Icon = "location",
+                           Title = "Парковки",
+                           ContentTemplate = new DataTemplate(typeof(ParkingsPage))
+                       });
             switch (AppIdentity.Role)
             {
                 case "Администратор":
+                    CommonTabBar
+                    .Items.Add(new ShellContent
+                    {
+                        Route = nameof(EmployeesPage),
+                        Icon = "address",
+                        Title = "Сотрудники",
+                        ContentTemplate = new DataTemplate(typeof(EmployeesPage))
+                    });
                     break;
                 case "Сотрудник":
                     break;
                 case "Клиент":
-                    CommonTabBar
-                        .Items.Add(new ShellContent
-                        {
-                            Route = nameof(ParkingsPage),
-                            Icon = "location",
-                            Title = "Парковки",
-                            ContentTemplate = new DataTemplate(typeof(ParkingsPage))
-                        });
                     CommonTabBar
                      .Items.Add(new ShellContent
                      {

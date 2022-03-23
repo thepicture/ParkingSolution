@@ -5,15 +5,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="d1a64a07af0549da8465c5a231e9ea84" Name="Diagram1">
-        <EntityTypeShape EntityType="ParkingBaseModel.Address" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="ParkingBaseModel.City" Width="1.5" PointX="1.5" PointY="16" />
-        <EntityTypeShape EntityType="ParkingBaseModel.Parking" Width="1.5" PointX="3" PointY="11.25" />
-        <EntityTypeShape EntityType="ParkingBaseModel.ParkingPlace" Width="1.5" PointX="5.25" PointY="11.625" />
-        <EntityTypeShape EntityType="ParkingBaseModel.ParkingPlaceReservation" Width="1.5" PointX="7.5" PointY="6.25" />
-        <EntityTypeShape EntityType="ParkingBaseModel.ParkingType" Width="1.5" PointX="0.75" PointY="10.375" />
-        <EntityTypeShape EntityType="ParkingBaseModel.PaymentHistory" Width="1.5" PointX="5.25" PointY="2" />
+        <EntityTypeShape EntityType="ParkingBaseModel.Address" Width="1.5" PointX="0.75" PointY="10.5" />
+        <EntityTypeShape EntityType="ParkingBaseModel.City" Width="1.5" PointX="1.5" PointY="13.625" />
+        <EntityTypeShape EntityType="ParkingBaseModel.Parking" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="ParkingBaseModel.ParkingPlace" Width="1.5" PointX="5.25" PointY="9.25" />
+        <EntityTypeShape EntityType="ParkingBaseModel.ParkingPlaceReservation" Width="1.5" PointX="7.5" PointY="2.875" />
+        <EntityTypeShape EntityType="ParkingBaseModel.ParkingType" Width="1.5" PointX="0.75" PointY="8.125" />
+        <EntityTypeShape EntityType="ParkingBaseModel.PaymentHistory" Width="1.5" PointX="9.75" PointY="3" />
         <EntityTypeShape EntityType="ParkingBaseModel.User" Width="1.5" PointX="3" PointY="3.125" />
-        <EntityTypeShape EntityType="ParkingBaseModel.UserCar" Width="1.5" PointX="5.25" PointY="6.125" />
+        <EntityTypeShape EntityType="ParkingBaseModel.UserCar" Width="1.5" PointX="5.25" PointY="2.75" />
         <EntityTypeShape EntityType="ParkingBaseModel.UserType" Width="1.5" PointX="0.75" PointY="3.5" />
         <AssociationConnector Association="ParkingBaseModel.FK_Address_City" />
         <AssociationConnector Association="ParkingBaseModel.FK_Parking_Address" />

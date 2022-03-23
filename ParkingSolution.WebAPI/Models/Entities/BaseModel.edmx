@@ -182,7 +182,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaymentHistory_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="PaymentHistory" Type="Self.PaymentHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -206,7 +208,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserCar_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="UserCar" Type="Self.UserCar" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -522,7 +526,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaymentHistory_User">
-          <End Type="ParkingBaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="ParkingBaseModel.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ParkingBaseModel.PaymentHistory" Role="PaymentHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -546,7 +552,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_UserCar_User">
-          <End Type="ParkingBaseModel.User" Role="User" Multiplicity="1" />
+          <End Type="ParkingBaseModel.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ParkingBaseModel.UserCar" Role="UserCar" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">

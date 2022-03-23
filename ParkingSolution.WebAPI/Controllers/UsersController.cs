@@ -1,5 +1,6 @@
 ﻿using ParkingSolution.WebAPI.Models.Entities;
 using ParkingSolution.WebAPI.Models.Serialized;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -21,6 +22,23 @@ namespace ParkingSolution.WebAPI.Controllers
         public IQueryable<User> GetUser()
         {
             return db.User;
+        }
+
+        // GET: api/Users
+        [Authorize(Roles = "Администратор")]
+        [HttpGet]
+        [Route("api/users/employees")]
+        [ResponseType(typeof(List<SerializedUser>))]
+        public IHttpActionResult GetEmployees()
+        {
+            return Ok(
+                db.User.Where(u => u.UserType.Name == "Сотрудник")
+                .ToList()
+                .ConvertAll(u =>
+                {
+                    return new SerializedUser(u);
+                })
+            );
         }
 
         // GET: api/Users/5
@@ -87,7 +105,8 @@ namespace ParkingSolution.WebAPI.Controllers
         }
 
         // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
+        [ResponseType(typeof(Nullable))]
+        [Authorize(Roles = "Администратор")]
         public async Task<IHttpActionResult> DeleteUser(int id)
         {
             User user = await db.User.FindAsync(id);
@@ -99,7 +118,7 @@ namespace ParkingSolution.WebAPI.Controllers
             db.User.Remove(user);
             await db.SaveChangesAsync();
 
-            return Ok(user);
+            return Content(HttpStatusCode.NoContent, user.Id);
         }
 
         protected override void Dispose(bool disposing)

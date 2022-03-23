@@ -68,8 +68,17 @@
                                                                                               Path=BindingContext.GoToParkingPlacesCommand}"
                                                                  Text="Начать парковку"
                                                                  VerticalOptions="EndAndExpand"
-                                                                 Style="{StaticResource BaseButton}">
-                                        </material:MaterialButton>
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 IsVisible="False">
+                                        <material:MaterialButton.Triggers>
+                                            <DataTrigger TargetType="material:MaterialButton"
+                                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                         Value="Клиент">
+                                                <Setter Property="IsVisible"
+                                                        Value="True" />
+                                            </DataTrigger>
+                                        </material:MaterialButton.Triggers>
+                                    </material:MaterialButton>
                                         <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                 Path=BindingContext}"
                                                                  Command="{Binding Source={RelativeSource Mode=FindAncestor, 
@@ -94,7 +103,17 @@
                                   FallbackValue=Выберите автостоянку}"
                    HorizontalTextAlignment="Center"
                    Margin="5"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center"
+                   IsVisible="False">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                 Value="Клиент">
+                        <Setter Property="IsVisible"
+                                Value="True" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
             <StackLayout Orientation="Horizontal"
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="Center"
@@ -103,8 +122,17 @@
                                              Text="Начать парковку"
                                              FontSize="10"
                                              Style="{StaticResource BaseButton}"
+                                             IsVisible="False"
                                              IsEnabled="{Binding SelectedParking.Parking.Id, 
                                                              FallbackValue=False}">
+                    <material:MaterialButton.Triggers>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding Role}"
+                                     Value="Клиент">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                    </material:MaterialButton.Triggers>
                     </material:MaterialButton>
                 <material:MaterialButton Text="Добавить автостоянку"
                                          FontSize="10"

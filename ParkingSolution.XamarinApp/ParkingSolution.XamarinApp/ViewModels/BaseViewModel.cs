@@ -15,11 +15,13 @@ namespace ParkingSolution.XamarinApp.ViewModels
         public IDataStore<SerializedUserCar> CarDataStore =>
             DependencyService.Get<IDataStore<SerializedUserCar>>();
         public IDataStore<SerializedParking> ParkingDataStore =>
-          DependencyService.Get<IDataStore<SerializedParking>>();
+            DependencyService.Get<IDataStore<SerializedParking>>();
         public IDataStore<SerializedParkingPlaceReservation> ReservationDataStore =>
-         DependencyService.Get<IDataStore<SerializedParkingPlaceReservation>>();
+            DependencyService.Get<IDataStore<SerializedParkingPlaceReservation>>();
         public IDataStore<SerializedPaymentHistory> PaymentHistoryDataStore =>
-     DependencyService.Get<IDataStore<SerializedPaymentHistory>>();
+            DependencyService.Get<IDataStore<SerializedPaymentHistory>>();
+        public IDataStore<SerializedUser> UserDataStore =>
+            DependencyService.Get<IDataStore<SerializedUser>>();
         public IFeedbackService FeedbackService =>
             DependencyService.Get<IFeedbackService>();
         public IAuthenticatorService AuthenticatorService =>

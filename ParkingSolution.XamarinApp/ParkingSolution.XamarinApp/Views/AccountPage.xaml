@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
              xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:services="clr-namespace:ParkingSolution.XamarinApp.Services"
              x:DataType="viewmodels:AccountViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.AccountPage"
              Title="Мой аккаунт">
@@ -21,8 +22,18 @@
                    HorizontalOptions="Center" />
             <ui:MaterialButton Command="{Binding GoToMyCarsPageCommand}"
                                Text="Мои автомобили"
-                               VerticalOptions="EndAndExpand" 
-                               Style="{StaticResource BaseButton}"/>
+                               VerticalOptions="EndAndExpand"
+                               Style="{StaticResource BaseButton}"
+                               IsVisible="False">
+                <ui:MaterialButton.Triggers>
+                    <DataTrigger TargetType="ui:MaterialButton"
+                                 Binding="{Binding Role}"
+                                 Value="Клиент">
+                        <Setter Property="IsVisible"
+                                Value="True" />
+                    </DataTrigger>
+                </ui:MaterialButton.Triggers>
+            </ui:MaterialButton>
             <ui:MaterialButton Command="{Binding ExitLoginCommand}"
                                Text="Разлогиниться"
                                VerticalOptions="End"
