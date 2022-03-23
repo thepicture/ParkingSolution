@@ -24,7 +24,7 @@
                                VerticalOptions="EndAndExpand" 
                                Style="{StaticResource BaseButton}"/>
             <ui:MaterialButton Command="{Binding ExitLoginCommand}"
-                               Text="Выйти из аккаунта"
+                               Text="Разлогиниться"
                                VerticalOptions="End"
                                Style="{StaticResource BackgroundButton}"/>
         </StackLayout>
