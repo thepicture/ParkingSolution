@@ -1,5 +1,6 @@
 ﻿using ParkingSolution.WebAPI.Models.Entities;
 using ParkingSolution.WebAPI.Models.Serialized;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -92,7 +93,8 @@ namespace ParkingSolution.WebAPI.Controllers
         }
 
         // DELETE: api/Parkings/5
-        [ResponseType(typeof(Parking))]
+        [ResponseType(typeof(Nullable))]
+        [Authorize(Roles ="Администратор")]
         public async Task<IHttpActionResult> DeleteParking(int id)
         {
             Parking parking = await db.Parking.FindAsync(id);
@@ -104,7 +106,7 @@ namespace ParkingSolution.WebAPI.Controllers
             db.Parking.Remove(parking);
             await db.SaveChangesAsync();
 
-            return Ok(parking);
+            return Content(HttpStatusCode.NoContent, parking.Id);
         }
 
         protected override void Dispose(bool disposing)

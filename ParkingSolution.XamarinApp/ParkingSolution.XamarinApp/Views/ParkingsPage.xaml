@@ -9,7 +9,8 @@
              xmlns:views="clr-namespace:ParkingSolution.XamarinApp.Views"
              x:DataType="viewmodels:ParkingsViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.ParkingsPage"
-             Title="Автостоянки">
+             Title="Автостоянки"
+             x:Name="Page">
     <Grid RowDefinitions="7*,3*"
           x:DataType="viewmodels:ParkingsViewModel">
         <maps:Map ItemsSource="{Binding Parkings}"
@@ -31,8 +32,8 @@
                 </DataTemplate>
             </maps:Map.ItemTemplate>
         </maps:Map>
-        <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                     Refreshing="OnRefreshing">
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
             <RefreshView.Triggers>
                 <DataTrigger TargetType="RefreshView"
                              Binding="{Binding IsShowAsMap}"
@@ -89,6 +90,24 @@
                                                                  Style="{StaticResource BaseButton}"
                                                                  Grid.Column="1">
                                         </material:MaterialButton>
+                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                                Path=BindingContext}"
+                                                             Command="{Binding Source={x:Reference Page}, 
+                                                                               Path=BindingContext.DeleteParkingCommand}"
+                                                             Text="Удалить"
+                                                             IsVisible="False"
+                                                             VerticalOptions="EndAndExpand"
+                                                             Style="{StaticResource BaseButton}"
+                                                             BackgroundColor="Red">
+                                        <material:MaterialButton.Triggers>
+                                            <DataTrigger TargetType="material:MaterialButton"
+                                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                         Value="Администратор">
+                                                <Setter Property="IsVisible"
+                                                        Value="True" />
+                                            </DataTrigger>
+                                        </material:MaterialButton.Triggers>
+                                    </material:MaterialButton>
                                 </StackLayout>
                             </material:MaterialCard>
                         </DataTemplate>

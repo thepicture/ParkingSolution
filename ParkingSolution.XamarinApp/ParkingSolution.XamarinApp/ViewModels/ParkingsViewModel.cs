@@ -1,5 +1,4 @@
-﻿using Microcharts;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ParkingSolution.XamarinApp.Models.Helpers;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
@@ -23,17 +22,11 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private bool showAsMap = true;
         internal void OnAppearing()
         {
-            Parkings = new ObservableCollection<ParkingHelper>();
-            Task.Run(() =>
-            {
-                LoadParkingsAsync();
-            });
+            IsRefreshing = true;
         }
 
         private async void LoadParkingsAsync()
         {
-            IsBusy = true;
-
             using (HttpClient client = new HttpClient())
             {
                 client.Timeout = TimeSpan.FromSeconds(10);
@@ -92,16 +85,16 @@ namespace ParkingSolution.XamarinApp.ViewModels
                     await FeedbackService.Inform("Время ожидания " +
                         "загрузки истекло. Обновите страницу");
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    await FeedbackService.Inform("Неизвестная ошибка. " +
+                        "Парковки не загружены. " +
+                        "Перезапустите приложение или обновите " +
+                        "список парковок");
+                }
             }
-            IsBusy = false;
-        }
-
-        internal void OnRefreshing()
-        {
-            Task.Run(() =>
-            {
-                LoadParkingsAsync();
-            });
+            IsRefreshing = false;
         }
 
         public ObservableCollection<ParkingHelper> Parkings
@@ -207,6 +200,70 @@ namespace ParkingSolution.XamarinApp.ViewModels
                        SelectedParking.Parking)
                    )
                );
+        }
+
+        private Command<ParkingHelper> deleteParkingCommand;
+
+        public Command<ParkingHelper> DeleteParkingCommand
+        {
+            get
+            {
+                if (deleteParkingCommand == null)
+                {
+                    deleteParkingCommand = new Command<ParkingHelper>
+                        (DeleteParkingAsync);
+                }
+
+                return deleteParkingCommand;
+            }
+        }
+
+        private async void DeleteParkingAsync(ParkingHelper parking)
+        {
+            if (!await FeedbackService.Ask("Удалить парковку зоны " +
+                $"{parking.Parking.Id}?"))
+            {
+                return;
+            }
+            if (await ParkingDataStore.DeleteItemAsync(parking.Parking.Id
+                .ToString()))
+            {
+                await FeedbackService.Inform("Парковка удалена");
+                IsRefreshing = true;
+            }
+            else
+            {
+                await FeedbackService.InformError("Парковка не удалена. " +
+                    "Перезайдите на страницу");
+            }
+        }
+
+        private Command refreshCommand;
+
+        public ParkingsViewModel()
+        {
+            Parkings = new ObservableCollection<ParkingHelper>();
+        }
+
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                if (refreshCommand == null)
+                {
+                    refreshCommand = new Command(Refresh);
+                }
+
+                return refreshCommand;
+            }
+        }
+
+        private void Refresh()
+        {
+            Task.Run(() =>
+            {
+                LoadParkingsAsync();
+            });
         }
     }
 }

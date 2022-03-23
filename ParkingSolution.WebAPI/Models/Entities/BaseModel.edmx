@@ -134,7 +134,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ParkingPlace_Parking">
-          <End Role="Parking" Type="Self.Parking" Multiplicity="1" />
+          <End Role="Parking" Type="Self.Parking" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ParkingPlace" Type="Self.ParkingPlace" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Parking">
@@ -146,7 +148,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ParkingPlaceReservation_ParkingPlace">
-          <End Role="ParkingPlace" Type="Self.ParkingPlace" Multiplicity="1" />
+          <End Role="ParkingPlace" Type="Self.ParkingPlace" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ParkingPlaceReservation" Type="Self.ParkingPlaceReservation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ParkingPlace">
@@ -170,7 +174,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaymentHistory_ParkingPlaceReservation">
-          <End Role="ParkingPlaceReservation" Type="Self.ParkingPlaceReservation" Multiplicity="1" />
+          <End Role="ParkingPlaceReservation" Type="Self.ParkingPlaceReservation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="PaymentHistory" Type="Self.PaymentHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ParkingPlaceReservation">
@@ -478,7 +484,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ParkingPlace_Parking">
-          <End Type="ParkingBaseModel.Parking" Role="Parking" Multiplicity="1" />
+          <End Type="ParkingBaseModel.Parking" Role="Parking" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ParkingBaseModel.ParkingPlace" Role="ParkingPlace" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Parking">
@@ -490,7 +498,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ParkingPlaceReservation_ParkingPlace">
-          <End Type="ParkingBaseModel.ParkingPlace" Role="ParkingPlace" Multiplicity="1" />
+          <End Type="ParkingBaseModel.ParkingPlace" Role="ParkingPlace" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ParkingBaseModel.ParkingPlaceReservation" Role="ParkingPlaceReservation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ParkingPlace">
@@ -514,7 +524,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaymentHistory_ParkingPlaceReservation">
-          <End Type="ParkingBaseModel.ParkingPlaceReservation" Role="ParkingPlaceReservation" Multiplicity="1" />
+          <End Type="ParkingBaseModel.ParkingPlaceReservation" Role="ParkingPlaceReservation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="ParkingBaseModel.PaymentHistory" Role="PaymentHistory" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ParkingPlaceReservation">

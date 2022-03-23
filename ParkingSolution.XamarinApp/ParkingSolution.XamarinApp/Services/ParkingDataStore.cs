@@ -3,6 +3,7 @@ using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -16,9 +17,27 @@ namespace ParkingSolution.XamarinApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteItemAsync(string id)
+        public async Task<bool> DeleteItemAsync(string id)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromSeconds(10);
+                client.DefaultRequestHeaders.Authorization =
+                  new AuthenticationHeaderValue("Basic",
+                                                AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                try
+                {
+                    HttpResponseMessage response = await client
+                     .DeleteAsync($"parkings/{id}");
+                    return response.StatusCode == HttpStatusCode.NoContent;
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    return false;
+                }
+            }
         }
 
         public async Task<SerializedParking> GetItemAsync(string id)
