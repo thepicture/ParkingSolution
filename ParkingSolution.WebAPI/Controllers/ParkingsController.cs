@@ -28,7 +28,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // GET: api/Parkings/5
         [ResponseType(typeof(SerializedParking))]
-        [Authorize(Roles ="Администратор, Сотрудник, Клиент")]
+        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
         public async Task<IHttpActionResult> GetParking(int id)
         {
             Parking parking = await db.Parking.FindAsync(id);
@@ -78,23 +78,79 @@ namespace ParkingSolution.WebAPI.Controllers
         }
 
         // POST: api/Parkings
-        [ResponseType(typeof(Parking))]
-        public async Task<IHttpActionResult> PostParking(Parking parking)
+        [ResponseType(typeof(int))]
+        public async Task<IHttpActionResult> PostParking
+            (SerializedParking serializedParking)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            City city = await db.City
+                .FirstOrDefaultAsync(c =>
+                    c.Name.ToLower()
+                    .Contains(
+                        serializedParking.City.ToLower()));
+            City newCity = null;
+            if (city == null)
+            {
+                int lastCityId = db.City.Max(c => c.Id);
+                newCity = new City
+                {
+                    Id = lastCityId + 1,
+                    Name = serializedParking.City
+                };
+                db.City.Add(newCity);
+                await db.SaveChangesAsync();
+            }
+
+            Address address = await db.Address
+                .FirstOrDefaultAsync(c =>
+                    c.StreetName.ToLower()
+                    .Contains(
+                        serializedParking.Street.ToLower()));
+            Address newAddress = null;
+            if (address == null)
+            {
+                int lastAddressId = db.Address.Max(a => a.Id);
+                newAddress = new Address
+                {
+                    Id = lastAddressId + 1,
+                    StreetName = serializedParking.Street,
+                    CityId = newCity == null ? city.Id : newCity.Id
+                };
+                db.Address.Add(newAddress);
+                await db.SaveChangesAsync();
+            }
+
+            Parking parking = new Parking
+            {
+                AddressId = newAddress == null ? address.Id : newAddress.Id,
+                ParkingTypeId = serializedParking.ParkingTypeId,
+                BeforeFreeTime = serializedParking.BeforeFreeTime,
+                BeforePaidTime = serializedParking.BeforePaidTime,
+                CostInRubles = serializedParking.CostInRubles
+            };
+
+            foreach (string carType in serializedParking.ParkingPlacesCarTypes)
+            {
+                ParkingPlace parkingPlace = new ParkingPlace
+                {
+                    Parking = parking,
+                    CarType = carType
+                };
+            }
+
             db.Parking.Add(parking);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = parking.Id }, parking);
+            return Content(HttpStatusCode.Created, parking.Id);
         }
 
         // DELETE: api/Parkings/5
         [ResponseType(typeof(Nullable))]
-        [Authorize(Roles ="Администратор")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IHttpActionResult> DeleteParking(int id)
         {
             Parking parking = await db.Parking.FindAsync(id);

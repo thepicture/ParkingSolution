@@ -15,5 +15,9 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public string ParkingType { get; set; }
         public int NumberOfParkingPlaces { get; set; }
         public IEnumerable<int> ParkingPlacesIds { get; set; }
+
+        public string Street { get; set; }
+        public string City { get; set; }
+        public IEnumerable<string> ParkingPlacesCarTypes { get; set; }
     }
 }

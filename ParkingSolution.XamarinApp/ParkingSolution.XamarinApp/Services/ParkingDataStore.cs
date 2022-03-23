@@ -6,15 +6,39 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ParkingSolution.XamarinApp.Services
 {
     public class ParkingDataStore : IDataStore<SerializedParking>
     {
-        public Task<bool> AddItemAsync(SerializedParking item)
+        public async Task<bool> AddItemAsync(SerializedParking item)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Basic",
+                                                  AppIdentity.AuthorizationValue);
+                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                try
+                {
+                    string parkingJson = JsonConvert.SerializeObject(item);
+                    HttpResponseMessage response = await client
+                        .PostAsync(new Uri(client.BaseAddress + "parkings"),
+                                   new StringContent(parkingJson,
+                                                     Encoding.UTF8,
+                                                     "application/json"));
+                    string content = await response.Content.ReadAsStringAsync();
+                    return response.StatusCode ==
+                        System.Net.HttpStatusCode.Created;
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    return await Task.FromResult(false);
+                }
+            }
         }
 
         public async Task<bool> DeleteItemAsync(string id)

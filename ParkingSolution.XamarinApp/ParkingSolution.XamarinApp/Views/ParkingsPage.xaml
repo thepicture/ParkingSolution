@@ -126,7 +126,7 @@
                    IsVisible="False">
                 <Label.Triggers>
                     <DataTrigger TargetType="Label"
-                                 Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                 Binding="{Binding Role}"
                                  Value="Клиент">
                         <Setter Property="IsVisible"
                                 Value="True" />
@@ -153,15 +153,17 @@
                         </DataTrigger>
                     </material:MaterialButton.Triggers>
                     </material:MaterialButton>
-                <material:MaterialButton Text="Добавить автостоянку"
+                <material:MaterialButton Command="{Binding GoToAddParkingPageCommand}"
+                                         Text="Добавить автостоянку"
                                          FontSize="10"
-                                         Style="{StaticResource BackgroundButton}">
+                                         Style="{StaticResource BackgroundButton}"
+                                         IsVisible="False">
                     <material:MaterialButton.Triggers>
                         <DataTrigger TargetType="material:MaterialButton"
-                                     Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                     Value="Клиент">
+                                     Binding="{Binding Role}"
+                                     Value="Администратор">
                             <Setter Property="IsVisible"
-                                    Value="False" />
+                                    Value="True" />
                         </DataTrigger>
                     </material:MaterialButton.Triggers>
                 </material:MaterialButton>

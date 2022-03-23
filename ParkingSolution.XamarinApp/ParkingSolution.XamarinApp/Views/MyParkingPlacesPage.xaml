@@ -6,6 +6,7 @@
              xmlns:serialized="clr-namespace:ParkingSolution.XamarinApp.Models.Serialized"
              xmlns:views="clr-namespace:ParkingSolution.XamarinApp.Views"
              xmlns:converters="clr-namespace:ParkingSolution.XamarinApp.Converters"
+             xmlns:services="clr-namespace:ParkingSolution.XamarinApp.Services"
              x:DataType="viewmodels:MyParkingPlacesViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.MyParkingPlacesPage"
              Title="Неоплаченные бронировки">
@@ -64,7 +65,16 @@
                                                                                               AncestorType={x:Type views:MyParkingPlacesPage}}, 
                                                                                               Path=BindingContext.PayParkingPlaceCommand}"
                                                          Text="Оплатить"
-                                                         Style="{StaticResource BaseButton}">
+                                                         Style="{StaticResource BaseButton}"
+                                                         IsVisible="False">
+                                    <material:MaterialButton.Triggers>
+                                        <DataTrigger TargetType="material:MaterialButton"
+                                                     Binding="{Binding Source={x:Static services:AppIdentity.Role}}"
+                                                     Value="Клиент">
+                                            <Setter Property="IsVisible"
+                                                    Value="True" />
+                                        </DataTrigger>
+                                    </material:MaterialButton.Triggers>
                                 </material:MaterialButton>
                             </StackLayout>
                         </material:MaterialCard>

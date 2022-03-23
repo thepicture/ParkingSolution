@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             x:DataType="viewmodels:AddParkingViewModel"
+             x:Class="ParkingSolution.XamarinApp.Views.AddParkingPage"
+             Title="Добавление автостоянки">
+    <ContentPage.Content>
+        <ScrollView Margin="10,10,10,0">
+            <StackLayout>
+                <material:MaterialTextField Text="{Binding City}"
+                                            Placeholder="Введите город"
+                                            HelperText="* обязательно"
+                                            InputType="Text"
+                                            MaxLength="18"
+                                            LeadingIcon="world"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}" />
+                <material:MaterialTextField Text="{Binding Street}"
+                                            Placeholder="Введите адрес улицы"
+                                            HelperText="* обязательно"
+                                            InputType="Text"
+                                            MaxLength="18"
+                                            LeadingIcon="home"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}" />
+                <Label Text="Выберите тип парковки" />
+                <Picker SelectedItem="{Binding ParkingType}"
+                        Title="Выберите тип парковки">
+                    <Picker.ItemsSource>
+                        <Array Type="{x:Type x:String}">
+                            <x:String>Придорожная</x:String>
+                            <x:String>Плоскостная</x:String>
+                        </Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Label Text="Платно начиная с времени" />
+                <TimePicker Time="{Binding BeforePaidTime}" />
+                <Label Text="и заканчивая временем" />
+                <TimePicker Time="{Binding BeforeFreeTime}" />
+                <material:MaterialTextField Text="{Binding CostInRubles}"
+                                            Placeholder="Введите стоимость платного времени"
+                                            HelperText="* обязательно, в рублях"
+                                            InputType="Numeric"
+                                            MaxLength="18"
+                                            LeadingIcon="write_letter"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}" />
+                <BoxView Color="WhiteSmoke"
+                         HeightRequest="1" 
+                         Margin="0,20,0,20"/>
+                <Label Text="Парковочные места" 
+                       FontAttributes="Bold"
+                       FontSize="Medium"/>
+                <Label Text="Выберите тип парковочного места"/>
+                <Picker SelectedItem="{Binding ParkingPlaceType}"
+                        Title="Тип парковочного места">
+                    <Picker.ItemsSource>
+                        <Array Type="{x:Type x:String}">
+                            <x:String>A</x:String>
+                            <x:String>B</x:String>
+                            <x:String>C</x:String>
+                            <x:String>D</x:String>
+                            <x:String>E</x:String>
+                        </Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <material:MaterialButton Command="{Binding AddParkingPlaceCommand}"
+                                         Text="Добавить"
+                                         Style="{StaticResource BaseButton}" />
+                <StackLayout BindableLayout.ItemsSource="{Binding ParkingPlaces}"
+                             ChildAdded="OnChildAdded">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <material:MaterialCard Elevation="5"
+                                                   Margin="10"
+                                                   IsClickable="True">
+                                <StackLayout>
+                                    <Label Text="Парковочное место"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center" />
+                                    <BoxView Color="WhiteSmoke"
+                                             HeightRequest="1" />
+                                    <Label Text="{Binding Source={RelativeSource Self},
+                                                  StringFormat='Автомобиль типа {0}'}"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center" />
+                                </StackLayout>
+                            </material:MaterialCard>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+                <material:MaterialButton Command="{Binding SaveChangesCommand}"
+                                         Text="Сохранить"
+                                         Style="{StaticResource BaseButton}" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

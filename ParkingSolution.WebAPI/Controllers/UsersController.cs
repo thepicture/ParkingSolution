@@ -7,6 +7,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -195,11 +196,25 @@ namespace ParkingSolution.WebAPI.Controllers
         }
 
         [ResponseType(typeof(List<SerializedParkingPlace>))]
-        [Authorize(Roles = "Клиент")]
+        [Authorize(Roles = "Клиент, Сотрудник")]
         [HttpGet]
         [Route("api/users/myparkingplaces")]
         public IHttpActionResult GetMyParkingPlacesAsync()
         {
+            string role = (HttpContext.Current.User.Identity as ClaimsIdentity)
+                .FindFirst(ClaimTypes.Role)
+                .Value;
+            if (role == "Сотрудник")
+            {
+                return Ok(
+                db.ParkingPlaceReservation
+                .Where(ppr => !ppr.IsPayed)
+                .ToList()
+                .ConvertAll(ppr =>
+                {
+                    return new SerializedParkingPlaceReservation(ppr);
+                }));
+            }
             return Ok(
                 db.ParkingPlaceReservation
                 .Where(ppr => !ppr.IsPayed

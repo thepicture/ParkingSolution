@@ -7,6 +7,10 @@ namespace ParkingSolution.WebAPI.Models.Serialized
 {
     public class SerializedParking
     {
+        public SerializedParking()
+        {
+        }
+
         public SerializedParking(Parking parking)
         {
             Id = parking.Id;
@@ -33,5 +37,9 @@ namespace ParkingSolution.WebAPI.Models.Serialized
         public string ParkingType { get; set; }
         public int NumberOfParkingPlaces { get; set; }
         public IEnumerable<int> ParkingPlacesIds { get; set; }
+        public IEnumerable<string> ParkingPlacesCarTypes { get; set; }
+
+        public string Street { get; set; }
+        public string City { get; set; }
     }
 }

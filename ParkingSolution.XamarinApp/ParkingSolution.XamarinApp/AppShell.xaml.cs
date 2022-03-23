@@ -13,6 +13,7 @@ namespace ParkingSolution.XamarinApp
             Routing.RegisterRoute(nameof(ParkingPlacesPage), typeof(ParkingPlacesPage));
             Routing.RegisterRoute(nameof(MyCarsPage), typeof(MyCarsPage));
             Routing.RegisterRoute(nameof(AddCarPage), typeof(AddCarPage));
+            Routing.RegisterRoute(nameof(AddParkingPage), typeof(AddParkingPage));
 
             if (IsLoggedIn())
             {
@@ -74,6 +75,14 @@ namespace ParkingSolution.XamarinApp
                     });
                     break;
                 case "Сотрудник":
+                    CommonTabBar
+                     .Items.Add(new ShellContent
+                     {
+                         Route = nameof(MyParkingPlacesPage),
+                         Icon = "write_letter",
+                         Title = "Бронировки",
+                         ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
+                     });
                     break;
                 case "Клиент":
                     CommonTabBar

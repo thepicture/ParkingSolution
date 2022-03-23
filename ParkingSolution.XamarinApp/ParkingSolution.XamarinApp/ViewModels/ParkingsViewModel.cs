@@ -265,5 +265,28 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 LoadParkingsAsync();
             });
         }
+
+        private Command goToAddParkingPageCommand;
+
+        public ICommand GoToAddParkingPageCommand
+        {
+            get
+            {
+                if (goToAddParkingPageCommand == null)
+                {
+                    goToAddParkingPageCommand = new Command(GoToAddParkingPageAsync);
+                }
+
+                return goToAddParkingPageCommand;
+            }
+        }
+
+        private async void GoToAddParkingPageAsync()
+        {
+            await Shell
+              .Current
+              .GoToAsync(
+                  $"{nameof(AddParkingPage)}");
+        }
     }
 }
