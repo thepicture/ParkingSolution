@@ -13,6 +13,10 @@ namespace ParkingSolution.XamarinApp.ViewModels
         bool isBusy = false;
         public IDataStore<SerializedUserCar> CarDataStore =>
             DependencyService.Get<IDataStore<SerializedUserCar>>();
+        public IDataStore<SerializedParking> ParkingDataStore =>
+          DependencyService.Get<IDataStore<SerializedParking>>();
+        public IDataStore<SerializedParkingPlaceReservation> ReservationDataStore =>
+         DependencyService.Get<IDataStore<SerializedParkingPlaceReservation>>();
         public IFeedbackService FeedbackService =>
             DependencyService.Get<IFeedbackService>();
         public IAuthenticatorService AuthenticatorService =>
@@ -50,11 +54,9 @@ namespace ParkingSolution.XamarinApp.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
+            PropertyChangedEventHandler changed = PropertyChanged;
 
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            changed?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
     }

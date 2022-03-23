@@ -13,7 +13,7 @@ namespace ParkingSolution.WebAPI.Models.Serialized
         public SerializedParkingPlace(ParkingPlace parkingPlace)
         {
             Id = parkingPlace.Id;
-            ParkingId = parkingPlace.Id;
+            ParkingId = parkingPlace.ParkingId;
             CarType = parkingPlace.CarType;
             IsFree = parkingPlace.ParkingPlaceReservation.Where(pp =>
             {

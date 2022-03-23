@@ -45,5 +45,12 @@ namespace ParkingSolution.XamarinApp.Views
             .SelectedParking = (sender as Pin)
             .BindingContext as ParkingHelper;
         }
+
+        private void OnListItemClicked(object sender, EventArgs e)
+        {
+            (BindingContext as ParkingsViewModel)
+          .SelectedParking = (sender as View)
+          .BindingContext as ParkingHelper;
+        }
     }
 }

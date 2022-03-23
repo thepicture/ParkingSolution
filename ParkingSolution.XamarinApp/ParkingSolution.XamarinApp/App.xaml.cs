@@ -18,6 +18,8 @@ namespace ParkingSolution.XamarinApp
             DependencyService.Register<ApiAuthenticatorService>();
             DependencyService.Register<ApiRegistrationService>();
             DependencyService.Register<CarDataStore>();
+            DependencyService.Register<ReservationDataStore>();
+            DependencyService.Register<ParkingDataStore>();
 
             MainPage = new AppShell();
         }

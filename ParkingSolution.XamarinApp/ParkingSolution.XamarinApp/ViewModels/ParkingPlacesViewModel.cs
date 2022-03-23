@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
+using ParkingSolution.XamarinApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,11 +41,11 @@ namespace ParkingSolution.XamarinApp.ViewModels
                         .Result
                         .Content
                         .ReadAsStringAsync();
-                    IEnumerable<SerializedUserCar> parkingPlacesResponse =
+                    IEnumerable<SerializedParkingPlace> parkingPlacesResponse =
                         JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedUserCar>>
+                        <IEnumerable<SerializedParkingPlace>>
                         (response);
-                    foreach (SerializedUserCar parkingPlace
+                    foreach (SerializedParkingPlace parkingPlace
                         in parkingPlacesResponse)
                     {
                         await Task.Delay(500);
@@ -63,10 +64,10 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
         }
 
-        private ObservableCollection<SerializedUserCar> parkingPlaces;
+        private ObservableCollection<SerializedParkingPlace> parkingPlaces;
 
         public SerializedParking Parking { get; set; }
-        public ObservableCollection<SerializedUserCar> ParkingPlaces
+        public ObservableCollection<SerializedParkingPlace> ParkingPlaces
         {
             get => parkingPlaces;
             set => SetProperty(ref parkingPlaces, value);
@@ -76,8 +77,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         public ParkingPlacesViewModel(SerializedParking serializedParking)
         {
+            ParkingPlaces = new ObservableCollection<SerializedParkingPlace>();
             Parking = serializedParking;
-            ParkingPlaces = new ObservableCollection<SerializedUserCar>();
             Task.Run(() =>
             {
                 LoadParkingPlacesAsync();
@@ -99,7 +100,15 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void ReserveParkingPlaceAsync(object param)
         {
-
+            await Shell
+              .Current
+              .Navigation
+              .PushAsync(
+                  new ReservationPage(
+                      new ReservationViewModel(
+                          param as SerializedParkingPlace)
+                      )
+                  );
         }
     }
 }

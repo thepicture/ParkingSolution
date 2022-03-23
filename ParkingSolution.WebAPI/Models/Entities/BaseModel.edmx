@@ -47,7 +47,7 @@
           <Property Name="ParkingPlaceId" Type="int" Nullable="false" />
           <Property Name="FromDateTime" Type="datetime" Nullable="false" />
           <Property Name="ToDateTime" Type="datetime" />
-          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CarId" Type="int" Nullable="false" />
           <Property Name="IsPayed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ParkingType">
@@ -164,7 +164,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ParkingPlaceReservation">
-              <PropertyRef Name="UserId" />
+              <PropertyRef Name="CarId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -354,7 +354,7 @@
           <Property Name="ParkingPlaceId" Type="Int32" Nullable="false" />
           <Property Name="FromDateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ToDateTime" Type="DateTime" Precision="3" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CarId" Type="Int32" Nullable="false" />
           <Property Name="IsPayed" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ParkingPlace" Relationship="ParkingBaseModel.FK_ParkingPlaceReservation_ParkingPlace" FromRole="ParkingPlaceReservation" ToRole="ParkingPlace" />
           <NavigationProperty Name="User" Relationship="ParkingBaseModel.FK_ParkingPlaceReservation_User" FromRole="ParkingPlaceReservation" ToRole="User" />
@@ -481,7 +481,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ParkingPlaceReservation">
-              <PropertyRef Name="UserId" />
+              <PropertyRef Name="CarId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -521,7 +521,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -569,7 +569,7 @@
             <EntityTypeMapping TypeName="ParkingBaseModel.ParkingPlaceReservation">
               <MappingFragment StoreEntitySet="ParkingPlaceReservation">
                 <ScalarProperty Name="IsPayed" ColumnName="IsPayed" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CarId" ColumnName="CarId" />
                 <ScalarProperty Name="ToDateTime" ColumnName="ToDateTime" />
                 <ScalarProperty Name="FromDateTime" ColumnName="FromDateTime" />
                 <ScalarProperty Name="ParkingPlaceId" ColumnName="ParkingPlaceId" />

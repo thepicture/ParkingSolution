@@ -11,5 +11,16 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public string RegistrationCode { get; set; }
         public int RegionCode { get; set; }
         public string Country { get; set; }
+        public string StringRepresentation
+        {
+            get
+            {
+                return SeriesPartOne
+                    + RegistrationCode
+                    + SeriesPartTwo
+                    + ", "
+                    + Country + ", тип " + CarType;
+            }
+        }
     }
 }

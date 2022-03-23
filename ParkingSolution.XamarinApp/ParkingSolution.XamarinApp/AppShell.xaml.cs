@@ -10,9 +10,6 @@ namespace ParkingSolution.XamarinApp
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
-            Routing.RegisterRoute(nameof(ParkingsPage), typeof(ParkingsPage));
             Routing.RegisterRoute(nameof(ParkingPlacesPage), typeof(ParkingPlacesPage));
             Routing.RegisterRoute(nameof(MyCarsPage), typeof(MyCarsPage));
             Routing.RegisterRoute(nameof(AddCarPage), typeof(AddCarPage));

@@ -45,7 +45,8 @@
                     <DataTemplate x:DataType="helpers:ParkingHelper">
                         <material:MaterialCard Elevation="5"
                                                Margin="10"
-                                               IsClickable="True">
+                                               IsClickable="True"
+                                               Clicked="OnListItemClicked">
                             <StackLayout>
                                 <Label Text="{Binding Address, 
                                                   StringFormat='Адрес: {0}'}"
@@ -77,7 +78,7 @@
                      VerticalOptions="CenterAndExpand">
             <Label Text="{Binding SelectedParking.Parking.NumberOfParkingPlaces,
                                   StringFormat='{}Число мест: {0}',
-                                  FallbackValue=Выберите автостоянку на карте}"
+                                  FallbackValue=Выберите автостоянку}"
                    HorizontalTextAlignment="Center"
                    Margin="5"
                    HorizontalOptions="Center" />

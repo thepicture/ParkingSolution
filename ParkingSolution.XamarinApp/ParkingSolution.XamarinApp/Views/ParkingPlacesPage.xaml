@@ -17,9 +17,9 @@
                                            IsClickable="True">
                         <StackLayout>
                             <Label Text="{Binding CarType, 
-                                                  StringFormat='Тип машины: {0}'}"
+                                                  StringFormat='{}Тип машины: {0}'}"
                                    FontAttributes="Bold"
-                                   HorizontalTextAlignment="Center" />
+                                   HorizontalTextAlignment="Center"/>
                             <BoxView Color="WhiteSmoke"
                                      HeightRequest="1" />
                             <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 

@@ -27,6 +27,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // GET: api/Parkings/5
         [ResponseType(typeof(SerializedParking))]
+        [Authorize(Roles ="Администратор, Сотрудник, Клиент")]
         public async Task<IHttpActionResult> GetParking(int id)
         {
             Parking parking = await db.Parking.FindAsync(id);
