@@ -196,7 +196,7 @@ namespace ParkingSolution.WebAPI.Controllers
         }
 
         [ResponseType(typeof(List<SerializedParkingPlace>))]
-        [Authorize(Roles = "Клиент, Сотрудник")]
+        [Authorize(Roles = "Клиент, Сотрудник, Администратор")]
         [HttpGet]
         [Route("api/users/myparkingplaces")]
         public IHttpActionResult GetMyParkingPlacesAsync()
@@ -204,7 +204,7 @@ namespace ParkingSolution.WebAPI.Controllers
             string role = (HttpContext.Current.User.Identity as ClaimsIdentity)
                 .FindFirst(ClaimTypes.Role)
                 .Value;
-            if (role == "Сотрудник")
+            if (role == "Сотрудник"  || role == "Администратор")
             {
                 return Ok(
                 db.ParkingPlaceReservation

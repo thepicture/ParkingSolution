@@ -73,6 +73,14 @@ namespace ParkingSolution.XamarinApp
                         Title = "Сотрудники",
                         ContentTemplate = new DataTemplate(typeof(EmployeesPage))
                     });
+                    CommonTabBar
+                    .Items.Add(new ShellContent
+                    {
+                        Route = nameof(MyParkingPlacesPage),
+                        Icon = "write_letter",
+                        Title = "Все бронирования",
+                        ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
+                    });
                     break;
                 case "Сотрудник":
                     CommonTabBar
@@ -80,7 +88,7 @@ namespace ParkingSolution.XamarinApp
                      {
                          Route = nameof(MyParkingPlacesPage),
                          Icon = "write_letter",
-                         Title = "Бронировки",
+                         Title = "Все бронирования",
                          ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
                      });
                     break;
@@ -90,7 +98,7 @@ namespace ParkingSolution.XamarinApp
                      {
                          Route = nameof(MyParkingPlacesPage),
                          Icon = "write_letter",
-                         Title = "Бронировки",
+                         Title = "Мои бронирования",
                          ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
                      });
                     break;
