@@ -84,8 +84,7 @@
                         <DataTemplate x:DataType="{x:Type helpers:ParkingTypeHelper}">
                             <material:MaterialCard Elevation="5"
                                                    Margin="10"
-                                                   IsClickable="True"
-                                                   HeightRequest="70">
+                                                   IsClickable="True">
                                 <StackLayout>
                                     <Label Text="Парковочное место"
                                            FontAttributes="Bold"
