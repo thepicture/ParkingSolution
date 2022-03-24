@@ -12,7 +12,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -30,22 +29,31 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             using (HttpClient client = new HttpClient())
             {
-                client.Timeout = TimeSpan.FromSeconds(10);
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",
                                                 AppIdentity.AuthorizationValue);
                 client.BaseAddress = new Uri((App.Current as App).BaseUrl);
                 try
                 {
-                    string response = await client
-                        .GetAsync("parkings")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
+                    HttpResponseMessage response = await client
+                        .GetAsync("parkings");
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            FeedbackService.InformError("Парковки не "
+                                + "подгружены в связи с ошибкой сервера: "
+                                + response.StatusCode);
+                        });
+                        IsRefreshing = false;
+                        return;
+                    }
                     IEnumerable<SerializedParking> parkings = JsonConvert
                         .DeserializeObject
                         <IEnumerable<SerializedParking>>
-                        (response);
+                        (
+                            await response.Content.ReadAsStringAsync()
+                        );
                     Geocoder geoCoder = new Geocoder();
                     Device.BeginInvokeOnMainThread(() =>
                     {
@@ -53,46 +61,90 @@ namespace ParkingSolution.XamarinApp.ViewModels
                     });
                     foreach (SerializedParking parking in parkings)
                     {
-                        IEnumerable<Position> approximateLocations =
-                                await geoCoder
-                                .GetPositionsForAddressAsync(
-                                string.Format(parking.Address)
-                                );
-                        Device.BeginInvokeOnMainThread(() =>
+                        try
                         {
+                            IEnumerable<Position> approximateLocations =
+                                                           await geoCoder
+                                                           .GetPositionsForAddressAsync(
+                                                           string.Format(parking.Address)
+                                                           );
                             Position position = approximateLocations
                                 .FirstOrDefault();
-                            Parkings.Add(new ParkingHelper
+                            Device.BeginInvokeOnMainThread(() =>
                             {
-                                Address = parking.Address,
-                                Description = parking.ParkingType,
-                                Position = position,
-                                Parking = parking
+                                Parkings.Add(new ParkingHelper
+                                {
+                                    Address = parking.Address,
+                                    Description = parking.ParkingType,
+                                    Position = position,
+                                    Parking = parking
+                                });
                             });
-                        });
+                        }
+                        catch (Exception ex)
+                        {
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                FeedbackService.InformError("Геолокация " +
+                                    "произошла с ошибкой: " + ex.StackTrace);
+                            });
+                        }
                     }
                 }
                 catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform("Парковки " +
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        FeedbackService.InformError("Парковки " +
                         "не загружены в связи с изменением " +
                         "бизнес-процессов. Обратитесь к " +
                         "администратору");
+                    });
+                    IsRefreshing = false;
+                }
+                catch (TaskCanceledException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        FeedbackService.InformError("Запрос на " +
+                        "получение парковок отменён");
+                    });
+                    IsRefreshing = false;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Debug.WriteLine(ex.StackTrace);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        FeedbackService.InformError("Система " +
+                         "попыталась отправить запрос " +
+                         "более, чем один раз");
+                    });
+                    IsRefreshing = false;
                 }
                 catch (TimeoutException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform("Время ожидания " +
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        FeedbackService.InformError("Время ожидания " +
                         "загрузки истекло. Обновите страницу");
+                    });
+                    IsRefreshing = false;
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform("Неизвестная ошибка. " +
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        FeedbackService.InformError("Неизвестная ошибка. " +
                         "Парковки не загружены. " +
                         "Перезапустите приложение или обновите " +
                         "список парковок");
+                    });
+                    IsRefreshing = false;
                 }
             }
             IsRefreshing = false;

@@ -1,10 +1,8 @@
 ﻿using ParkingSolution.XamarinApp.Models.Helpers;
-using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.ViewModels;
 using Plugin.Geolocator;
 using System;
 using System.Diagnostics;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
