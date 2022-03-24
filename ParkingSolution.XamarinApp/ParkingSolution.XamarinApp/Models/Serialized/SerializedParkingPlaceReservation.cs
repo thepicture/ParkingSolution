@@ -12,5 +12,6 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public bool IsPayed { get; set; }
         public string CarType { get; set; }
         public decimal TotalPrice { get; set; }
+        public string ReservationFullAddress { get; set; }
     }
 }

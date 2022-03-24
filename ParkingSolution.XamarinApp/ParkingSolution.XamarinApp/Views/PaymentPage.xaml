@@ -21,6 +21,10 @@
                     <behaviors:MaskedBehavior Mask="(XXXX)-(XXXX)-(XXXX)-(XXXX)"/>
                 </material:MaterialTextField.Behaviors>
             </material:MaterialTextField>
+            <Label Text="{Binding Reservation.ReservationFullAddress, 
+                                  StringFormat='{}Адрес: {0:F0} РУБ.'}"
+                   HorizontalTextAlignment="Center"
+                   FontSize="Large"/>
             <Label Text="{Binding Reservation.TotalPrice, StringFormat='{}ИТОГО: {0:F0} РУБ.'}"
                    HorizontalTextAlignment="Center"
                    FontSize="Large"

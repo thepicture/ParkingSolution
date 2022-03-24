@@ -41,6 +41,12 @@
                                        HorizontalTextAlignment="Center" />
                                 <BoxView Color="WhiteSmoke"
                                          HeightRequest="1" />
+                                <Label Text="{Binding ReservationFullAddress, 
+                                                  StringFormat='{}Адрес: {0}'}"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+                                <BoxView Color="WhiteSmoke"
+                                         HeightRequest="1" />
                                 <Label Text="{Binding TotalPrice, 
                                                   StringFormat='{}ИТОГО: {0:F0} РУБ.'}"
                                        FontAttributes="Bold"

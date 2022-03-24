@@ -25,6 +25,10 @@ namespace ParkingSolution.WebAPI.Models.Serialized
                     TotalPrice += reservation.ParkingPlace.Parking.CostInRubles;
                 }
             }
+            ReservationFullAddress = reservation
+                .ParkingPlace.Parking.Address.StreetName
+                + ", "
+                + reservation.ParkingPlace.Parking.Address.City.Name;
         }
 
         public int Id { get; set; }
@@ -36,5 +40,6 @@ namespace ParkingSolution.WebAPI.Models.Serialized
 
         public string CarType { get; set; }
         public decimal TotalPrice { get; set; }
+        public string ReservationFullAddress { get; set; }
     }
 }
