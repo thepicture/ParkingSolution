@@ -124,25 +124,38 @@ namespace ParkingSolution.WebAPI.Controllers
                 await db.SaveChangesAsync();
             }
 
-            Parking parking = new Parking
+            Parking parking;
+            if (serializedParking.Id == 0)
             {
-                AddressId = newAddress == null ? address.Id : newAddress.Id,
-                ParkingTypeId = serializedParking.ParkingTypeId,
-                BeforeFreeTime = serializedParking.BeforeFreeTime,
-                BeforePaidTime = serializedParking.BeforePaidTime,
-                CostInRubles = serializedParking.CostInRubles
-            };
-
-            foreach (string carType in serializedParking.ParkingPlacesCarTypes)
-            {
-                ParkingPlace parkingPlace = new ParkingPlace
+                parking = new Parking
                 {
-                    CarType = carType
+                    AddressId = newAddress == null ? address.Id : newAddress.Id,
+                    ParkingTypeId = serializedParking.ParkingTypeId,
+                    BeforeFreeTime = serializedParking.BeforeFreeTime,
+                    BeforePaidTime = serializedParking.BeforePaidTime,
+                    CostInRubles = serializedParking.CostInRubles
                 };
-                parking.ParkingPlace.Add(parkingPlace);
+
+                foreach (string carType in serializedParking.ParkingPlacesCarTypes)
+                {
+                    ParkingPlace parkingPlace = new ParkingPlace
+                    {
+                        CarType = carType
+                    };
+                    parking.ParkingPlace.Add(parkingPlace);
+                }
+                db.Parking.Add(parking);
+            }
+            else
+            {
+                parking = await db.Parking.FindAsync(serializedParking.Id);
+                parking.AddressId = newAddress == null ? address.Id : newAddress.Id;
+                parking.ParkingTypeId = serializedParking.ParkingType == "Придорожная" ? 1 : 2;
+                parking.BeforePaidTime = serializedParking.BeforePaidTime;
+                parking.BeforeFreeTime = serializedParking.BeforeFreeTime;
+                parking.CostInRubles = serializedParking.CostInRubles;
             }
 
-            db.Parking.Add(parking);
             await db.SaveChangesAsync();
 
             return Content(HttpStatusCode.Created, parking.Id);

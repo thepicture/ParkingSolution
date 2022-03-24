@@ -18,6 +18,35 @@ namespace ParkingSolution.XamarinApp.ViewModels
             ParkingPlaces = new ObservableCollection<ParkingTypeHelper>();
         }
 
+        public AddParkingViewModel(SerializedParking serializedParking)
+        {
+            ParkingPlaces = new ObservableCollection<ParkingTypeHelper>();
+            EditingParking = serializedParking;
+            if (EditingParking.ParkingPlacesCarTypes != null)
+            {
+                foreach (string parkingPlaceCarType in EditingParking.ParkingPlacesCarTypes)
+                {
+                    ParkingTypeHelper parkingTypeHelper = new ParkingTypeHelper
+                    {
+                        Name = parkingPlaceCarType
+                    };
+                    if (parkingPlaceCarType == "A") parkingTypeHelper.Id = 1;
+                    if (parkingPlaceCarType == "B") parkingTypeHelper.Id = 2;
+                    if (parkingPlaceCarType == "C") parkingTypeHelper.Id = 3;
+                    if (parkingPlaceCarType == "D") parkingTypeHelper.Id = 4;
+                    if (parkingPlaceCarType == "E") parkingTypeHelper.Id = 5;
+                    ParkingPlaces.Add(parkingTypeHelper);
+                }
+            }
+
+            City = EditingParking.City;
+            Street = EditingParking.Street;
+            ParkingType = EditingParking.ParkingType;
+            BeforePaidTime = EditingParking.BeforePaidTime;
+            BeforeFreeTime = EditingParking.BeforeFreeTime;
+            CostInRubles = EditingParking.CostInRubles.ToString("F0");
+        }
+
         public ObservableCollection<ParkingTypeHelper> ParkingPlaces
         {
             get => parkingPlaces;
@@ -112,16 +141,32 @@ namespace ParkingSolution.XamarinApp.ViewModels
             }
 
             IsBusy = true;
-            SerializedParking parking = new SerializedParking
+            SerializedParking parking = null;
+            if (EditingParking != null)
             {
-                City = City,
-                Street = Street,
-                ParkingTypeId = ParkingType == "Придорожная" ? 1 : 2,
-                BeforePaidTime = BeforePaidTime,
-                BeforeFreeTime = BeforeFreeTime,
-                CostInRubles = decimal.Parse(CostInRubles),
-                ParkingPlacesCarTypes = ParkingPlaces.Select(pp => pp.Name)
-            };
+                EditingParking.City = City;
+                EditingParking.Street = Street;
+                EditingParking.ParkingTypeId = ParkingType == "Придорожная" ? 1 : 2;
+                EditingParking.BeforePaidTime = BeforePaidTime;
+                EditingParking.BeforeFreeTime = BeforeFreeTime;
+                EditingParking.CostInRubles = decimal.Parse(CostInRubles);
+                EditingParking.ParkingPlacesCarTypes = ParkingPlaces.Select(pp => pp.Name);
+                parking = EditingParking;
+            }
+            else
+            {
+                parking = new SerializedParking
+                {
+                    City = City,
+                    Street = Street,
+                    ParkingTypeId = ParkingType == "Придорожная" ? 1 : 2,
+                    BeforePaidTime = BeforePaidTime,
+                    BeforeFreeTime = BeforeFreeTime,
+                    CostInRubles = decimal.Parse(CostInRubles),
+                    ParkingPlacesCarTypes = ParkingPlaces.Select(pp => pp.Name)
+                };
+            }
+
             if (await ParkingDataStore.AddItemAsync(parking))
             {
                 await FeedbackService.Inform("Парковка добавлена");
@@ -190,11 +235,17 @@ namespace ParkingSolution.XamarinApp.ViewModels
         }
 
         private string costInRubles;
+        private SerializedParking editingParking;
 
         public string CostInRubles
         {
             get => costInRubles;
             set => SetProperty(ref costInRubles, value);
+        }
+        public SerializedParking EditingParking
+        {
+            get => editingParking;
+            set => SetProperty(ref editingParking, value);
         }
     }
 }

@@ -15,6 +15,12 @@ namespace ParkingSolution.XamarinApp.Views
             BindingContext = _viewModel = new AddParkingViewModel();
         }
 
+        public AddParkingPage(AddParkingViewModel addParkingViewModel)
+        {
+            InitializeComponent();
+            BindingContext = _viewModel = addParkingViewModel;
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();

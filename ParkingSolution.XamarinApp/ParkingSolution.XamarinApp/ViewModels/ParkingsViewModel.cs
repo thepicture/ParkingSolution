@@ -349,5 +349,33 @@ namespace ParkingSolution.XamarinApp.ViewModels
               .GoToAsync(
                   $"{nameof(AddParkingPage)}");
         }
+
+        private Command<SerializedParking> goToParkingEditCommand;
+
+        public Command<SerializedParking> GoToParkingEditCommand
+        {
+            get
+            {
+                if (goToParkingEditCommand == null)
+                {
+                    goToParkingEditCommand = new Command<SerializedParking>
+                        (GoToParkingEditAsync);
+                }
+
+                return goToParkingEditCommand;
+            }
+        }
+
+        private async void GoToParkingEditAsync(SerializedParking serializedParking)
+        {
+            await Shell
+                .Current
+                .Navigation
+                .PushAsync(
+                    new AddParkingPage(
+                        new AddParkingViewModel(serializedParking)
+                        )
+                    );
+        }
     }
 }

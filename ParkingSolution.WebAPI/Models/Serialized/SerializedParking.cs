@@ -27,6 +27,10 @@ namespace ParkingSolution.WebAPI.Models.Serialized
                 .ParkingPlace
                 .Where(pp => new SerializedParkingPlace(pp).IsFree)
                 .Count();
+            ParkingPlacesCarTypes = parking.ParkingPlace
+                .Select(p => p.CarType);
+            City = parking.Address.City.Name;
+            Street = parking.Address.StreetName;
         }
 
         public int Id { get; set; }

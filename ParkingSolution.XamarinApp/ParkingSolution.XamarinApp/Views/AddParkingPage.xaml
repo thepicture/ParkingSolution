@@ -4,9 +4,13 @@
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
              xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
              xmlns:helpers="clr-namespace:ParkingSolution.XamarinApp.Models.Helpers"
+             xmlns:converters="clr-namespace:ParkingSolution.XamarinApp.Converters"
              x:DataType="viewmodels:AddParkingViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.AddParkingPage"
-             Title="Добавление автостоянки">
+             Title="Изменение автостоянки">
+    <ContentPage.Resources>
+        <converters:EditingParkingValueConverter x:Key="EditingParkingBoolean"/>
+    </ContentPage.Resources>
     <ContentView>
         <ScrollView Margin="10,10,10,0">
             <StackLayout>
@@ -54,31 +58,33 @@
                 <Label Text="Парковочные места"
                        FontAttributes="Bold"
                        FontSize="Medium" />
-                <Label Text="Выберите тип парковочного места" />
-                <Picker SelectedItem="{Binding ParkingPlaceType}"
-                        Title="Тип парковочного места">
-                    <Picker.ItemDisplayBinding>
-                        <Binding Path="Name"
-                                 x:DataType="{x:Type helpers:ParkingTypeHelper}" />
-                    </Picker.ItemDisplayBinding>
-                    <Picker.ItemsSource>
-                        <Array Type="{x:Type helpers:ParkingTypeHelper}">
-                            <helpers:ParkingTypeHelper Id="1"
-                                                       Name="A" />
-                            <helpers:ParkingTypeHelper Id="2"
-                                                       Name="B" />
-                            <helpers:ParkingTypeHelper Id="3"
-                                                       Name="C" />
-                            <helpers:ParkingTypeHelper Id="4"
-                                                       Name="D" />
-                            <helpers:ParkingTypeHelper Id="5"
-                                                       Name="E" />
-                        </Array>
-                    </Picker.ItemsSource>
-                </Picker>
-                <material:MaterialButton Command="{Binding AddParkingPlaceCommand}"
-                                         Text="Добавить место"
-                                         Style="{StaticResource BaseButton}" />
+                <StackLayout IsVisible="{Binding EditingParking, Converter={x:StaticResource EditingParkingBoolean}}">
+                    <Label Text="Выберите тип парковочного места" />
+                    <Picker SelectedItem="{Binding ParkingPlaceType}"
+                            Title="Тип парковочного места">
+                        <Picker.ItemDisplayBinding>
+                            <Binding Path="Name"
+                                     x:DataType="{x:Type helpers:ParkingTypeHelper}" />
+                        </Picker.ItemDisplayBinding>
+                        <Picker.ItemsSource>
+                            <Array Type="{x:Type helpers:ParkingTypeHelper}">
+                                <helpers:ParkingTypeHelper Id="1"
+                                                           Name="A" />
+                                <helpers:ParkingTypeHelper Id="2"
+                                                           Name="B" />
+                                <helpers:ParkingTypeHelper Id="3"
+                                                           Name="C" />
+                                <helpers:ParkingTypeHelper Id="4"
+                                                           Name="D" />
+                                <helpers:ParkingTypeHelper Id="5"
+                                                           Name="E" />
+                            </Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    <material:MaterialButton Command="{Binding AddParkingPlaceCommand}"
+                                             Text="Добавить место"
+                                             Style="{StaticResource BaseButton}" />
+                </StackLayout>
                 <StackLayout BindableLayout.ItemsSource="{Binding ParkingPlaces}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type helpers:ParkingTypeHelper}">
