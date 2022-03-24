@@ -22,6 +22,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private bool showAsMap = true;
         internal void OnAppearing()
         {
+            SelectedParking = null;
             IsRefreshing = true;
         }
 

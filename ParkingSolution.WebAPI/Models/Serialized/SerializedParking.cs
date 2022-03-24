@@ -23,8 +23,10 @@ namespace ParkingSolution.WebAPI.Models.Serialized
                       + ", "
                       + parking.Address.City.Name;
             ParkingType = parking.ParkingType.Name;
-            NumberOfParkingPlaces = parking.ParkingPlace.Count;
-            ParkingPlacesIds = parking.ParkingPlace.Select(pp => pp.Id);
+            NumberOfParkingPlaces = parking
+                .ParkingPlace
+                .Where(pp => new SerializedParkingPlace(pp).IsFree)
+                .Count();
         }
 
         public int Id { get; set; }
