@@ -2,9 +2,28 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ParkingSolution.XamarinApp.ViewModels"
-             xmlns:forms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             xmlns:helpers="clr-namespace:ParkingSolution.XamarinApp.Models.Helpers"
              x:DataType="viewmodels:ParkingPriceViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.ParkingPricePage"
              Title="График стоимости">
-    <forms:ChartView Chart="{Binding CurrentChart}" />
+    <ScrollView VerticalOptions="Center">
+        <StackLayout BindableLayout.ItemsSource="{Binding Prices}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type helpers:PriceHelper}">
+                    <Grid ColumnDefinitions="10*, 1*, 10*">
+                        <Label Text="{Binding Time, 
+                                               StringFormat='{}{0:hh}:{0:mm}'}"
+                               FontSize="Large"
+                               HorizontalOptions="End"/>
+                        <Rectangle Grid.Column="1"
+                                   Fill="{Binding Color}"/>
+                        <Label Text="{Binding PriceInRubles, 
+                                              StringFormat='{}{0:F0} РУБ.'}"
+                               Grid.Column="2"
+                               FontSize="Large"/>
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

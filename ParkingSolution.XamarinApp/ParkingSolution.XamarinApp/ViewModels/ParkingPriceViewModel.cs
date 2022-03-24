@@ -1,4 +1,4 @@
-﻿using Microcharts;
+﻿using ParkingSolution.XamarinApp.Models.Helpers;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.ObjectModel;
@@ -7,16 +7,16 @@ namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class ParkingPriceViewModel : BaseViewModel
     {
-        private ObservableCollection<ChartEntry> prices;
+        private ObservableCollection<PriceHelper> prices;
         private SerializedParking parking;
 
         public ParkingPriceViewModel(SerializedParking parking)
         {
-            Prices = new ObservableCollection<ChartEntry>();
+            Prices = new ObservableCollection<PriceHelper>();
             Parking = parking;
         }
 
-        public ObservableCollection<ChartEntry> Prices
+        public ObservableCollection<PriceHelper> Prices
         {
             get => prices;
             set => SetProperty(ref prices, value);
@@ -32,14 +32,6 @@ namespace ParkingSolution.XamarinApp.ViewModels
             LoadPrices();
         }
 
-        public LineChart CurrentChart
-        {
-            get => currentChart;
-            set => SetProperty(ref currentChart, value);
-        }
-
-        private LineChart currentChart = new LineChart();
-
         private void LoadPrices()
         {
             for (TimeSpan i = TimeSpan.Zero;
@@ -48,42 +40,32 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 if (i < Parking.BeforePaidTime)
                 {
-                    Prices.Add(new ChartEntry(0)
+                    Prices.Add(new PriceHelper
                     {
-                        Color = SkiaSharp.SKColor.Parse("#00FF00"),
-                        Label = i.ToString(@"hh\:mm"),
-                        ValueLabel = "0 руб."
+                        Color = Xamarin.Forms.Color.Green,
+                        Time = i,
+                        PriceInRubles = 0
                     });
                 }
                 else if (i < Parking.BeforeFreeTime)
                 {
-                    Prices.Add(new ChartEntry((int)Parking.CostInRubles)
+                    Prices.Add(new PriceHelper
                     {
-                        Color = SkiaSharp.SKColor.Parse("#FF0000"),
-                        Label = i.ToString(@"hh\:mm"),
-                        ValueLabel = Parking.CostInRubles.ToString("F0") + "руб."
+                        Color = Xamarin.Forms.Color.Red,
+                        Time = i,
+                        PriceInRubles = Parking.CostInRubles
                     });
                 }
                 else
                 {
-                    Prices.Add(new ChartEntry(0)
+                    Prices.Add(new PriceHelper
                     {
-                        Color = SkiaSharp.SKColor.Parse("#00FF00"),
-                        Label = i.ToString(@"hh\:mm"),
-                        ValueLabel = "0 руб."
+                        Color = Xamarin.Forms.Color.Green,
+                        Time = i,
+                        PriceInRubles = 0
                     });
                 }
             }
-            CurrentChart = new LineChart()
-            {
-                Entries = Prices,
-                LineMode = LineMode.Straight,
-                LineSize = 8,
-                PointMode = PointMode.Square,
-                LabelTextSize = 40,
-                PointSize = 18,
-                IsAnimated = true
-            };
         }
     }
 }
