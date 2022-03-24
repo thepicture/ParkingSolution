@@ -25,8 +25,7 @@ namespace ParkingSolution.XamarinApp.Views
             try
             {
                 Plugin.Geolocator.Abstractions.Position position =
-                    await CrossGeolocator.Current.GetPositionAsync(
-                        timeout: TimeSpan.FromSeconds(10));
+                    await CrossGeolocator.Current.GetPositionAsync();
                 ParkingsMap.MoveToRegion(
                     MapSpan.FromCenterAndRadius(
                         new Position(position.Latitude, position.Longitude),
