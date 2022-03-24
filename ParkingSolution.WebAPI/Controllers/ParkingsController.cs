@@ -137,9 +137,9 @@ namespace ParkingSolution.WebAPI.Controllers
             {
                 ParkingPlace parkingPlace = new ParkingPlace
                 {
-                    Parking = parking,
                     CarType = carType
                 };
+                parking.ParkingPlace.Add(parkingPlace);
             }
 
             db.Parking.Add(parking);

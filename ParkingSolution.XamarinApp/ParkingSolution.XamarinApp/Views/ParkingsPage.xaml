@@ -11,7 +11,7 @@
              x:Class="ParkingSolution.XamarinApp.Views.ParkingsPage"
              Title="Автостоянки"
              x:Name="Page">
-    <Grid RowDefinitions="7*,3*"
+    <Grid RowDefinitions="7*,auto"
           x:DataType="viewmodels:ParkingsViewModel">
         <maps:Map ItemsSource="{Binding Parkings}"
                   IsShowingUser="True"

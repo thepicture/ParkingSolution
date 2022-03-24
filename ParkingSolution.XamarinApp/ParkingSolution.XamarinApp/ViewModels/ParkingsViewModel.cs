@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -260,10 +261,17 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private void Refresh()
         {
-            Task.Run(() =>
+            try
             {
-                LoadParkingsAsync();
-            });
+                Task.Run(() =>
+                {
+                    LoadParkingsAsync();
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.StackTrace);
+            }
         }
 
         private Command goToAddParkingPageCommand;

@@ -1,6 +1,8 @@
-﻿using ParkingSolution.XamarinApp.Models.Serialized;
+﻿using ParkingSolution.XamarinApp.Models.Helpers;
+using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -9,14 +11,14 @@ namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class AddParkingViewModel : BaseViewModel
     {
-        private ObservableCollection<string> parkingPlaces;
+        private ObservableCollection<ParkingTypeHelper> parkingPlaces;
 
         public AddParkingViewModel()
         {
-            ParkingPlaces = new ObservableCollection<string>();
+            ParkingPlaces = new ObservableCollection<ParkingTypeHelper>();
         }
 
-        public ObservableCollection<string> ParkingPlaces
+        public ObservableCollection<ParkingTypeHelper> ParkingPlaces
         {
             get => parkingPlaces;
             set => SetProperty(ref parkingPlaces, value);
@@ -88,12 +90,17 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 _ = validationErrors.AppendLine("Стоимость должна " +
                     "быть положительной и в рублях");
             }
-            if (BeforePaidTime >= beforeFreeTime)
+            if (BeforePaidTime >= BeforeFreeTime)
             {
                 _ = validationErrors.AppendLine("Дата начала " +
                     "платной парковки " +
                     "должна быть раньше " +
                     "даты окончания платной парковки");
+            }
+            if (ParkingPlaces.Count == 0)
+            {
+                _ = validationErrors.AppendLine("Необходимо " +
+                    "хотя бы одно парковочное место");
             }
 
             if (validationErrors.Length > 0)
@@ -103,6 +110,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 IsBusy = false;
                 return;
             }
+
             IsBusy = true;
             SerializedParking parking = new SerializedParking
             {
@@ -112,7 +120,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 BeforePaidTime = BeforePaidTime,
                 BeforeFreeTime = BeforeFreeTime,
                 CostInRubles = decimal.Parse(CostInRubles),
-                ParkingPlacesCarTypes = ParkingPlaces
+                ParkingPlacesCarTypes = ParkingPlaces.Select(pp => pp.Name)
             };
             if (await ParkingDataStore.AddItemAsync(parking))
             {
@@ -128,7 +136,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             IsBusy = false;
         }
 
-        private TimeSpan beforePaidTime;
+        private TimeSpan beforePaidTime = TimeSpan.FromHours(12);
 
         public TimeSpan BeforePaidTime
         {
@@ -136,7 +144,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             set => SetProperty(ref beforePaidTime, value);
         }
 
-        private System.TimeSpan beforeFreeTime;
+        private TimeSpan beforeFreeTime = TimeSpan.FromHours(20);
 
         public TimeSpan BeforeFreeTime
         {
@@ -144,9 +152,9 @@ namespace ParkingSolution.XamarinApp.ViewModels
             set => SetProperty(ref beforeFreeTime, value);
         }
 
-        private string parkingPlaceType;
+        private ParkingTypeHelper parkingPlaceType;
 
-        public string ParkingPlaceType
+        public ParkingTypeHelper ParkingPlaceType
         {
             get => parkingPlaceType;
             set => SetProperty(ref parkingPlaceType, value);
@@ -160,23 +168,23 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 if (addParkingPlaceCommand == null)
                 {
-                    addParkingPlaceCommand = new Command(AddParkingPlace);
+                    addParkingPlaceCommand = new Command(AddParkingPlaceAsync);
                 }
 
                 return addParkingPlaceCommand;
             }
         }
 
-        private void AddParkingPlace()
+        private async void AddParkingPlaceAsync()
         {
             if (ParkingPlaceType == null)
             {
-                FeedbackService.InformError("Вы не " +
-                    "выбрали тип парковочного места");
+                await FeedbackService.InformError("Выберите " +
+                    "тип парковочного места");
                 return;
             }
             ParkingPlaces.Add(ParkingPlaceType);
-            FeedbackService.Inform("Парковочное место " +
+            await FeedbackService.Inform("Парковочное место " +
                 "добавлено локально. " +
                 "Оно будет сохранено с парковкой");
         }

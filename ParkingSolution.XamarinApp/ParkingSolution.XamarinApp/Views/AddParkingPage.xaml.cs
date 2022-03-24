@@ -1,10 +1,4 @@
 ﻿using ParkingSolution.XamarinApp.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -25,11 +19,6 @@ namespace ParkingSolution.XamarinApp.Views
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
-        }
-
-        private void OnChildAdded(object sender, ElementEventArgs e)
-        {
-            (sender as StackLayout).ResolveLayoutChanges();
         }
     }
 }
