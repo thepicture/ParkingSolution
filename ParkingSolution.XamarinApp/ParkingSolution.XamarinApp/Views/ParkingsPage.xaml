@@ -7,12 +7,25 @@
              xmlns:helpers="clr-namespace:ParkingSolution.XamarinApp.Models.Helpers"
              xmlns:services="clr-namespace:ParkingSolution.XamarinApp.Services"
              xmlns:views="clr-namespace:ParkingSolution.XamarinApp.Views"
+             xmlns:controls="clr-namespace:ParkingSolution.XamarinApp.Controls"
+             xmlns:converters="clr-namespace:ParkingSolution.XamarinApp.Converters"
              x:DataType="viewmodels:ParkingsViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.ParkingsPage"
              Title="Автостоянки"
              x:Name="Page">
-    <Grid RowDefinitions="7*,auto"
-          x:DataType="viewmodels:ParkingsViewModel">
+    <ContentPage.ToolbarItems>
+        <controls:BindableToolbarItem Text="Показывать картой"
+                                      Command="{Binding ToggleViewTypeCommand}">
+            <controls:BindableToolbarItem.IsVisible>
+                <Binding Path="IsShowAsMap">
+                    <Binding.Converter>
+                        <converters:InvertBooleanValueConverter />
+                    </Binding.Converter>
+                </Binding>
+            </controls:BindableToolbarItem.IsVisible>
+        </controls:BindableToolbarItem>
+    </ContentPage.ToolbarItems>
+    <Grid RowDefinitions="*, auto">
         <maps:Map ItemsSource="{Binding Parkings}"
                   IsShowingUser="True"
                   x:Name="ParkingsMap"
@@ -150,28 +163,18 @@
                 </StackLayout>
             </ScrollView>
         </RefreshView>
-        <StackLayout Grid.Row="1"
-                     VerticalOptions="CenterAndExpand">
+        <StackLayout VerticalOptions="CenterAndExpand"
+                     Grid.Row="1"
+                     IsVisible="{Binding IsShowAsMap}">
             <Label Text="{Binding SelectedParking.Parking.NumberOfParkingPlaces,
                                   StringFormat='{}Число мест: {0}',
                                   FallbackValue=Выберите автостоянку}"
                    HorizontalTextAlignment="Center"
                    Margin="5"
-                   HorizontalOptions="Center"
-                   IsVisible="False">
-                <Label.Triggers>
-                    <DataTrigger TargetType="Label"
-                                 Binding="{Binding Role}"
-                                 Value="Клиент">
-                        <Setter Property="IsVisible"
-                                Value="True" />
-                    </DataTrigger>
-                </Label.Triggers>
-            </Label>
+                   HorizontalOptions="Center"/>
             <StackLayout Orientation="Horizontal"
                          VerticalOptions="EndAndExpand"
-                         HorizontalOptions="Center"
-                         Grid.Row="1">
+                         HorizontalOptions="Center">
                 <material:MaterialButton Command="{Binding GoToParkingPlacesCommand}"
                                          Text="Начать парковку"
                                          FontSize="10"

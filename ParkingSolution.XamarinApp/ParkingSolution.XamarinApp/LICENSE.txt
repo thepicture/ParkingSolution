@@ -3,3 +3,4 @@
 	Parking icons created by fjstudio - Flaticon
 DateTimePicker's source is https://stackoverflow.com/a/60808944
 MaskedBehavior's source is https://www.xamarinhelp.com/masked-entry-in-xamarin-forms/
+BindableToolbarItem's source is https://forums.xamarin.com/discussion/comment/168974/#Comment_168974
