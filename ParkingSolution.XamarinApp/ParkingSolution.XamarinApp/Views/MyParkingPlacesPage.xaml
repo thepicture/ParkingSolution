@@ -11,82 +11,81 @@
              x:Class="ParkingSolution.XamarinApp.Views.MyParkingPlacesPage"
              Title="Неоплаченные бронировки">
     <ContentPage.Resources>
-        <converters:InvertBooleanValueConverter x:Key="InvertBoolean"/>
+        <converters:InvertBooleanValueConverter x:Key="InvertBoolean" />
     </ContentPage.Resources>
-    <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                 Command="{Binding RefreshCommand}">
-        <ScrollView>
-            <StackLayout BindableLayout.ItemsSource="{Binding MyReservations}">
-                <BindableLayout.EmptyViewTemplate>
-                    <DataTemplate>
-                        <Label Text="Задолженностей нет"
-                               FontSize="Large"
-                               HorizontalOptions="CenterAndExpand"
-                               VerticalOptions="CenterAndExpand"
-                               HorizontalTextAlignment="Center"
-                               IsVisible="{Binding Source={RelativeSource AncestorType={x:Type views:MyParkingPlacesPage}}, 
+    <ContentView>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView>
+                <StackLayout BindableLayout.ItemsSource="{Binding MyReservations}">
+                    <BindableLayout.EmptyViewTemplate>
+                        <DataTemplate>
+                            <Label Text="Задолженностей нет"
+                                   FontSize="Large"
+                                   HorizontalOptions="CenterAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalTextAlignment="Center"
+                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type views:MyParkingPlacesPage}}, 
                                                    Path=BindingContext.IsRefreshing,
                                                    Converter={StaticResource InvertBoolean}}" />
-                    </DataTemplate>
-                </BindableLayout.EmptyViewTemplate>
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="serialized:SerializedParkingPlaceReservation">
-                        <material:MaterialCard Elevation="5"
-                                               Margin="10"
-                                               IsClickable="True">
-                            <StackLayout>
-                                <Label Text="{Binding CarType, 
+                        </DataTemplate>
+                    </BindableLayout.EmptyViewTemplate>
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="serialized:SerializedParkingPlaceReservation">
+                            <material:MaterialCard Elevation="5"
+                                                   Margin="10"
+                                                   IsClickable="True">
+                                <StackLayout>
+                                    <Label Text="{Binding CarType, 
                                                   StringFormat='{}Тип машины: {0}'}"
-                                       FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center" />
-                                <BoxView Color="WhiteSmoke"
-                                         HeightRequest="1" />
-                                <Label Text="{Binding ReservationFullAddress, 
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center" />
+                                    <BoxView Color="WhiteSmoke"
+                                             HeightRequest="1" />
+                                    <Label Text="{Binding ReservationFullAddress, 
                                                   StringFormat='{}Адрес: {0}'}"
-                                       FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center" />
-                                <BoxView Color="WhiteSmoke"
-                                         HeightRequest="1" />
-                                <Label Text="{Binding TotalPrice, 
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center" />
+                                    <BoxView Color="WhiteSmoke"
+                                             HeightRequest="1" />
+                                    <Label Text="{Binding TotalPrice, 
                                                   StringFormat='{}ИТОГО: {0:F0} РУБ.'}"
-                                       FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center" />
-                                <BoxView Color="WhiteSmoke"
-                                         HeightRequest="1" />
-                                <Label HorizontalTextAlignment="Center">
-                                    <Label.Text>
-                                        <MultiBinding StringFormat="Занято 
-                                                                  с {0:yyyy-MM-dd hh:mm} 
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center" />
+                                    <BoxView Color="WhiteSmoke"
+                                             HeightRequest="1" />
+                                    <Label HorizontalTextAlignment="Center">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="Занято с {0:yyyy-MM-dd hh:mm} 
                                                                   до {1:yyyy-MM-dd hh:mm}">
-                                            <Binding Path="FromDateTime" />
-                                            <Binding Path="ToDateTime" />
-                                        </MultiBinding>
-                                    </Label.Text>
-                                </Label>
-                                <BoxView Color="WhiteSmoke"
-                                         HeightRequest="1" />
-                                <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                <Binding Path="FromDateTime" />
+                                                <Binding Path="ToDateTime" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                 Path=BindingContext}"
-                                                         Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                             Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                               AncestorType={x:Type views:MyParkingPlacesPage}}, 
                                                                                               Path=BindingContext.PayParkingPlaceCommand}"
-                                                         Text="Оплатить"
-                                                         Style="{StaticResource BaseButton}"
-                                                         IsVisible="False">
-                                    <material:MaterialButton.Triggers>
-                                        <DataTrigger TargetType="material:MaterialButton"
-                                                     Binding="{Binding Source={x:Static services:AppIdentity.Role}}"
-                                                     Value="Клиент">
-                                            <Setter Property="IsVisible"
-                                                    Value="True" />
-                                        </DataTrigger>
-                                    </material:MaterialButton.Triggers>
-                                </material:MaterialButton>
-                            </StackLayout>
-                        </material:MaterialCard>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </StackLayout>
-        </ScrollView>
-    </RefreshView>
+                                                             Text="Оплатить"
+                                                             Style="{StaticResource BaseButton}"
+                                                             IsVisible="False">
+                                        <material:MaterialButton.Triggers>
+                                            <DataTrigger TargetType="material:MaterialButton"
+                                                         Binding="{Binding Source={x:Static services:AppIdentity.Role}}"
+                                                         Value="Клиент">
+                                                <Setter Property="IsVisible"
+                                                        Value="True" />
+                                            </DataTrigger>
+                                        </material:MaterialButton.Triggers>
+                                    </material:MaterialButton>
+                                </StackLayout>
+                            </material:MaterialCard>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
+    </ContentView>
 </ContentPage>
