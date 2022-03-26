@@ -117,6 +117,12 @@
                                                 <Setter Property="IsVisible"
                                                         Value="True" />
                                             </DataTrigger>
+                                            <DataTrigger TargetType="material:MaterialButton"
+                                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                         Value="Сотрудник">
+                                                <Setter Property="IsVisible"
+                                                        Value="True" />
+                                            </DataTrigger>
                                         </material:MaterialButton.Triggers>
                                     </material:MaterialButton>
                                     <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
@@ -191,6 +197,12 @@
                         <DataTrigger TargetType="material:MaterialButton"
                                      Binding="{Binding Role}"
                                      Value="Администратор">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="material:MaterialButton"
+                                     Binding="{Binding Role}"
+                                     Value="Сотрудник">
                             <Setter Property="IsVisible"
                                     Value="True" />
                         </DataTrigger>

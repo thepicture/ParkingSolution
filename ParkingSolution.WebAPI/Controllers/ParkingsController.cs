@@ -79,6 +79,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // POST: api/Parkings
         [ResponseType(typeof(int))]
+        [Authorize(Roles ="Администратор, Сотрудник")]
         public async Task<IHttpActionResult> PostParking
             (SerializedParking serializedParking)
         {
