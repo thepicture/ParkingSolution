@@ -21,8 +21,6 @@
                                                    Name="Клиент" />
                     <serialized:SerializedUserType Id="2"
                                                    Name="Сотрудник" />
-                    <serialized:SerializedUserType Id="3"
-                                                   Name="Администратор" />
                 </x:Array>
             </Picker.ItemsSource>
         </Picker>

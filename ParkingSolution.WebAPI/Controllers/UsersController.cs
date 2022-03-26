@@ -7,7 +7,6 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -147,6 +146,12 @@ namespace ParkingSolution.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if (serializedUser.UserTypeId != 1
+                && serializedUser.UserTypeId != 2)
+            {
+                return Content(HttpStatusCode.Forbidden, "Регистрация " +
+                    "разрешена только для сотрудника и клиента");
+            }
             User userToValidate = await db
                 .User
                 .FirstOrDefaultAsync(u =>
@@ -204,7 +209,7 @@ namespace ParkingSolution.WebAPI.Controllers
             string role = (HttpContext.Current.User.Identity as ClaimsIdentity)
                 .FindFirst(ClaimTypes.Role)
                 .Value;
-            if (role == "Сотрудник"  || role == "Администратор")
+            if (role == "Сотрудник" || role == "Администратор")
             {
                 return Ok(
                 db.ParkingPlaceReservation
