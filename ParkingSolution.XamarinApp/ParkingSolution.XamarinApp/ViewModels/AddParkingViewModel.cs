@@ -169,7 +169,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
             if (await ParkingDataStore.AddItemAsync(parking))
             {
-                await FeedbackService.Inform("Парковка добавлена");
+                string action = parking.Id == 0 ? "добавлена" : "изменена";
+                await FeedbackService.Inform($"Парковка {action}");
                 await Shell.Current.GoToAsync("..");
             }
             else
