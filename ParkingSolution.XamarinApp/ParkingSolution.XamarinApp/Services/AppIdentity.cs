@@ -4,6 +4,12 @@ namespace ParkingSolution.XamarinApp.Services
 {
     public static class AppIdentity
     {
+        public static void Reset()
+        {
+            AuthorizationValue = null;
+            Role = null;
+            (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
+        }
         public static string Role
         {
             get
