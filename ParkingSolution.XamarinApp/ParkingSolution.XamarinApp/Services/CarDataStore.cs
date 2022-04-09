@@ -3,10 +3,11 @@ using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Headers;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp.Services
 {
@@ -29,8 +30,27 @@ namespace ParkingSolution.XamarinApp.Services
                                                      Encoding.UTF8,
                                                      "application/json"));
                     string content = await response.Content.ReadAsStringAsync();
-                    return response.StatusCode ==
-                        System.Net.HttpStatusCode.Created;
+                    if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            _ = DependencyService.Get<IFeedbackService>()
+                            .Inform("Автомобиль добавлен");
+                        });
+                        return true;
+                    }
+                    else
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            _ = DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Не удалось "
+                            + "добавить автомобиль. "
+                            + "Проверьте подключение к интернету");
+                        });
+                        return false;
+                    }
                 }
                 catch (HttpRequestException ex)
                 {

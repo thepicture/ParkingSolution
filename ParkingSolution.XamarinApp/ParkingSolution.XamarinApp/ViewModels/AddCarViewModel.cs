@@ -95,13 +95,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             CurrentCar.CarType = SelectedCarType;
             if (await CarDataStore.AddItemAsync(currentCar))
             {
-                await FeedbackService.Inform("Автомобиль добавлен");
                 await Shell.Current.GoToAsync("..");
-            }
-            else
-            {
-                await FeedbackService.Inform("Не удалось " +
-                    "добавить автомобиль. Проверьте подключение к интернету");
             }
             IsBusy = false;
         }
