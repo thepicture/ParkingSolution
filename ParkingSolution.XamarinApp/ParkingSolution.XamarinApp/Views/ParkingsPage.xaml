@@ -171,7 +171,7 @@
                                   FallbackValue=Выберите автостоянку}"
                    HorizontalTextAlignment="Center"
                    Margin="5"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center" />
             <StackLayout Orientation="Horizontal"
                          VerticalOptions="EndAndExpand"
                          HorizontalOptions="Center">

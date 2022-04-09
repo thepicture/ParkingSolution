@@ -248,5 +248,41 @@ namespace ParkingSolution.XamarinApp.ViewModels
             get => editingParking;
             set => SetProperty(ref editingParking, value);
         }
+
+        private Command deleteParkingCommand;
+
+        public ICommand DeleteParkingCommand
+        {
+            get
+            {
+                if (deleteParkingCommand == null)
+                {
+                    deleteParkingCommand = new Command(DeleteParkingAsync);
+                }
+
+                return deleteParkingCommand;
+            }
+        }
+
+        private async void DeleteParkingAsync()
+        {
+            if (await FeedbackService.Ask("Удалить парковку?"))
+            {
+                string id = EditingParking.Id.ToString();
+                if (await ParkingDataStore.DeleteItemAsync(id))
+                {
+                    await FeedbackService.Inform("Парковка удалена");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await FeedbackService.InformError("Парковка " +
+                        "не удалена. Проверьте подлкючение " +
+                        "к интернету");
+                }
+            }
+        }
+
+        public bool IsEditing => EditingParking != null;
     }
 }

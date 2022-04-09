@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="2" android:versionName="1.1" package="com.companyname.parkingsolution.xamarinapp" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="3" android:versionName="1.2" package="com.companyname.parkingsolution.xamarinapp" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
-	<application android:label="ParkingSolution.XamarinApp.Android" android:theme="@style/MainTheme" android:icon="@drawable/logo">
+	<application android:label="Автостоянка" android:theme="@style/MainTheme" android:icon="@drawable/logo">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyD0Sw5tv9j-N_CVNSh0uJezcti8Tju5h98" />
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>

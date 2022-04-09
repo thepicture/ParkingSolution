@@ -9,7 +9,7 @@
              x:Class="ParkingSolution.XamarinApp.Views.AddParkingPage"
              Title="Изменение автостоянки">
     <ContentPage.Resources>
-        <converters:EditingParkingValueConverter x:Key="EditingParkingBoolean"/>
+        <converters:EditingParkingValueConverter x:Key="EditingParkingBoolean" />
     </ContentPage.Resources>
     <ContentView>
         <ScrollView Margin="10,10,10,0">
@@ -111,6 +111,24 @@
                 <material:MaterialButton Command="{Binding SaveChangesCommand}"
                                          Text="Сохранить стоянку"
                                          Style="{StaticResource BaseButton}" />
+                <material:MaterialButton Command="{Binding DeleteParkingCommand}"
+                                         Text="Удалить"
+                                         IsVisible="False"
+                                         Style="{StaticResource BaseButton}"
+                                         BackgroundColor="Red">
+                    <material:MaterialButton.Triggers>
+                        <MultiTrigger TargetType="material:MaterialButton">
+                            <MultiTrigger.Conditions>
+                                <BindingCondition Binding="{Binding Role}"
+                                                  Value="Администратор" />
+                                <BindingCondition Binding="{Binding IsEditing}"
+                                                  Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </MultiTrigger>
+                    </material:MaterialButton.Triggers>
+                </material:MaterialButton>
             </StackLayout>
         </ScrollView>
     </ContentView>
