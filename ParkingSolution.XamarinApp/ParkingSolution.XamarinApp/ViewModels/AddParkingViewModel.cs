@@ -169,15 +169,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
             if (await ParkingDataStore.AddItemAsync(parking))
             {
-                string action = parking.Id == 0 ? "добавлена" : "изменена";
-                await FeedbackService.Inform($"Парковка {action}");
                 await Shell.Current.GoToAsync("..");
-            }
-            else
-            {
-                await FeedbackService.Inform("Не удалось " +
-                    "добавить парковку. " +
-                    "Проверьте подключение к интернету");
             }
             IsBusy = false;
         }
@@ -271,14 +263,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 string id = EditingParking.Id.ToString();
                 if (await ParkingDataStore.DeleteItemAsync(id))
                 {
-                    await FeedbackService.Inform("Парковка удалена");
                     await Shell.Current.GoToAsync("..");
-                }
-                else
-                {
-                    await FeedbackService.InformError("Парковка " +
-                        "не удалена. Проверьте подлкючение " +
-                        "к интернету");
                 }
             }
         }

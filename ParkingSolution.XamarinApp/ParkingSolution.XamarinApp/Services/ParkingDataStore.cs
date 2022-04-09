@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp.Services
 {
@@ -30,6 +31,27 @@ namespace ParkingSolution.XamarinApp.Services
                                                      Encoding.UTF8,
                                                      "application/json"));
                     string content = await response.Content.ReadAsStringAsync();
+                    if (response.StatusCode == HttpStatusCode.Created)
+                    {
+                        string action = item.Id == 0 ? "добавлена" : "изменена";
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            _ = DependencyService.Get<IFeedbackService>()
+                            .Inform($"Парковка {action}");
+                        });
+                    }
+                    else
+                    {
+                        string action = item.Id == 0 ? "добавить" : "изменить";
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            _ = DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Не удалось "
+                            + $"{action} парковку. "
+                            + "Проверьте подключение к интернету");
+                        });
+                    }
                     return response.StatusCode ==
                         System.Net.HttpStatusCode.Created;
                 }
@@ -53,11 +75,24 @@ namespace ParkingSolution.XamarinApp.Services
                 {
                     HttpResponseMessage response = await client
                      .DeleteAsync($"parkings/{id}");
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        _ = DependencyService.Get<IFeedbackService>()
+                        .Inform("Парковка удалена");
+                    });
                     return response.StatusCode == HttpStatusCode.NoContent;
                 }
                 catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.StackTrace);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        _ = DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError("Парковка "
+                            + "не удалена. Проверьте подлкючение "
+                            + "к интернету");
+                    });
                     return false;
                 }
             }
