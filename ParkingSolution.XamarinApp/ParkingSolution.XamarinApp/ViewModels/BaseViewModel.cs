@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public abstract class BaseViewModel : INotifyPropertyChanged
     {
         bool isRefreshing;
         bool isBusy = false;
