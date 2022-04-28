@@ -1,6 +1,5 @@
 ﻿using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -34,12 +33,9 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         internal void OnAppearing()
         {
-            Task.Run(() =>
-            {
-                string[] phoneNumberAndPassword =
-                PhoneNumberAndPasswordFromBasicDecoder.Decode();
-                PhoneNumber = phoneNumberAndPassword[0];
-            });
+            string[] phoneNumberAndPassword =
+            PhoneNumberAndPasswordFromBasicDecoder.Decode();
+            PhoneNumber = phoneNumberAndPassword[0];
         }
 
         private async void ExitLogin()
@@ -47,7 +43,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             if (await FeedbackService.Ask("Выйти из аккаунта?"))
             {
                 AppIdentity.Reset();
-                (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
+                AppShell.LoadLoginAndRegisterShell();
             }
         }
 

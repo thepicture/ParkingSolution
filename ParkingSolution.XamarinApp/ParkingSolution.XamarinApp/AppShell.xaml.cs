@@ -1,12 +1,12 @@
 ﻿using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp
 {
     public partial class AppShell : Shell
     {
+        public static TabBar CommonTabBar = new TabBar();
         public AppShell()
         {
             InitializeComponent();
@@ -14,6 +14,8 @@ namespace ParkingSolution.XamarinApp
             Routing.RegisterRoute(nameof(MyCarsPage), typeof(MyCarsPage));
             Routing.RegisterRoute(nameof(AddCarPage), typeof(AddCarPage));
             Routing.RegisterRoute(nameof(AddParkingPage), typeof(AddParkingPage));
+
+            Items.Add(CommonTabBar);
 
             if (IsLoggedIn())
             {
@@ -25,7 +27,7 @@ namespace ParkingSolution.XamarinApp
             }
         }
 
-        public void LoadLoginAndRegisterShell()
+        public static void LoadLoginAndRegisterShell()
         {
             CommonTabBar.Items.Clear();
             CommonTabBar
@@ -51,7 +53,7 @@ namespace ParkingSolution.XamarinApp
             return AppIdentity.AuthorizationValue != null;
         }
 
-        public void SetShellStacksDependingOnRole()
+        public static void SetShellStacksDependingOnRole()
         {
             CommonTabBar.Items.Clear();
             CommonTabBar

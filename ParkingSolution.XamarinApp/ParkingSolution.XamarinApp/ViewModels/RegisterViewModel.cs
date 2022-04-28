@@ -98,7 +98,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 await FeedbackService.Inform(
                     RegistrationService.ValidationResult);
-                (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
+                AppShell.LoadLoginAndRegisterShell();
             }
             else
             {

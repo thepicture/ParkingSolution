@@ -34,6 +34,4 @@
                    BasedOn="{StaticResource BaseStyle}" />
         </ResourceDictionary>
     </Shell.Resources>
-
-    <TabBar x:Name="CommonTabBar" />
 </Shell>

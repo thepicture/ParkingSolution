@@ -57,7 +57,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             };
             if (await LoginDataStore.AddItemAsync(loginUser))
             {
-                (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
+                AppShell.SetShellStacksDependingOnRole();
             }
             IsBusy = false;
         }

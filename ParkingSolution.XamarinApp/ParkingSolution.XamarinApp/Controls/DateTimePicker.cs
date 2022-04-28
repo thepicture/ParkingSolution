@@ -92,7 +92,7 @@ namespace ParkingSolution.XamarinApp.Controls
 
         static void DTPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var timePicker = (bindable as DateTimePicker);
+            var timePicker = bindable as DateTimePicker;
             timePicker.UpdateEntryText();
         }
     }
