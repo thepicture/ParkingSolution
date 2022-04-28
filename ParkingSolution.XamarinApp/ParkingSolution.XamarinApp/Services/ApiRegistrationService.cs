@@ -18,7 +18,7 @@ namespace ParkingSolution.XamarinApp.Services
             string jsonIdentity = JsonConvert.SerializeObject(identity);
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = App.BaseUrl;
                 try
                 {
                     HttpResponseMessage response = await client

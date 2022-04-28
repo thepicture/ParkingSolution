@@ -19,7 +19,7 @@ namespace ParkingSolution.XamarinApp.Services
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = App.BaseUrl;
                 try
                 {
                     string paymentJson = JsonConvert.SerializeObject(item);

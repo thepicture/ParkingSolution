@@ -48,7 +48,7 @@ namespace ParkingSolution.XamarinApp
 
         private bool IsLoggedIn()
         {
-            return SecureStorage.GetAsync("Identity").Result != null;
+            return AppIdentity.AuthorizationValue != null;
         }
 
         public void SetShellStacksDependingOnRole()

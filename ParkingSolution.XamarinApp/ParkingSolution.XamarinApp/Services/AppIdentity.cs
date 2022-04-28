@@ -6,17 +6,17 @@ namespace ParkingSolution.XamarinApp.Services
     {
         public static void Reset()
         {
-            AuthorizationValue = null;
-            Role = null;
-            (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
+            App.AuthorizationValue = null;
+            App.Role = null;
+            SecureStorage.RemoveAll();
         }
         public static string Role
         {
             get
             {
-                if ((App.Current as App).Role != null)
+                if (App.Role != null)
                 {
-                    return (App.Current as App).Role;
+                    return App.Role;
                 }
                 else
                 {
@@ -25,7 +25,7 @@ namespace ParkingSolution.XamarinApp.Services
             }
             set
             {
-                (App.Current as App).Role = value;
+                App.Role = value;
                 if (value == null)
                 {
                     _ = SecureStorage.Remove("Role");
@@ -40,26 +40,19 @@ namespace ParkingSolution.XamarinApp.Services
         {
             get
             {
-                if ((App.Current as App).Identity != null)
+                if (App.AuthorizationValue != null)
                 {
-                    return (App.Current as App).Identity;
+                    return App.AuthorizationValue;
                 }
                 else
                 {
-                    return SecureStorage.GetAsync("Identity").Result;
+                    return SecureStorage.GetAsync("AuthorizationValue").Result;
                 }
             }
             set
             {
-                (App.Current as App).Identity = value;
-                if (value == null)
-                {
-                    _ = SecureStorage.Remove("Identity");
-                }
-                else
-                {
-                    _ = SecureStorage.SetAsync("Identity", value);
-                }
+                App.AuthorizationValue = value;
+                _ = SecureStorage.SetAsync("AuthorizationValue", value);
             }
         }
     }

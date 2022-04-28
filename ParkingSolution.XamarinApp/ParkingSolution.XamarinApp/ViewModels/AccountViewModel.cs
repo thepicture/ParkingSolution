@@ -47,6 +47,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             if (await FeedbackService.Ask("Выйти из аккаунта?"))
             {
                 AppIdentity.Reset();
+                (AppShell.Current as AppShell).LoadLoginAndRegisterShell();
             }
         }
 

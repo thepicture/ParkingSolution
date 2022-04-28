@@ -1,8 +1,6 @@
 ﻿using ParkingSolution.XamarinApp.Models;
+using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
-using System;
-using System.Diagnostics;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -50,66 +48,16 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private async void LoginAsync()
         {
             IsBusy = true;
-            StringBuilder validationErrors = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(PhoneNumber)
-                || PhoneNumber.Length != 18)
-            {
-                _ = validationErrors.AppendLine("Введите номер телефона");
-            }
-            if (string.IsNullOrWhiteSpace(Password))
-            {
-                _ = validationErrors.AppendLine("Введите пароль");
-            }
-
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(validationErrors);
-                IsBusy = false;
-                return;
-            }
-
-            bool isAuthenticated;
             string rawPhoneNumber = MaskDeleter.DeleteMask(PhoneNumber);
-            try
+            SerializedLoginUser loginUser = new SerializedLoginUser
             {
-                isAuthenticated = await AuthenticatorService
-                .IsCorrectAsync(rawPhoneNumber, Password);
-            }
-            catch (Exception ex)
+                PhoneNumber = rawPhoneNumber,
+                Password = Password,
+                IsRememberMe = IsRememberMe
+            };
+            if (await LoginDataStore.AddItemAsync(loginUser))
             {
-                Debug.WriteLine(ex.StackTrace);
-                await FeedbackService.Inform("Подключение к интернету " +
-                     "отсутствует, проверьте подключение " +
-                     "и попробуйте ещё раз");
-                IsBusy = false;
-                return;
-            }
-            if (isAuthenticated)
-            {
-                string encodedLoginAndPassword =
-                    PhoneNumberAndPasswordToBasicEncoder
-                    .Encode(rawPhoneNumber, Password);
-                if (IsRememberMe)
-                {
-                    await SecureStorage
-                        .SetAsync("Identity",
-                                  encodedLoginAndPassword);
-                    await SecureStorage
-                       .SetAsync("Role",
-                                 AuthenticatorService.Role);
-                }
-                else
-                {
-                    (App.Current as App).Role = AuthenticatorService.Role;
-                    (App.Current as App).Identity = encodedLoginAndPassword;
-                }
-                await FeedbackService.Inform("Вы авторизованы " +
-                    $"как {AuthenticatorService.Role}");
                 (AppShell.Current as AppShell).SetShellStacksDependingOnRole();
-            }
-            else
-            {
-                await FeedbackService.InformError("Неверный логин или пароль");
             }
             IsBusy = false;
         }

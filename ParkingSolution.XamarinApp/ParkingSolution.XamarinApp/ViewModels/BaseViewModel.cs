@@ -24,8 +24,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
             DependencyService.Get<IDataStore<SerializedUser>>();
         public IFeedbackService FeedbackService =>
             DependencyService.Get<IFeedbackService>();
-        public IAuthenticatorService AuthenticatorService =>
-            DependencyService.Get<IAuthenticatorService>();
+        public IDataStore<SerializedLoginUser> LoginDataStore =>
+            DependencyService.Get<IDataStore<SerializedLoginUser>>();
         public IRegistrationService<SerializedUser> RegistrationService =>
            DependencyService.Get<IRegistrationService<SerializedUser>>();
         public string Role => AppIdentity.Role;

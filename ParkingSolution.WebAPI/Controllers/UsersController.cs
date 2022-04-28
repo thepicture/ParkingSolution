@@ -174,30 +174,29 @@ namespace ParkingSolution.WebAPI.Controllers
             return Content(HttpStatusCode.Created, user.Id);
         }
 
-        // GET: api/Users/login
-        [ResponseType(typeof(string))]
+        // POST: api/Users/login
+        [ResponseType(typeof(SerializedUser))]
         [Route("api/users/login")]
-        [HttpGet]
-        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
-        public IHttpActionResult LoginUser()
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> LoginUser(SerializedUser loginUser)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (HttpContext.Current.User.Identity.IsAuthenticated)
+            if (await db.User.FirstOrDefaultAsync(u =>
+                u.PhoneNumber == loginUser.PhoneNumber) is User foundUser)
             {
-                return Ok(
-                    (HttpContext.Current.User.Identity as ClaimsIdentity)
-                        .FindFirst(ClaimTypes.Role)
-                            .Value
-                );
+
+                if (foundUser.Password == loginUser.Password)
+                {
+                    return Ok(
+                        new SerializedUser(foundUser));
+                }
             }
-            else
-            {
-                return Unauthorized();
-            }
+            return Unauthorized();
         }
 
         [ResponseType(typeof(List<SerializedParkingPlace>))]

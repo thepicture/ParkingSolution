@@ -21,7 +21,7 @@ namespace ParkingSolution.XamarinApp.Services
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
                                                   AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = App.BaseUrl;
                 try
                 {
                     string parkingJson = JsonConvert.SerializeObject(item);
@@ -70,7 +70,7 @@ namespace ParkingSolution.XamarinApp.Services
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",
                                                 AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = App.BaseUrl;
                 try
                 {
                     HttpResponseMessage response = await client
@@ -105,7 +105,7 @@ namespace ParkingSolution.XamarinApp.Services
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",
                                                 AppIdentity.AuthorizationValue);
-                client.BaseAddress = new Uri((App.Current as App).BaseUrl);
+                client.BaseAddress = App.BaseUrl;
                 try
                 {
                     string response = await client

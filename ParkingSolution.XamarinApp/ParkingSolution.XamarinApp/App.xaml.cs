@@ -1,13 +1,15 @@
 ﻿using ParkingSolution.XamarinApp.Services;
+using System;
 using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp
 {
     public partial class App : Application
     {
-        public string Role { get; set; }
-        public string Identity { get; set; }
-        public string BaseUrl { get; } = "https://parkingsolution-webapi.conveyor.cloud/api/";
+        public static string Role { get; set; }
+        public static string AuthorizationValue { get; set; }
+        public static Uri BaseUrl { get; } =
+            new Uri("https://parkingsolution-webapi.conveyor.cloud/api/");
 
         public App()
         {
@@ -23,7 +25,7 @@ namespace ParkingSolution.XamarinApp
                 .MaterialConfiguration)Resources["CommonMaterial"]);
 
             DependencyService.Register<AndroidFeedbackService>();
-            DependencyService.Register<ApiAuthenticatorService>();
+            DependencyService.Register<LoginDataStore>();
             DependencyService.Register<ApiRegistrationService>();
             DependencyService.Register<CarDataStore>();
             DependencyService.Register<ReservationDataStore>();
