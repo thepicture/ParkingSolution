@@ -14,11 +14,5 @@ namespace ParkingSolution.XamarinApp.Views
             InitializeComponent();
             BindingContext = _viewModel = new LoginViewModel();
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            _viewModel.OnAppearing();
-        }
     }
 }

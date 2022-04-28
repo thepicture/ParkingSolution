@@ -1,19 +1,13 @@
 ﻿using ParkingSolution.XamarinApp.Models;
 using ParkingSolution.XamarinApp.Models.Serialized;
-using ParkingSolution.XamarinApp.Services;
+using System;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        internal void OnAppearing()
-        {
-
-        }
-
         private string phoneNumber;
 
         public string PhoneNumber
@@ -48,6 +42,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private async void LoginAsync()
         {
             IsBusy = true;
+            IsRefreshing = true;
             string rawPhoneNumber = MaskDeleter.DeleteMask(PhoneNumber);
             SerializedLoginUser loginUser = new SerializedLoginUser
             {
@@ -59,6 +54,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 AppShell.SetShellStacksDependingOnRole();
             }
+            IsRefreshing = false;
             IsBusy = false;
         }
 
@@ -88,7 +84,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             if (await FeedbackService.Ask("Выйти из приложения?"))
             {
-                System.Environment.Exit(0);
+                Environment.Exit(0);
             }
         }
     }

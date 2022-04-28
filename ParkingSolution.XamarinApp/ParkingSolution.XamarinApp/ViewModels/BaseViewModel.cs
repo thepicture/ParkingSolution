@@ -10,8 +10,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
-        bool isRefreshing;
-        bool isBusy = false;
+        private bool isRefreshing;
+        private bool isBusy = false;
         public IDataStore<SerializedUserCar> CarDataStore =>
             DependencyService.Get<IDataStore<SerializedUserCar>>();
         public IDataStore<SerializedParking> ParkingDataStore =>
@@ -31,15 +31,24 @@ namespace ParkingSolution.XamarinApp.ViewModels
         public string Role => AppIdentity.Role;
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            get => isBusy;
+            set
+            {
+                if (SetProperty(ref isBusy, value))
+                {
+                    OnPropertyChanged(
+                        nameof(IsNotBusy));
+                }
+            }
         }
 
-        string title = string.Empty;
+        public bool IsNotBusy => !IsBusy;
+
+        private string title = string.Empty;
         public string Title
         {
-            get { return title; }
-            set { SetProperty(ref title, value); }
+            get => title;
+            set => SetProperty(ref title, value);
         }
 
         public bool IsRefreshing
