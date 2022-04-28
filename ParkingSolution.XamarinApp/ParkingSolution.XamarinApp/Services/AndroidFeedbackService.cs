@@ -4,36 +4,45 @@ namespace ParkingSolution.XamarinApp.Services
 {
     public class AndroidFeedbackService : IFeedbackService
     {
-        public async Task<bool> Ask(string question)
+        public async Task<bool> Ask(object question)
         {
             return await App
                 .Current
                 .MainPage
-                .DisplayAlert("Вопрос", question, "Да", "Нет");
+                .DisplayAlert("Вопрос",
+                              question.ToString(),
+                              "Да",
+                              "Нет");
         }
 
-        public async Task Inform(string message)
+        public async Task Inform(object message)
         {
             await App
             .Current
             .MainPage
-            .DisplayAlert("Информация", message, "ОК");
+            .DisplayAlert("Информация",
+                          message.ToString(),
+                          "ОК");
         }
 
-        public async Task InformError(string description)
+        public async Task InformError(object description)
         {
             await App
            .Current
            .MainPage
-           .DisplayAlert("Ошибка", description, "ОК");
+           .DisplayAlert("Ошибка",
+                         description.ToString(),
+                         "ОК");
         }
 
-        public async Task Warn(string warning)
+        public async Task Warn(object warning)
         {
             await App
             .Current
             .MainPage
-            .DisplayAlert("Предупреждение", warning, "ОК");
+            .DisplayAlert("Предупреждение",
+                          warning.ToString(),
+                          "ОК");
         }
     }
 }

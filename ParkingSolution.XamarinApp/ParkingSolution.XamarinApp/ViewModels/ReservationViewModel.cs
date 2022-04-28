@@ -140,8 +140,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
             if (validationErrors.Length > 0)
             {
-                await FeedbackService.InformError(
-                    validationErrors.ToString());
+                await FeedbackService.InformError(validationErrors);
                 IsBusy = false;
                 return;
             }
