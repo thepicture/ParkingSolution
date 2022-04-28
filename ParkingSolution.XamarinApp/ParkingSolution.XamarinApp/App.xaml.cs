@@ -26,7 +26,7 @@ namespace ParkingSolution.XamarinApp
 
             DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<LoginDataStore>();
-            DependencyService.Register<ApiRegistrationService>();
+            DependencyService.Register<RegistrationDataStore>();
             DependencyService.Register<CarDataStore>();
             DependencyService.Register<ReservationDataStore>();
             DependencyService.Register<ParkingDataStore>();

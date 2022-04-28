@@ -6,6 +6,7 @@ namespace ParkingSolution.XamarinApp.Models
     {
         public static string DeleteMask(string input)
         {
+            if (input == null) return input;
             return input
                     .Where(l =>
                     {

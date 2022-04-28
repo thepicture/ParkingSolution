@@ -26,8 +26,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
             DependencyService.Get<IFeedbackService>();
         public IDataStore<SerializedLoginUser> LoginDataStore =>
             DependencyService.Get<IDataStore<SerializedLoginUser>>();
-        public IRegistrationService<SerializedUser> RegistrationService =>
-           DependencyService.Get<IRegistrationService<SerializedUser>>();
+        public IDataStore<SerializedRegistrationUser> RegistrationDataStore =>
+            DependencyService.Get<IDataStore<SerializedRegistrationUser>>();
         public string Role => AppIdentity.Role;
         public bool IsBusy
         {
