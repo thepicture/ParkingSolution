@@ -7,11 +7,6 @@ namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class RegisterViewModel : BaseViewModel
     {
-        internal void OnAppearing()
-        {
-
-        }
-
         private SerializedUserType currentUserType;
 
         public SerializedUserType CurrentUserType
@@ -46,6 +41,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private async void RegisterAsync()
         {
             IsBusy = true;
+            IsRefreshing = true;
             string rawPhoneNumber = MaskDeleter.DeleteMask(PhoneNumber);
             SerializedRegistrationUser registrationUser = new SerializedRegistrationUser
             {
@@ -58,6 +54,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 AppShell.LoadLoginAndRegisterShell();
             }
+            IsRefreshing = false;
             IsBusy = false;
         }
 
