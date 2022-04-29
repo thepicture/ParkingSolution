@@ -1,13 +1,7 @@
-﻿using Newtonsoft.Json;
-using ParkingSolution.XamarinApp.Models.Serialized;
-using ParkingSolution.XamarinApp.Services;
+﻿using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Views;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -23,58 +17,25 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void LoadMyParkingPlacesAsync()
         {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                MyReservations.Clear();
-            });
+            MyReservations.Clear();
 
-            using (HttpClient client = new HttpClient())
+            IEnumerable<SerializedParkingPlaceReservation> reservationsResponse =
+                await ReservationDataStore.GetItemsAsync();
+            foreach (SerializedParkingPlaceReservation reservation
+                in reservationsResponse)
             {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = App.BaseUrl;
-                try
-                {
-                    string response = await client
-                        .GetAsync($"users/myparkingplaces")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    IEnumerable<SerializedParkingPlaceReservation> reservationsResponse =
-                        JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedParkingPlaceReservation>>
-                        (response);
-                    foreach (SerializedParkingPlaceReservation reservation
-                        in reservationsResponse)
-                    {
-                        await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            MyReservations.Add(reservation);
-                        });
-                    }
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform(
-                        "Неоплаченные парковки не подгружены. " +
-                        "Перезайдите на страницу");
-                }
+                await Task.Delay(500);
+                MyReservations.Add(reservation);
             }
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                IsRefreshing = false;
-            });
+            IsRefreshing = false;
         }
 
-        private ObservableCollection<SerializedParkingPlaceReservation> myReservatins;
+        private ObservableCollection<SerializedParkingPlaceReservation> myReservations;
 
         public ObservableCollection<SerializedParkingPlaceReservation> MyReservations
         {
-            get => myReservatins;
-            set => SetProperty(ref myReservatins, value);
+            get => myReservations;
+            set => SetProperty(ref myReservations, value);
         }
 
         private Command<SerializedParkingPlaceReservation> payParkingPlaceCommand;
@@ -129,10 +90,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private void Refresh()
         {
-            Task.Run(() =>
-            {
-                LoadMyParkingPlacesAsync();
-            });
+            LoadMyParkingPlacesAsync();
         }
     }
 }

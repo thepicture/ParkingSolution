@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,11 +15,6 @@ namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class ParkingPlacesViewModel : BaseViewModel
     {
-        internal void OnAppearing()
-        {
-
-        }
-
         private async void LoadParkingPlacesAsync()
         {
             if (ParkingPlaces.Count != 0)

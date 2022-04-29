@@ -2,11 +2,12 @@
 using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp.Services
 {
@@ -14,6 +15,23 @@ namespace ParkingSolution.XamarinApp.Services
     {
         public async Task<bool> AddItemAsync(SerializedPaymentHistory item)
         {
+            StringBuilder validationErrors = new StringBuilder();
+            if (item.CardNumber == null || item.CardNumber.Length != 27)
+            {
+                _ = validationErrors.AppendLine("Укажите " +
+                    "корректный номер карты");
+            }
+            if (validationErrors.Length > 0)
+            {
+                await DependencyService
+                    .Get<IFeedbackService>()
+                    .InformError(validationErrors);
+                return false;
+            }
+            item.CardNumber = item.CardNumber
+                .Replace("(", "")
+                .Replace(")", "")
+                .Replace("-", "");
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization =
@@ -23,19 +41,32 @@ namespace ParkingSolution.XamarinApp.Services
                 try
                 {
                     string paymentJson = JsonConvert.SerializeObject(item);
+                    StringContent content =
+                        new StringContent(paymentJson,
+                                          Encoding.UTF8,
+                                          "application/json");
                     HttpResponseMessage response = await client
-                        .PostAsync(new Uri(client.BaseAddress + "PaymentHistories"),
-                                   new StringContent(paymentJson,
-                                                     Encoding.UTF8,
-                                                     "application/json"));
-                    string content = await response.Content.ReadAsStringAsync();
-                    return response.StatusCode ==
-                        System.Net.HttpStatusCode.Created;
+                        .PostAsync("PaymentHistories", content);
+                    if (response.StatusCode == HttpStatusCode.Created)
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Платёж успешен");
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
+                    return response.StatusCode == HttpStatusCode.Created;
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
-                    return await Task.FromResult(false);
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
+                    return false;
                 }
             }
         }

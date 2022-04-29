@@ -8,7 +8,7 @@
              x:Class="ParkingSolution.XamarinApp.Views.PaymentPage"
              Title="Оплата парковочного места">
     <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                 Refreshing="OnRefreshing">
+                 Command="{Binding RefreshCommand}">
         <StackLayout Margin="10,0,0,0">
             <material:MaterialTextField Text="{Binding CardNumber}"
                                         Placeholder="Укажите номер карты"

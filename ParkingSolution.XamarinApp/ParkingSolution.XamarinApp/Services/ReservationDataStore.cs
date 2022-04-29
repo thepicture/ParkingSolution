@@ -3,10 +3,12 @@ using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp.Services
 {
@@ -50,9 +52,40 @@ namespace ParkingSolution.XamarinApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<SerializedParkingPlaceReservation>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<SerializedParkingPlaceReservation>> GetItemsAsync(
+            bool forceRefresh = false)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                  new AuthenticationHeaderValue("Basic",
+                                                AppIdentity.AuthorizationValue);
+                client.BaseAddress = App.BaseUrl;
+                try
+                {
+                    HttpResponseMessage response =
+                        await client.GetAsync("users/myparkingplaces");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return JsonConvert.DeserializeObject
+                            <IEnumerable<SerializedParkingPlaceReservation>>(
+                                await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
+                }
+            }
+            return new List<SerializedParkingPlaceReservation>();
         }
 
         public Task<bool> UpdateItemAsync(SerializedParkingPlaceReservation item)

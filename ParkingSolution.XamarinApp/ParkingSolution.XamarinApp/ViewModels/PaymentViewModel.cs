@@ -1,5 +1,4 @@
 ﻿using ParkingSolution.XamarinApp.Models.Serialized;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -7,11 +6,6 @@ namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class PaymentViewModel : BaseViewModel
     {
-        internal void OnAppearing()
-        {
-
-        }
-
         private Command payCommand;
 
         public ICommand PayCommand
@@ -29,42 +23,16 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void PayAsync()
         {
-
-            StringBuilder validationErrors = new StringBuilder();
-            if (CardNumber == null || CardNumber.Length != 27)
-            {
-                _ = validationErrors.AppendLine("Укажите " +
-                    "корректный номер карты");
-            }
-
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(validationErrors);
-                return;
-            }
-
             IsBusy = true;
-
-            SerializedPaymentHistory history =
-                new SerializedPaymentHistory
-                {
-                    Sum = Reservation.TotalPrice,
-                    ReservationId = Reservation.Id,
-                    CardNumber = CardNumber
-                        .Replace("(", "")
-                        .Replace(")", "")
-                        .Replace("-", ""),
-                };
-
+            SerializedPaymentHistory history = new SerializedPaymentHistory
+            {
+                Sum = Reservation.TotalPrice,
+                ReservationId = Reservation.Id,
+                CardNumber = CardNumber
+            };
             if (await PaymentHistoryDataStore.AddItemAsync(history))
             {
-                await FeedbackService.Inform("Платёж успешен");
                 await Shell.Current.GoToAsync($"..");
-            }
-            else
-            {
-                await FeedbackService.InformError("При транзакции " +
-                    "произошла ошибка. Попробуйте ещё раз");
             }
             IsBusy = false;
         }
@@ -86,6 +54,29 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             get => reservation;
             set => SetProperty(ref reservation, value);
+        }
+
+        private Command refreshCommand;
+
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                if (refreshCommand == null)
+                {
+                    refreshCommand = new Command(Refresh);
+                }
+
+                return refreshCommand;
+            }
+        }
+
+        private void Refresh()
+        {
+            if (IsNotBusy && IsRefreshing)
+            {
+                IsRefreshing = false;
+            }
         }
     }
 }
