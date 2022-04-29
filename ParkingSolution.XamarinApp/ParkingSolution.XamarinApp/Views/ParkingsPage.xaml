@@ -25,207 +25,211 @@
             </controls:BindableToolbarItem.IsVisible>
         </controls:BindableToolbarItem>
     </ContentPage.ToolbarItems>
-    <Grid RowDefinitions="*, auto">
-        <maps:Map ItemsSource="{Binding Parkings}"
-                  IsShowingUser="True"
-                  x:Name="ParkingsMap"
-                  IsVisible="{Binding IsShowAsMap}">
-            <x:Arguments>
-                <maps:MapSpan>
+    <ContentView>
+        <Grid RowDefinitions="*, auto">
+            <RefreshView IsRefreshing="{Binding IsRefreshing}">
+                <maps:Map ItemsSource="{Binding Parkings}"
+                          IsShowingUser="True"
+                          x:Name="ParkingsMap"
+                          IsVisible="{Binding IsShowAsMap}">
                     <x:Arguments>
-                        <maps:Position>
+                        <maps:MapSpan>
                             <x:Arguments>
-                                <x:Double>55.751244</x:Double>
-                                <x:Double>37.618423</x:Double>
+                                <maps:Position>
+                                    <x:Arguments>
+                                        <x:Double>55.751244</x:Double>
+                                        <x:Double>37.618423</x:Double>
+                                    </x:Arguments>
+                                </maps:Position>
+                                <x:Double>0.01</x:Double>
+                                <x:Double>0.01</x:Double>
                             </x:Arguments>
-                        </maps:Position>
-                        <x:Double>0.01</x:Double>
-                        <x:Double>0.01</x:Double>
+                        </maps:MapSpan>
                     </x:Arguments>
-                </maps:MapSpan>
-            </x:Arguments>
-            <maps:Map.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type helpers:ParkingHelper}">
-                    <maps:Pin Position="{Binding Position}"
-                              Address="{Binding Address}"
-                              MarkerClicked="OnPinClicked">
-                        <maps:Pin.Label>
-                            <MultiBinding StringFormat="{}Зона {0} - {1}">
-                                <Binding Path="Parking.Id" />
-                                <Binding Path="Address" />
-                            </MultiBinding>
-                        </maps:Pin.Label>
-                    </maps:Pin>
-                </DataTemplate>
-            </maps:Map.ItemTemplate>
-        </maps:Map>
-        <RefreshView IsRefreshing="{Binding IsRefreshing}"
-                     Command="{Binding RefreshCommand}">
-            <RefreshView.Triggers>
-                <DataTrigger TargetType="RefreshView"
-                             Binding="{Binding IsShowAsMap}"
-                             Value="True">
-                    <Setter Property="IsVisible"
-                            Value="False" />
-                </DataTrigger>
-            </RefreshView.Triggers>
-            <ScrollView>
-                <StackLayout BindableLayout.ItemsSource="{Binding Parkings}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="helpers:ParkingHelper">
-                            <material:MaterialCard Elevation="5"
-                                                   Margin="10"
-                                                   IsClickable="True"
-                                                   Clicked="OnListItemClicked">
-                                <StackLayout>
-                                    <Label Text="{Binding Address, 
+                    <maps:Map.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type helpers:ParkingHelper}">
+                            <maps:Pin Position="{Binding Position}"
+                                      Address="{Binding Address}"
+                                      MarkerClicked="OnPinClicked">
+                                <maps:Pin.Label>
+                                    <MultiBinding StringFormat="{}Зона {0} - {1}">
+                                        <Binding Path="Parking.Id" />
+                                        <Binding Path="Address" />
+                                    </MultiBinding>
+                                </maps:Pin.Label>
+                            </maps:Pin>
+                        </DataTemplate>
+                    </maps:Map.ItemTemplate>
+                </maps:Map>
+            </RefreshView>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding RefreshCommand}">
+                <RefreshView.Triggers>
+                    <DataTrigger TargetType="RefreshView"
+                                 Binding="{Binding IsShowAsMap}"
+                                 Value="True">
+                        <Setter Property="IsVisible"
+                                Value="False" />
+                    </DataTrigger>
+                </RefreshView.Triggers>
+                <ScrollView>
+                    <StackLayout BindableLayout.ItemsSource="{Binding Parkings}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="helpers:ParkingHelper">
+                                <material:MaterialCard Elevation="5"
+                                                       Margin="10"
+                                                       IsClickable="True"
+                                                       Clicked="OnListItemClicked">
+                                    <StackLayout>
+                                        <Label Text="{Binding Address, 
                                                   StringFormat='Адрес: {0}'}"
-                                           FontAttributes="Bold"
-                                           HorizontalTextAlignment="Center" />
-                                    <BoxView Color="WhiteSmoke"
-                                             HeightRequest="1" />
-                                    <Label Text="{Binding Parking.ParkingType, 
+                                               FontAttributes="Bold"
+                                               HorizontalTextAlignment="Center" />
+                                        <BoxView Color="WhiteSmoke"
+                                                 HeightRequest="1" />
+                                        <Label Text="{Binding Parking.ParkingType, 
                                                   StringFormat='Тип: {0}'}"
-                                           HorizontalTextAlignment="Center" />
-                                    <BoxView Color="WhiteSmoke"
-                                             HeightRequest="1" />
-                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                               HorizontalTextAlignment="Center" />
+                                        <BoxView Color="WhiteSmoke"
+                                                 HeightRequest="1" />
+                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                 Path=BindingContext}"
-                                                             Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                               AncestorType={x:Type views:ParkingsPage}}, 
                                                                                               Path=BindingContext.GoToParkingPlacesCommand}"
-                                                             Text="Начать парковку"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BaseButton}"
-                                                             IsVisible="False">
-                                        <material:MaterialButton.Triggers>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                                         Value="Клиент">
-                                                <Setter Property="IsVisible"
-                                                        Value="True" />
-                                            </DataTrigger>
-                                        </material:MaterialButton.Triggers>
-                                    </material:MaterialButton>
-                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                 Text="Начать парковку"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 IsVisible="False">
+                                            <material:MaterialButton.Triggers>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                             Value="Клиент">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                            </material:MaterialButton.Triggers>
+                                        </material:MaterialButton>
+                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                 Path=BindingContext}"
-                                                             Command="{Binding Source={RelativeSource Mode=FindAncestor, 
+                                                                 Command="{Binding Source={RelativeSource Mode=FindAncestor, 
                                                                                               AncestorType={x:Type views:ParkingsPage}}, 
                                                                                               Path=BindingContext.GoToParkingPriceCommand}"
-                                                             Text="Стоимость"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BaseButton}"
-                                                             Grid.Column="1">
-                                    </material:MaterialButton>
-                                    <material:MaterialButton Clicked="OnParkingEditClick"
-                                                             Text="Редактировать"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BaseButton}"
-                                                             Grid.Column="1"
-                                                             IsVisible="False">
-                                        <material:MaterialButton.Triggers>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                                         Value="Администратор">
-                                                <Setter Property="IsVisible"
-                                                        Value="True" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                                         Value="Сотрудник">
-                                                <Setter Property="IsVisible"
-                                                        Value="True" />
-                                            </DataTrigger>
-                                        </material:MaterialButton.Triggers>
-                                    </material:MaterialButton>
-                                    <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
+                                                                 Text="Стоимость"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 Grid.Column="1">
+                                        </material:MaterialButton>
+                                        <material:MaterialButton Clicked="OnParkingEditClick"
+                                                                 Text="Редактировать"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 Grid.Column="1"
+                                                                 IsVisible="False">
+                                            <material:MaterialButton.Triggers>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                             Value="Администратор">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                             Value="Сотрудник">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                            </material:MaterialButton.Triggers>
+                                        </material:MaterialButton>
+                                        <material:MaterialButton CommandParameter="{Binding Source={RelativeSource Self}, 
                                                                                 Path=BindingContext}"
-                                                             Command="{Binding Source={x:Reference Page}, 
+                                                                 Command="{Binding Source={x:Reference Page}, 
                                                                                Path=BindingContext.DeleteParkingCommand}"
-                                                             Text="Удалить"
-                                                             IsVisible="False"
-                                                             VerticalOptions="EndAndExpand"
-                                                             Style="{StaticResource BaseButton}"
-                                                             BackgroundColor="Red">
-                                        <material:MaterialButton.Triggers>
-                                            <DataTrigger TargetType="material:MaterialButton"
-                                                         Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
-                                                         Value="Администратор">
-                                                <Setter Property="IsVisible"
-                                                        Value="True" />
-                                            </DataTrigger>
-                                        </material:MaterialButton.Triggers>
-                                    </material:MaterialButton>
-                                </StackLayout>
-                            </material:MaterialCard>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </StackLayout>
-            </ScrollView>
-        </RefreshView>
-        <StackLayout VerticalOptions="CenterAndExpand"
-                     Grid.Row="1"
-                     IsVisible="{Binding IsShowAsMap}">
-            <Label Text="{Binding SelectedParking.Parking.NumberOfParkingPlaces,
+                                                                 Text="Удалить"
+                                                                 IsVisible="False"
+                                                                 VerticalOptions="EndAndExpand"
+                                                                 Style="{StaticResource BaseButton}"
+                                                                 BackgroundColor="Red">
+                                            <material:MaterialButton.Triggers>
+                                                <DataTrigger TargetType="material:MaterialButton"
+                                                             Binding="{Binding Source={Static Member=services:AppIdentity.Role}}"
+                                                             Value="Администратор">
+                                                    <Setter Property="IsVisible"
+                                                            Value="True" />
+                                                </DataTrigger>
+                                            </material:MaterialButton.Triggers>
+                                        </material:MaterialButton>
+                                    </StackLayout>
+                                </material:MaterialCard>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+            </RefreshView>
+            <StackLayout VerticalOptions="CenterAndExpand"
+                         Grid.Row="1"
+                         IsVisible="{Binding IsShowAsMap}">
+                <Label Text="{Binding SelectedParking.Parking.NumberOfParkingPlaces,
                                   StringFormat='{}Число мест: {0}',
                                   FallbackValue=Выберите автостоянку}"
-                   HorizontalTextAlignment="Center"
-                   Margin="5"
-                   HorizontalOptions="Center" />
-            <StackLayout Orientation="Horizontal"
-                         VerticalOptions="EndAndExpand"
-                         HorizontalOptions="Center">
-                <material:MaterialButton Command="{Binding GoToParkingPlacesCommand}"
-                                         Text="Начать парковку"
+                       HorizontalTextAlignment="Center"
+                       Margin="5"
+                       HorizontalOptions="Center" />
+                <StackLayout Orientation="Horizontal"
+                             VerticalOptions="EndAndExpand"
+                             HorizontalOptions="Center">
+                    <material:MaterialButton Command="{Binding GoToParkingPlacesCommand}"
+                                             Text="Начать парковку"
+                                             FontSize="10"
+                                             Style="{StaticResource BaseButton}"
+                                             IsVisible="False"
+                                             IsEnabled="{Binding SelectedParking.Parking.Id, 
+                                                             FallbackValue=False}">
+                        <material:MaterialButton.Triggers>
+                            <DataTrigger TargetType="material:MaterialButton"
+                                         Binding="{Binding Role}"
+                                         Value="Клиент">
+                                <Setter Property="IsVisible"
+                                        Value="True" />
+                            </DataTrigger>
+                        </material:MaterialButton.Triggers>
+                    </material:MaterialButton>
+                    <material:MaterialButton Command="{Binding GoToAddParkingPageCommand}"
+                                             Text="Добавить автостоянку"
+                                             FontSize="10"
+                                             Style="{StaticResource BackgroundButton}"
+                                             IsVisible="False">
+                        <material:MaterialButton.Triggers>
+                            <DataTrigger TargetType="material:MaterialButton"
+                                         Binding="{Binding Role}"
+                                         Value="Администратор">
+                                <Setter Property="IsVisible"
+                                        Value="True" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="material:MaterialButton"
+                                         Binding="{Binding Role}"
+                                         Value="Сотрудник">
+                                <Setter Property="IsVisible"
+                                        Value="True" />
+                            </DataTrigger>
+                        </material:MaterialButton.Triggers>
+                    </material:MaterialButton>
+                </StackLayout>
+                <material:MaterialButton Command="{Binding ToggleViewTypeCommand}"
+                                         Text="Показывать картой"
                                          FontSize="10"
                                          Style="{StaticResource BaseButton}"
-                                         IsVisible="False"
-                                         IsEnabled="{Binding SelectedParking.Parking.Id, 
-                                                             FallbackValue=False}">
+                                         HorizontalOptions="Center">
                     <material:MaterialButton.Triggers>
                         <DataTrigger TargetType="material:MaterialButton"
-                                     Binding="{Binding Role}"
-                                     Value="Клиент">
-                            <Setter Property="IsVisible"
-                                    Value="True" />
-                        </DataTrigger>
-                    </material:MaterialButton.Triggers>
-                </material:MaterialButton>
-                <material:MaterialButton Command="{Binding GoToAddParkingPageCommand}"
-                                         Text="Добавить автостоянку"
-                                         FontSize="10"
-                                         Style="{StaticResource BackgroundButton}"
-                                         IsVisible="False">
-                    <material:MaterialButton.Triggers>
-                        <DataTrigger TargetType="material:MaterialButton"
-                                     Binding="{Binding Role}"
-                                     Value="Администратор">
-                            <Setter Property="IsVisible"
-                                    Value="True" />
-                        </DataTrigger>
-                        <DataTrigger TargetType="material:MaterialButton"
-                                     Binding="{Binding Role}"
-                                     Value="Сотрудник">
-                            <Setter Property="IsVisible"
-                                    Value="True" />
+                                     Binding="{Binding IsShowAsMap}"
+                                     Value="True">
+                            <Setter Property="Text"
+                                    Value="Показывать списком" />
                         </DataTrigger>
                     </material:MaterialButton.Triggers>
                 </material:MaterialButton>
             </StackLayout>
-            <material:MaterialButton Command="{Binding ToggleViewTypeCommand}"
-                                     Text="Показывать картой"
-                                     FontSize="10"
-                                     Style="{StaticResource BaseButton}"
-                                     HorizontalOptions="Center">
-                <material:MaterialButton.Triggers>
-                    <DataTrigger TargetType="material:MaterialButton"
-                                 Binding="{Binding IsShowAsMap}"
-                                 Value="True">
-                        <Setter Property="Text"
-                                Value="Показывать списком" />
-                    </DataTrigger>
-                </material:MaterialButton.Triggers>
-            </material:MaterialButton>
-        </StackLayout>
-    </Grid>
+        </Grid>
+    </ContentView>
 </ContentPage>
