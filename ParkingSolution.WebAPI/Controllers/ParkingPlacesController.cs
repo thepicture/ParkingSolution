@@ -23,7 +23,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // GET: api/ParkingPlaces/5
         [ResponseType(typeof(SerializedParkingPlace))]
-        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [Authorize]
         public async Task<IHttpActionResult> GetParkingPlace(int id)
         {
             ParkingPlace parkingPlace = await db.ParkingPlace.FindAsync(id);
@@ -39,7 +39,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // GET: api/ParkingPlaces?parkingId=1
         [ResponseType(typeof(IEnumerable<SerializedParkingPlace>))]
-        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [Authorize]
         public async Task<IHttpActionResult> GetParkingPlaces(int parkingId)
         {
             Parking parking = await db.Parking.FindAsync(parkingId);

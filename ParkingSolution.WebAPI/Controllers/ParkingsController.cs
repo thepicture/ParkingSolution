@@ -18,7 +18,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // GET: api/Parkings
         [ResponseType(typeof(List<SerializedParking>))]
-        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [Authorize]
         public IHttpActionResult GetParking()
         {
             return Ok(db.Parking
@@ -28,7 +28,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // GET: api/Parkings/5
         [ResponseType(typeof(SerializedParking))]
-        [Authorize(Roles = "Администратор, Сотрудник, Клиент")]
+        [Authorize]
         public async Task<IHttpActionResult> GetParking(int id)
         {
             Parking parking = await db.Parking.FindAsync(id);

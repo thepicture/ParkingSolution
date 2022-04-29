@@ -200,7 +200,7 @@ namespace ParkingSolution.WebAPI.Controllers
         }
 
         [ResponseType(typeof(List<SerializedParkingPlace>))]
-        [Authorize(Roles = "Клиент, Сотрудник, Администратор")]
+        [Authorize]
         [HttpGet]
         [Route("api/users/myparkingplaces")]
         public IHttpActionResult GetMyParkingPlacesAsync()
