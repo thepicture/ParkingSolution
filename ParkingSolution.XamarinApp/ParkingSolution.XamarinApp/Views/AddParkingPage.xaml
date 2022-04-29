@@ -18,7 +18,6 @@
                                             Placeholder="Введите город"
                                             HelperText="* обязательно"
                                             InputType="Text"
-                                            MaxLength="18"
                                             LeadingIcon="world"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}" />
@@ -26,7 +25,6 @@
                                             Placeholder="Введите адрес улицы"
                                             HelperText="* обязательно"
                                             InputType="Text"
-                                            MaxLength="18"
                                             LeadingIcon="home"
                                             AlwaysShowUnderline="True"
                                             TintColor="{StaticResource Primary}" />
@@ -45,7 +43,7 @@
                 <Label Text="и заканчивая временем" />
                 <TimePicker Time="{Binding BeforeFreeTime}" />
                 <material:MaterialTextField Text="{Binding CostInRubles}"
-                                            Placeholder="Введите стоимость платного времени"
+                                            Placeholder="Стоимость за час"
                                             HelperText="* обязательно, в рублях"
                                             InputType="Numeric"
                                             MaxLength="18"

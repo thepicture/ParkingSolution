@@ -79,7 +79,7 @@ namespace ParkingSolution.WebAPI.Controllers
 
         // POST: api/Parkings
         [ResponseType(typeof(int))]
-        [Authorize(Roles ="Администратор, Сотрудник")]
+        [Authorize(Roles = "Администратор, Сотрудник")]
         public async Task<IHttpActionResult> PostParking
             (SerializedParking serializedParking)
         {
@@ -90,9 +90,8 @@ namespace ParkingSolution.WebAPI.Controllers
 
             City city = await db.City
                 .FirstOrDefaultAsync(c =>
-                    c.Name.ToLower()
-                    .Contains(
-                        serializedParking.City.ToLower()));
+                    c.Name.Equals(
+                        serializedParking.City, StringComparison.OrdinalIgnoreCase));
             City newCity = null;
             if (city == null)
             {
@@ -108,9 +107,8 @@ namespace ParkingSolution.WebAPI.Controllers
 
             Address address = await db.Address
                 .FirstOrDefaultAsync(c =>
-                    c.StreetName.ToLower()
-                    .Contains(
-                        serializedParking.Street.ToLower()));
+                    c.StreetName.Equals(
+                        serializedParking.Street, StringComparison.OrdinalIgnoreCase));
             Address newAddress = null;
             if (address == null)
             {

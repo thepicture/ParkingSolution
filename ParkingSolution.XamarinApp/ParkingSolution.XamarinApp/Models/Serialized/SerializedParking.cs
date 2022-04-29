@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace ParkingSolution.XamarinApp.Models.Serialized
@@ -11,6 +12,8 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public TimeSpan BeforePaidTime { get; set; }
         public TimeSpan BeforeFreeTime { get; set; }
         public decimal CostInRubles { get; set; }
+        [JsonIgnore]
+        public string CostInRublesAsString { get; set; }
         public string Address { get; set; }
         public string ParkingType { get; set; }
         public int NumberOfParkingPlaces { get; set; }

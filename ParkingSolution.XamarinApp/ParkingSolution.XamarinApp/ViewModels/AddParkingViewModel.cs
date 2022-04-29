@@ -3,7 +3,6 @@ using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -53,10 +52,6 @@ namespace ParkingSolution.XamarinApp.ViewModels
             set => SetProperty(ref parkingPlaces, value);
         }
 
-        internal void OnAppearing()
-        {
-        }
-
         private string parkingType;
 
         public string ParkingType
@@ -98,74 +93,22 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            StringBuilder validationErrors = new StringBuilder();
-            if (ParkingType == null)
-            {
-                _ = validationErrors.AppendLine("Выберите тип " +
-                    "парковки");
-            }
-            if (string.IsNullOrWhiteSpace(City))
-            {
-                _ = validationErrors.AppendLine("Укажите город");
-            }
-            if (string.IsNullOrWhiteSpace(Street))
-            {
-                _ = validationErrors.AppendLine("Укажите улицу");
-            }
-            if (string.IsNullOrWhiteSpace(CostInRubles)
-                || !decimal.TryParse(CostInRubles, out decimal price)
-                || price <= 0)
-            {
-                _ = validationErrors.AppendLine("Стоимость должна " +
-                    "быть положительной и в рублях");
-            }
-            if (BeforePaidTime >= BeforeFreeTime)
-            {
-                _ = validationErrors.AppendLine("Дата начала " +
-                    "платной парковки " +
-                    "должна быть раньше " +
-                    "даты окончания платной парковки");
-            }
-            if (ParkingPlaces.Count == 0)
-            {
-                _ = validationErrors.AppendLine("Необходимо " +
-                    "хотя бы одно парковочное место");
-            }
-
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(validationErrors);
-                IsBusy = false;
-                return;
-            }
-
             IsBusy = true;
-            SerializedParking parking = null;
+            SerializedParking parking = new SerializedParking();
             if (EditingParking != null)
             {
-                EditingParking.City = City;
-                EditingParking.Street = Street;
-                EditingParking.ParkingTypeId = ParkingType == "Придорожная" ? 1 : 2;
-                EditingParking.BeforePaidTime = BeforePaidTime;
-                EditingParking.BeforeFreeTime = BeforeFreeTime;
-                EditingParking.CostInRubles = decimal.Parse(CostInRubles);
-                EditingParking.ParkingPlacesCarTypes = ParkingPlaces.Select(pp => pp.Name);
                 parking = EditingParking;
             }
-            else
+            parking.City = City;
+            parking.Street = Street;
+            if (ParkingType != null)
             {
-                parking = new SerializedParking
-                {
-                    City = City,
-                    Street = Street,
-                    ParkingTypeId = ParkingType == "Придорожная" ? 1 : 2,
-                    BeforePaidTime = BeforePaidTime,
-                    BeforeFreeTime = BeforeFreeTime,
-                    CostInRubles = decimal.Parse(CostInRubles),
-                    ParkingPlacesCarTypes = ParkingPlaces.Select(pp => pp.Name)
-                };
+                parking.ParkingTypeId = ParkingType == "Придорожная" ? 1 : 2;
             }
-
+            parking.BeforePaidTime = BeforePaidTime;
+            parking.BeforeFreeTime = BeforeFreeTime;
+            parking.CostInRublesAsString = CostInRubles;
+            parking.ParkingPlacesCarTypes = ParkingPlaces?.Select(pp => pp.Name);
             if (await ParkingDataStore.AddItemAsync(parking))
             {
                 await Shell.Current.GoToAsync("..");
@@ -257,13 +200,10 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void DeleteParkingAsync()
         {
-            if (await FeedbackService.Ask("Удалить парковку?"))
+            string id = EditingParking.Id.ToString();
+            if (await ParkingDataStore.DeleteItemAsync(id))
             {
-                string id = EditingParking.Id.ToString();
-                if (await ParkingDataStore.DeleteItemAsync(id))
-                {
-                    await Shell.Current.GoToAsync("..");
-                }
+                await Shell.Current.GoToAsync("..");
             }
         }
 

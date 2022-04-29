@@ -1,16 +1,10 @@
-﻿using Newtonsoft.Json;
-using ParkingSolution.XamarinApp.Models.Helpers;
+﻿using ParkingSolution.XamarinApp.Models.Helpers;
 using ParkingSolution.XamarinApp.Models.Serialized;
-using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -22,131 +16,39 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private bool showAsMap = true;
         internal void OnAppearing()
         {
-            SelectedParking = null;
             IsRefreshing = true;
         }
 
         private async void LoadParkingsAsync()
         {
-            using (HttpClient client = new HttpClient())
+            SelectedParking = null;
+            Parkings.Clear();
+            IEnumerable<SerializedParking> parkings =
+                await ParkingDataStore.GetItemsAsync();
+            try
             {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = App.BaseUrl;
-                try
+                Geocoder geoCoder = new Geocoder();
+                foreach (SerializedParking parking in parkings)
                 {
-                    HttpResponseMessage response = await client
-                        .GetAsync("parkings");
-                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    IEnumerable<Position> approximateLocations =
+                        await geoCoder
+                        .GetPositionsForAddressAsync(
+                            string.Format(parking.Address));
+                    Position position = approximateLocations
+                        .FirstOrDefault();
+                    Parkings.Add(new ParkingHelper
                     {
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            FeedbackService.InformError("Парковки не "
-                                + "подгружены в связи с ошибкой сервера: "
-                                + response.StatusCode);
-                        });
-                        IsRefreshing = false;
-                        return;
-                    }
-                    IEnumerable<SerializedParking> parkings = JsonConvert
-                        .DeserializeObject
-                        <IEnumerable<SerializedParking>>
-                        (
-                            await response.Content.ReadAsStringAsync()
-                        );
-                    Geocoder geoCoder = new Geocoder();
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        Parkings.Clear();
+                        Address = parking.Address,
+                        Description = parking.ParkingType,
+                        Position = position,
+                        Parking = parking
                     });
-                    foreach (SerializedParking parking in parkings)
-                    {
-                        try
-                        {
-                            IEnumerable<Position> approximateLocations =
-                                                           await geoCoder
-                                                           .GetPositionsForAddressAsync(
-                                                           string.Format(parking.Address)
-                                                           );
-                            Position position = approximateLocations
-                                .FirstOrDefault();
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                Parkings.Add(new ParkingHelper
-                                {
-                                    Address = parking.Address,
-                                    Description = parking.ParkingType,
-                                    Position = position,
-                                    Parking = parking
-                                });
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                FeedbackService.InformError("Геолокация " +
-                                    "произошла с ошибкой: " + ex.StackTrace);
-                            });
-                        }
-                    }
                 }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        FeedbackService.InformError("Парковки " +
-                        "не загружены в связи с изменением " +
-                        "бизнес-процессов. Обратитесь к " +
-                        "администратору");
-                    });
-                    IsRefreshing = false;
-                }
-                catch (TaskCanceledException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        FeedbackService.InformError("Запрос на " +
-                        "получение парковок отменён");
-                    });
-                    IsRefreshing = false;
-                }
-                catch (InvalidOperationException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        FeedbackService.InformError("Система " +
-                         "попыталась отправить запрос " +
-                         "более, чем один раз");
-                    });
-                    IsRefreshing = false;
-                }
-                catch (TimeoutException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        FeedbackService.InformError("Время ожидания " +
-                        "загрузки истекло. Обновите страницу");
-                    });
-                    IsRefreshing = false;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        FeedbackService.InformError("Неизвестная ошибка. " +
-                        "Парковки не загружены. " +
-                        "Перезапустите приложение или обновите " +
-                        "список парковок");
-                    });
-                    IsRefreshing = false;
-                }
+            }
+            catch (Exception ex)
+            {
+                await FeedbackService
+                    .InformError(ex);
             }
             IsRefreshing = false;
         }
@@ -274,21 +176,11 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void DeleteParkingAsync(ParkingHelper parking)
         {
-            if (!await FeedbackService.Ask("Удалить парковку зоны " +
-                $"{parking.Parking.Id}?"))
-            {
-                return;
-            }
-            if (await ParkingDataStore.DeleteItemAsync(parking.Parking.Id
+            if (await ParkingDataStore
+                .DeleteItemAsync(parking.Parking.Id
                 .ToString()))
             {
-                await FeedbackService.Inform("Парковка удалена");
                 IsRefreshing = true;
-            }
-            else
-            {
-                await FeedbackService.InformError("Парковка не удалена. " +
-                    "Перезайдите на страницу");
             }
         }
 
@@ -314,17 +206,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private void Refresh()
         {
-            try
-            {
-                Task.Run(() =>
-                {
-                    LoadParkingsAsync();
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.StackTrace);
-            }
+            LoadParkingsAsync();
         }
 
         private Command goToAddParkingPageCommand;
