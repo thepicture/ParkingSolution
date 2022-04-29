@@ -2,7 +2,7 @@
 using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -24,38 +24,32 @@ namespace ParkingSolution.XamarinApp.Services
                 try
                 {
                     string carJson = JsonConvert.SerializeObject(item);
+                    StringContent content =
+                        new StringContent(carJson,
+                                          Encoding.UTF8,
+                                          "application/json");
                     HttpResponseMessage response = await client
-                        .PostAsync(new Uri(client.BaseAddress + "usercars"),
-                                   new StringContent(carJson,
-                                                     Encoding.UTF8,
-                                                     "application/json"));
-                    string content = await response.Content.ReadAsStringAsync();
-                    if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                        .PostAsync("userCars", content);
+                    if (response.StatusCode == HttpStatusCode.Created)
                     {
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            _ = DependencyService.Get<IFeedbackService>()
+                        await DependencyService
+                            .Get<IFeedbackService>()
                             .Inform("Автомобиль добавлен");
-                        });
-                        return true;
                     }
                     else
                     {
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            _ = DependencyService
+                        await DependencyService
                             .Get<IFeedbackService>()
-                            .Inform("Не удалось "
-                            + "добавить автомобиль. "
-                            + "Проверьте подключение к интернету");
-                        });
-                        return false;
+                            .Inform(response);
                     }
+                    return response.StatusCode == HttpStatusCode.Created;
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
-                    return await Task.FromResult(false);
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .Inform(ex);
+                    return false;
                 }
             }
         }
@@ -70,9 +64,39 @@ namespace ParkingSolution.XamarinApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<SerializedUserCar>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<SerializedUserCar>> GetItemsAsync(
+            bool forceRefresh = false)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+                  new AuthenticationHeaderValue("Basic",
+                                                AppIdentity.AuthorizationValue);
+                client.BaseAddress = App.BaseUrl;
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync($"userCars");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return JsonConvert.DeserializeObject
+                            <IEnumerable<SerializedUserCar>>(
+                                await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform(response);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .Inform(ex);
+                }
+            }
+            return new List<SerializedUserCar>();
         }
 
         public Task<bool> UpdateItemAsync(SerializedUserCar item)

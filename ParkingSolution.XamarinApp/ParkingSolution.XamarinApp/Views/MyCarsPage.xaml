@@ -16,8 +16,7 @@
             <BindableLayout.ItemTemplate>
                 <DataTemplate x:DataType="serialized:SerializedUserCar">
                     <material:MaterialCard Elevation="5"
-                                           Margin="10"
-                                           IsClickable="True">
+                                           Margin="10">
                         <StackLayout>
                             <Label Text="{Binding CarType, 
                                                   StringFormat='Автомобиль типа {0}'}"

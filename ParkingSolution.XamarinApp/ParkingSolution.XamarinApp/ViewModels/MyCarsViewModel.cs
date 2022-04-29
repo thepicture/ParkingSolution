@@ -1,13 +1,7 @@
-﻿using Newtonsoft.Json;
-using ParkingSolution.XamarinApp.Models.Serialized;
-using ParkingSolution.XamarinApp.Services;
+﻿using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Views;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -42,57 +36,27 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         internal void OnAppearing()
         {
-            Cars = new ObservableCollection<SerializedUserCar>();
-            Task.Run(() =>
-            {
-                LoadCarsAsync();
-            });
+            LoadCarsAsync();
         }
 
         private async void LoadCarsAsync()
         {
-            if (Cars.Count != 0)
+            Cars.Clear();
+            IEnumerable<SerializedUserCar> dataStoreCars =
+                await CarDataStore.GetItemsAsync();
+            foreach (SerializedUserCar car in dataStoreCars)
             {
-                Cars.Clear();
-            }
-
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = App.BaseUrl;
-                try
-                {
-                    string response = await client
-                        .GetAsync($"usercars")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    IEnumerable<SerializedUserCar> userCarsResponse =
-                        JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedUserCar>>
-                        (response);
-                    foreach (SerializedUserCar userCar
-                        in userCarsResponse)
-                    {
-                        await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            Cars.Add(userCar);
-                        });
-                    }
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform("Автомобили не подгружены. "
-                        + "Перезайдите на страницу");
-                }
+                await Task.Delay(200);
+                Cars.Add(car);
             }
         }
 
         private ObservableCollection<SerializedUserCar> cars;
+
+        public MyCarsViewModel()
+        {
+            Cars = new ObservableCollection<SerializedUserCar>();
+        }
 
         public ObservableCollection<SerializedUserCar> Cars
         {
