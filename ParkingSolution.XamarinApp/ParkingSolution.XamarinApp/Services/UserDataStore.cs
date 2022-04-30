@@ -2,12 +2,11 @@
 using ParkingSolution.XamarinApp.Models.Serialized;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using System.Net;
 
 namespace ParkingSolution.XamarinApp.Services
 {
@@ -20,6 +19,12 @@ namespace ParkingSolution.XamarinApp.Services
 
         public async Task<bool> DeleteItemAsync(string id)
         {
+            if (!await DependencyService
+                .Get<IFeedbackService>()
+                .Ask("Удалить сотрудника?"))
+            {
+                return false;
+            }
             using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
@@ -30,11 +35,26 @@ namespace ParkingSolution.XamarinApp.Services
                 {
                     HttpResponseMessage response = await client
                      .DeleteAsync($"users/{id}");
+                    if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .Inform("Сотрудник удалён");
+                    }
+                    else
+                    {
+                        await DependencyService
+                               .Get<IFeedbackService>()
+                               .InformError(response);
+
+                    }
                     return response.StatusCode == HttpStatusCode.NoContent;
                 }
-                catch (HttpRequestException ex)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine(ex.StackTrace);
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
                     return false;
                 }
             }
@@ -45,9 +65,40 @@ namespace ParkingSolution.XamarinApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<SerializedUser>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<SerializedUser>> GetItemsAsync(
+            bool forceRefresh = false)
         {
-            throw new NotImplementedException();
+            using (HttpClient client = new HttpClient(App.ClientHandler))
+            {
+                client.DefaultRequestHeaders.Authorization =
+                  new AuthenticationHeaderValue("Basic",
+                                                AppIdentity.AuthorizationValue);
+                client.BaseAddress = App.BaseUrl;
+                try
+                {
+                    HttpResponseMessage response = await client
+                        .GetAsync($"users/employees");
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return JsonConvert.DeserializeObject
+                            <IEnumerable<SerializedUser>>(
+                            await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        await DependencyService
+                            .Get<IFeedbackService>()
+                            .InformError(response);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await DependencyService
+                        .Get<IFeedbackService>()
+                        .InformError(ex);
+                }
+                return new List<SerializedUser>();
+            }
         }
 
         public Task<bool> UpdateItemAsync(SerializedUser item)

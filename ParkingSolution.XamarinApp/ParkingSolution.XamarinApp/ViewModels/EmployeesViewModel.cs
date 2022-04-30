@@ -1,12 +1,6 @@
-﻿using Newtonsoft.Json;
-using ParkingSolution.XamarinApp.Models.Serialized;
-using ParkingSolution.XamarinApp.Services;
-using System;
+﻿using ParkingSolution.XamarinApp.Models.Serialized;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -20,7 +14,6 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         internal void OnAppearing()
         {
-            Employees = new ObservableCollection<SerializedUser>();
             IsRefreshing = true;
         }
 
@@ -47,24 +40,19 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void DeleteEmployeeAsync(SerializedUser user)
         {
-            if (!await FeedbackService.Ask($"Удалить сотрудника {user.PhoneNumber}?"))
-            {
-                return;
-            }
             if (await UserDataStore.DeleteItemAsync(user.Id
                 .ToString()))
             {
-                await FeedbackService.Inform("Сотрудник удалён");
                 IsRefreshing = true;
-            }
-            else
-            {
-                await FeedbackService.InformError("Сотрудник не удалён. " +
-                    "Перезайдите на страницу");
             }
         }
 
         private Command refreshCommand;
+
+        public EmployeesViewModel()
+        {
+            Employees = new ObservableCollection<SerializedUser>();
+        }
 
         public ICommand RefreshCommand
         {
@@ -81,58 +69,20 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private void Refresh()
         {
-            Task.Run(() =>
-            {
-                LoadEmployeesAsync();
-            });
+            LoadEmployeesAsync();
         }
 
         private async void LoadEmployeesAsync()
         {
-            Device.BeginInvokeOnMainThread(() =>
+            Employees.Clear();
+            IEnumerable<SerializedUser> employeesResponse =
+                await UserDataStore.GetItemsAsync();
+            foreach (SerializedUser employee in employeesResponse)
             {
-                Employees.Clear();
-            });
-
-            using (HttpClient client = new HttpClient(App.ClientHandler))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = App.BaseUrl;
-                try
-                {
-                    string response = await client
-                        .GetAsync($"users/employees")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    IEnumerable<SerializedUser> employeesResponse =
-                        JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedUser>>
-                        (response);
-                    foreach (SerializedUser employee
-                        in employeesResponse)
-                    {
-                        await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            Employees.Add(employee);
-                        });
-                    }
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform(
-                        "Сотрудники не подгружены. " +
-                        "Перезайдите на страницу");
-                }
+                await Task.Delay(500);
+                Employees.Add(employee);
             }
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                IsRefreshing = false;
-            });
+            IsRefreshing = false;
         }
     }
 }
