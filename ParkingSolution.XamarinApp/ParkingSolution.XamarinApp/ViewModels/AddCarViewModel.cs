@@ -43,11 +43,11 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private async void SaveChangesAsync()
         {
             IsBusy = true;
-            CurrentCar.SeriesPartOne = SeriesPartOne.ToUpper();
+            CurrentCar.SeriesPartOne = SeriesPartOne?.ToUpper();
             CurrentCar.RegistrationCode = RegistrationCode;
-            CurrentCar.SeriesPartTwo = SeriesPartTwo.ToUpper();
+            CurrentCar.SeriesPartTwo = SeriesPartTwo?.ToUpper();
             CurrentCar.RegionCodeAsString = RegionCode;
-            CurrentCar.Country = Country.ToUpper();
+            CurrentCar.Country = Country?.ToUpper();
             CurrentCar.CarType = SelectedCarType;
             if (await CarDataStore.AddItemAsync(CurrentCar))
             {
