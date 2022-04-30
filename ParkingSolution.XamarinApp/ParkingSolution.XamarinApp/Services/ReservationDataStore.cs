@@ -16,7 +16,7 @@ namespace ParkingSolution.XamarinApp.Services
     {
         public async Task<bool> AddItemAsync(SerializedParkingPlaceReservation item)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
@@ -55,7 +55,7 @@ namespace ParkingSolution.XamarinApp.Services
         public async Task<IEnumerable<SerializedParkingPlaceReservation>> GetItemsAsync(
             bool forceRefresh = false)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",

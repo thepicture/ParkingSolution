@@ -11,10 +11,17 @@ namespace ParkingSolution.XamarinApp
         public static string AuthorizationValue { get; set; }
         public static Uri BaseUrl { get; } =
             new Uri("https://parkingsolution-webapi.conveyor.cloud/api/");
-        public static HttpClientHandler ClientHandler = new HttpClientHandler();
+        public static HttpClientHandler ClientHandler
+        {
+            get
+            {
+                HttpClientHandler _handler = new HttpClientHandler();
+                _handler.ServerCertificateCustomValidationCallback += (_, __, ___, ____) => true;
+                return _handler;
+            }
+        }
         public App()
         {
-            ClientHandler.ServerCertificateCustomValidationCallback += (_, __, ___, ____) => true;
             InitializeComponent();
             XF.Material.Forms
                 .Material

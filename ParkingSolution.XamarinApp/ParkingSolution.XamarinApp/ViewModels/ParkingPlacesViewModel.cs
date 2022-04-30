@@ -22,7 +22,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 ParkingPlaces.Clear();
             }
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",

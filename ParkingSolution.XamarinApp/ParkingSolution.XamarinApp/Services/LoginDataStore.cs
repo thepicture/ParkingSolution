@@ -33,7 +33,7 @@ namespace ParkingSolution.XamarinApp.Services
             }
 
             string jsonLoginUser = JsonConvert.SerializeObject(item);
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.BaseAddress = App.BaseUrl;
                 try

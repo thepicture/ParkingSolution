@@ -59,7 +59,7 @@ namespace ParkingSolution.XamarinApp.Services
                 return false;
             }
             item.CostInRubles = decimal.Parse(item.CostInRublesAsString);
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
@@ -107,7 +107,7 @@ namespace ParkingSolution.XamarinApp.Services
             {
                 return false;
             }
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",
@@ -143,7 +143,7 @@ namespace ParkingSolution.XamarinApp.Services
 
         public async Task<SerializedParking> GetItemAsync(string id)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",
@@ -178,7 +178,7 @@ namespace ParkingSolution.XamarinApp.Services
         public async Task<IEnumerable<SerializedParking>> GetItemsAsync(
             bool forceRefresh = false)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",

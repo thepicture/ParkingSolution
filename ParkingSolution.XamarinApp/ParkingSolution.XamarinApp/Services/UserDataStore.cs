@@ -20,7 +20,7 @@ namespace ParkingSolution.XamarinApp.Services
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                   new AuthenticationHeaderValue("Basic",

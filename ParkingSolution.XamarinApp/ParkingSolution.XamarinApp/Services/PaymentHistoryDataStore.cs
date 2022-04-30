@@ -32,7 +32,7 @@ namespace ParkingSolution.XamarinApp.Services
                 .Replace("(", "")
                 .Replace(")", "")
                 .Replace("-", "");
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient(App.ClientHandler))
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic",
