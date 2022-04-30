@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace ParkingSolution.XamarinApp.Models.Serialized
 {
     public class SerializedUserCar
@@ -10,6 +12,8 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public string SeriesPartTwo { get; set; }
         public string RegistrationCode { get; set; }
         public int RegionCode { get; set; }
+        [JsonIgnore]
+        public string RegionCodeAsString { get; set; }
         public string Country { get; set; }
         public string StringRepresentation
         {

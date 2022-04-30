@@ -1,5 +1,4 @@
 ﻿using ParkingSolution.XamarinApp.Models.Serialized;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -43,56 +42,14 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            StringBuilder validationErrors = new StringBuilder();
-            if (SelectedCarType == null)
-            {
-                _ = validationErrors.AppendLine("Выберите тип " +
-                    "автомобиля");
-            }
-            if (string.IsNullOrWhiteSpace(SeriesPartOne))
-            {
-                _ = validationErrors.AppendLine("Введите первую часть " +
-                    "серии");
-            }
-            if (string.IsNullOrWhiteSpace(RegistrationCode)
-                || !int.TryParse(RegistrationCode, out _)
-                || int.Parse(RegistrationCode) <= 0)
-            {
-                _ = validationErrors.AppendLine("Введите " +
-                    "код регистрации в формате <nnn> (например, 002)");
-            }
-            if (string.IsNullOrWhiteSpace(SeriesPartTwo))
-            {
-                _ = validationErrors.AppendLine("Введите вторую часть " +
-                    "серии");
-            }
-            if (string.IsNullOrWhiteSpace(RegionCode)
-              || !int.TryParse(RegionCode, out int code)
-              || code <= 0)
-            {
-                _ = validationErrors.AppendLine("Введите " +
-                    "код региона в формате <nn> (например, 05)");
-            }
-            if (string.IsNullOrWhiteSpace(Country))
-            {
-                _ = validationErrors.AppendLine("Введите регион " +
-                    "(например, RUS)");
-            }
-
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(validationErrors);
-                IsBusy = false;
-                return;
-            }
             IsBusy = true;
             CurrentCar.SeriesPartOne = SeriesPartOne.ToUpper();
-            CurrentCar.RegistrationCode = registrationCode;
+            CurrentCar.RegistrationCode = RegistrationCode;
             CurrentCar.SeriesPartTwo = SeriesPartTwo.ToUpper();
-            CurrentCar.RegionCode = int.Parse(RegionCode);
+            CurrentCar.RegionCodeAsString = RegionCode;
             CurrentCar.Country = Country.ToUpper();
             CurrentCar.CarType = SelectedCarType;
-            if (await CarDataStore.AddItemAsync(currentCar))
+            if (await CarDataStore.AddItemAsync(CurrentCar))
             {
                 await Shell.Current.GoToAsync("..");
             }

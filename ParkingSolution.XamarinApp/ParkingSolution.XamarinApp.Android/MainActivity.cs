@@ -4,6 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using ParkingSolution.XamarinApp.Services;
+using System.Net;
 using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp.Droid

@@ -1,5 +1,6 @@
 ﻿using ParkingSolution.XamarinApp.Services;
 using System;
+using System.Net.Http;
 using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp
@@ -10,9 +11,10 @@ namespace ParkingSolution.XamarinApp
         public static string AuthorizationValue { get; set; }
         public static Uri BaseUrl { get; } =
             new Uri("https://parkingsolution-webapi.conveyor.cloud/api/");
-
+        public static HttpClientHandler ClientHandler = new HttpClientHandler();
         public App()
         {
+            ClientHandler.ServerCertificateCustomValidationCallback += (_, __, ___, ____) => true;
             InitializeComponent();
             XF.Material.Forms
                 .Material
