@@ -7,32 +7,34 @@
              x:DataType="viewmodels:PaymentViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.PaymentPage"
              Title="Оплата парковочного места">
-    <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                 Command="{Binding RefreshCommand}">
-        <StackLayout Margin="10,0,0,0">
-            <material:MaterialTextField Text="{Binding CardNumber}"
-                                        Placeholder="Укажите номер карты"
-                                        InputType="Numeric"
-                                        MaxLength="27"
-                                        LeadingIcon="address"
-                                        AlwaysShowUnderline="True"
-                                        TintColor="{StaticResource Primary}">
-                <material:MaterialTextField.Behaviors>
-                    <behaviors:MaskedBehavior Mask="(XXXX)-(XXXX)-(XXXX)-(XXXX)"/>
-                </material:MaterialTextField.Behaviors>
-            </material:MaterialTextField>
-            <Label Text="{Binding Reservation.ReservationFullAddress, 
+    <ContentView>
+        <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                     Command="{Binding RefreshCommand}">
+            <StackLayout Margin="10,0,0,0">
+                <material:MaterialTextField Text="{Binding CardNumber}"
+                                            Placeholder="Укажите номер карты"
+                                            InputType="Numeric"
+                                            MaxLength="27"
+                                            LeadingIcon="address"
+                                            AlwaysShowUnderline="True"
+                                            TintColor="{StaticResource Primary}">
+                    <material:MaterialTextField.Behaviors>
+                        <behaviors:MaskedBehavior Mask="(XXXX)-(XXXX)-(XXXX)-(XXXX)" />
+                    </material:MaterialTextField.Behaviors>
+                </material:MaterialTextField>
+                <Label Text="{Binding Reservation.ReservationFullAddress, 
                                   StringFormat='{}Адрес: {0:F0} РУБ.'}"
-                   HorizontalTextAlignment="Center"
-                   FontSize="Large"/>
-            <Label Text="{Binding Reservation.TotalPrice, StringFormat='{}ИТОГО: {0:F0} РУБ.'}"
-                   HorizontalTextAlignment="Center"
-                   FontSize="Large"
-                   FontAttributes="Bold"/>
-            <material:MaterialButton Command="{Binding PayCommand}"
-                                     Text="Оплатить"
-                                     VerticalOptions="EndAndExpand"
-                                     Style="{StaticResource BaseButton}" />
-        </StackLayout>
-    </RefreshView>
+                       HorizontalTextAlignment="Center"
+                       FontSize="Large" />
+                <Label Text="{Binding Reservation.TotalPrice, StringFormat='{}ИТОГО: {0:F0} РУБ.'}"
+                       HorizontalTextAlignment="Center"
+                       FontSize="Large"
+                       FontAttributes="Bold" />
+                <material:MaterialButton Command="{Binding PayCommand}"
+                                         Text="Оплатить"
+                                         VerticalOptions="EndAndExpand"
+                                         Style="{StaticResource BaseButton}" />
+            </StackLayout>
+        </RefreshView>
+    </ContentView>
 </ContentPage>
