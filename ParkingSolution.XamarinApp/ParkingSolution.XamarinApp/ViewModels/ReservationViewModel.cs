@@ -1,16 +1,9 @@
-﻿using Newtonsoft.Json;
-using ParkingSolution.XamarinApp.Models.Serialized;
-using ParkingSolution.XamarinApp.Services;
+﻿using ParkingSolution.XamarinApp.Models.Serialized;
 using ParkingSolution.XamarinApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -32,8 +25,8 @@ namespace ParkingSolution.XamarinApp.ViewModels
         private async void LoadParkingAsync()
         {
             Parking = await ParkingDataStore
-                    .GetItemAsync(
-                        ParkingPlace.ParkingId.ToString());
+                .GetItemAsync(
+                    ParkingPlace.ParkingId.ToString());
         }
 
         public SerializedParkingPlace ParkingPlace
@@ -44,47 +37,20 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         internal void OnAppearing()
         {
-            Task.Run(() =>
-            {
-                LoadCarsAsync();
-            });
+            LoadCarsAsync();
         }
 
         private async void LoadCarsAsync()
         {
-            using (HttpClient client = new HttpClient(App.ClientHandler))
+            Cars.Clear();
+            IEnumerable<SerializedUserCar> userCarsResponse =
+                await CarDataStore
+                .GetItemsAsync();
+            userCarsResponse = userCarsResponse
+                .Where(c => c.CarType == ParkingPlace.CarType);
+            foreach (SerializedUserCar car in userCarsResponse)
             {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = App.BaseUrl;
-                try
-                {
-                    string response = await client
-                        .GetAsync($"usercars")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    IEnumerable<SerializedUserCar> userCarsResponse =
-                        JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedUserCar>>
-                        (response)
-                        .Where(c => c.CarType == ParkingPlace.CarType);
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        Cars.Clear();
-                        foreach (SerializedUserCar car in userCarsResponse)
-                        {
-                            Cars.Add(car);
-                        }
-                    });
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform("Автомобили не подгружены. "
-                        + "Перезайдите на страницу");
-                }
+                Cars.Add(car);
             }
         }
 
@@ -121,74 +87,21 @@ namespace ParkingSolution.XamarinApp.ViewModels
 
         private async void SaveChangesAsync()
         {
-            StringBuilder validationErrors = new StringBuilder();
-
-            if (SelectedCar == null)
-            {
-                _ = validationErrors.AppendLine("Укажите автомобиль");
-            }
-            if (FromDateTime < DateTime.Now)
-            {
-                _ = validationErrors.AppendLine("Парковка должна быть " +
-                    "позднее текущей даты и времени");
-            }
-            if (IsKnownToDate && (FromDateTime >= ToDateTime))
-            {
-                _ = validationErrors.AppendLine("Дата начала " +
-                    "должна быть раньше даты окончания");
-            }
-
-            if (validationErrors.Length > 0)
-            {
-                await FeedbackService.InformError(validationErrors);
-                IsBusy = false;
-                return;
-            }
-
-            IEnumerable<SerializedParkingPlaceReservation> conflictPlaces =
-                ParkingPlace.Reservations
-                .Where(pp =>
-                {
-                    return pp.FromDateTime < FromDateTime
-                    && pp.ToDateTime > ToDateTime;
-                });
-            if (conflictPlaces
-                .Count() > 0)
-            {
-                DateTime recommendDateTime = conflictPlaces
-                    .OrderBy(cp => cp.ToDateTime)
-                    .Last()
-                    .ToDateTime;
-                await FeedbackService.InformError("В назначенное время " +
-                    "уже есть бронировки. Выберите дату начала " +
-                    $"начиная с {recommendDateTime:yyyy-MM-dd hh:mm}");
-                return;
-            }
-
             IsBusy = true;
 
             SerializedParkingPlaceReservation reservation =
                 new SerializedParkingPlaceReservation
                 {
                     FromDateTime = FromDateTime,
-                    ToDateTime = IsKnownToDate ? ToDateTime : FromDateTime.AddHours(1),
-                    CarId = SelectedCar.Id,
-                    ParkingPlaceId = ParkingPlace.Id
+                    LocalToDateTime = ToDateTime,
+                    CarId = SelectedCar?.Id ?? 0,
+                    ParkingPlaceId = ParkingPlace.Id,
+                    IsKnownToDate = IsKnownToDate
                 };
-            if (IsKnownToDate)
-            {
-                reservation.ToDateTime = ToDateTime;
-            }
 
             if (await ReservationDataStore.AddItemAsync(reservation))
             {
-                await FeedbackService.Inform("Парковочное место забронировано");
                 await Shell.Current.GoToAsync($"../..");
-            }
-            else
-            {
-                await FeedbackService.InformError("При сохранении " +
-                    "произошла ошибка. Попробуйте ещё раз");
             }
 
             IsBusy = false;

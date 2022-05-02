@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace ParkingSolution.XamarinApp.Models.Serialized
 {
@@ -13,5 +14,9 @@ namespace ParkingSolution.XamarinApp.Models.Serialized
         public string CarType { get; set; }
         public decimal TotalPrice { get; set; }
         public string ReservationFullAddress { get; set; }
+        [JsonIgnore]
+        public bool IsKnownToDate { get; set; }
+        [JsonIgnore]
+        public DateTime LocalToDateTime { get; set; }
     }
 }
