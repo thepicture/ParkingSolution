@@ -87,5 +87,36 @@ namespace ParkingSolution.XamarinApp.ViewModels
                 Environment.Exit(0);
             }
         }
+
+        private Command openUrlOptionsCommand;
+
+        public ICommand OpenUrlOptionsCommand
+        {
+            get
+            {
+                if (openUrlOptionsCommand == null)
+                {
+                    openUrlOptionsCommand = new Command(OpenUrlOptionsAsync);
+                }
+
+                return openUrlOptionsCommand;
+            }
+        }
+
+        private async void OpenUrlOptionsAsync()
+        {
+            Uri currentUrl = App.BaseUrl;
+            string url = await AppShell.Current.CurrentPage.DisplayPromptAsync(
+                        "Установить URL",
+                        "Текущий URL:\n" +
+                        $"{currentUrl}\n" +
+                        "Введите новый URL",
+                        keyboard: Keyboard.Text,
+                        initialValue: currentUrl.OriginalString);
+            if (url != null)
+            {
+                App.BaseUrl = new Uri(url);
+            }
+        }
     }
 }

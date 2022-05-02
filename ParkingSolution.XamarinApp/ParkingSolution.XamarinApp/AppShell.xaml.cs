@@ -30,22 +30,20 @@ namespace ParkingSolution.XamarinApp
         public static void LoadLoginAndRegisterShell()
         {
             CommonTabBar.Items.Clear();
-            CommonTabBar
-                .Items.Add(new ShellContent
-                {
-                    Route = nameof(LoginPage),
-                    Icon = "call_1",
-                    Title = "Авторизация",
-                    ContentTemplate = new DataTemplate(typeof(LoginPage))
-                });
-            CommonTabBar
-              .Items.Add(new ShellContent
-              {
-                  Route = nameof(RegisterPage),
-                  Icon = "address",
-                  Title = "Регистрация",
-                  ContentTemplate = new DataTemplate(typeof(RegisterPage))
-              });
+            CommonTabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(LoginPage),
+                Icon = "call_1",
+                Title = "Авторизация",
+                ContentTemplate = new DataTemplate(typeof(LoginPage))
+            });
+            CommonTabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(RegisterPage),
+                Icon = "address",
+                Title = "Регистрация",
+                ContentTemplate = new DataTemplate(typeof(RegisterPage))
+            });
         }
 
         private bool IsLoggedIn()
@@ -56,27 +54,24 @@ namespace ParkingSolution.XamarinApp
         public static void SetShellStacksDependingOnRole()
         {
             CommonTabBar.Items.Clear();
-            CommonTabBar
-                       .Items.Add(new ShellContent
-                       {
-                           Route = nameof(ParkingsPage),
-                           Icon = "location",
-                           Title = "Парковки",
-                           ContentTemplate = new DataTemplate(typeof(ParkingsPage))
-                       });
+            CommonTabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(ParkingsPage),
+                Icon = "location",
+                Title = "Парковки",
+                ContentTemplate = new DataTemplate(typeof(ParkingsPage))
+            });
             switch (AppIdentity.Role)
             {
                 case "Администратор":
-                    CommonTabBar
-                    .Items.Add(new ShellContent
+                    CommonTabBar.Items.Add(new ShellContent
                     {
                         Route = nameof(EmployeesPage),
                         Icon = "address",
                         Title = "Сотрудники",
                         ContentTemplate = new DataTemplate(typeof(EmployeesPage))
                     });
-                    CommonTabBar
-                    .Items.Add(new ShellContent
+                    CommonTabBar.Items.Add(new ShellContent
                     {
                         Route = nameof(MyParkingPlacesPage),
                         Icon = "write_letter",
@@ -85,36 +80,33 @@ namespace ParkingSolution.XamarinApp
                     });
                     break;
                 case "Сотрудник":
-                    CommonTabBar
-                     .Items.Add(new ShellContent
-                     {
-                         Route = nameof(MyParkingPlacesPage),
-                         Icon = "write_letter",
-                         Title = "Все бронирования",
-                         ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
-                     });
+                    CommonTabBar.Items.Add(new ShellContent
+                    {
+                        Route = nameof(MyParkingPlacesPage),
+                        Icon = "write_letter",
+                        Title = "Все бронирования",
+                        ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
+                    });
                     break;
                 case "Клиент":
-                    CommonTabBar
-                     .Items.Add(new ShellContent
-                     {
-                         Route = nameof(MyParkingPlacesPage),
-                         Icon = "write_letter",
-                         Title = "Мои бронирования",
-                         ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
-                     });
+                    CommonTabBar.Items.Add(new ShellContent
+                    {
+                        Route = nameof(MyParkingPlacesPage),
+                        Icon = "write_letter",
+                        Title = "Мои бронирования",
+                        ContentTemplate = new DataTemplate(typeof(MyParkingPlacesPage))
+                    });
                     break;
                 default:
                     break;
             }
-            CommonTabBar
-                       .Items.Add(new ShellContent
-                       {
-                           Route = nameof(AccountPage),
-                           Icon = "address",
-                           Title = "Аккаунт",
-                           ContentTemplate = new DataTemplate(typeof(AccountPage))
-                       });
+            CommonTabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(AccountPage),
+                Icon = "address",
+                Title = "Аккаунт",
+                ContentTemplate = new DataTemplate(typeof(AccountPage))
+            });
         }
     }
 }

@@ -48,6 +48,8 @@
                                             TintColor="{StaticResource Primary}" />
                 <material:MaterialCheckbox IsSelected="{Binding IsRememberMe}"
                                            Text="Запомнить" />
+                <Button Command="{Binding OpenUrlOptionsCommand}"
+                        Opacity="0" />
                 <Grid ColumnDefinitions="*,*"
                       VerticalOptions="EndAndExpand">
                     <material:MaterialButton Command="{Binding LoginCommand}"

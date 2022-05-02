@@ -1,6 +1,7 @@
 ﻿using ParkingSolution.XamarinApp.Services;
 using System;
 using System.Net.Http;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp
@@ -9,8 +10,16 @@ namespace ParkingSolution.XamarinApp
     {
         public static string Role { get; set; }
         public static string AuthorizationValue { get; set; }
-        public static Uri BaseUrl { get; } =
-            new Uri("https://parkingsolution-webapi.conveyor.cloud/api/");
+        public static Uri BaseUrl
+        {
+            get => new Uri(Preferences.Get(
+                nameof(BaseUrl), baseUrl));
+
+            set => Preferences.Set(
+                nameof(BaseUrl), value.OriginalString);
+        }
+        private static readonly string baseUrl =
+            "https://parkingsolution-webapi.conveyor.cloud/api/";
         public static HttpClientHandler ClientHandler
         {
             get
