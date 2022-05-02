@@ -1,13 +1,8 @@
 ﻿using AsyncCommands;
-using Newtonsoft.Json;
 using ParkingSolution.XamarinApp.Models.Serialized;
-using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -17,44 +12,14 @@ namespace ParkingSolution.XamarinApp.ViewModels
     {
         private async void LoadParkingPlacesAsync()
         {
-            if (ParkingPlaces.Count != 0)
+            ParkingPlaces.Clear();
+            IEnumerable<SerializedParkingPlace> parkingPlacesResponse =
+                await ParkingParkingPlaceDataStore.GetItemAsync(
+                    Parking.Id.ToString());
+            foreach (SerializedParkingPlace parkingPlace in parkingPlacesResponse)
             {
-                ParkingPlaces.Clear();
-            }
-
-            using (HttpClient client = new HttpClient(App.ClientHandler))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                  new AuthenticationHeaderValue("Basic",
-                                                AppIdentity.AuthorizationValue);
-                client.BaseAddress = App.BaseUrl;
-                try
-                {
-                    string response = await client
-                        .GetAsync($"parkingplaces?parkingId={Parking.Id}")
-                        .Result
-                        .Content
-                        .ReadAsStringAsync();
-                    IEnumerable<SerializedParkingPlace> parkingPlacesResponse =
-                        JsonConvert.DeserializeObject
-                        <IEnumerable<SerializedParkingPlace>>
-                        (response);
-                    foreach (SerializedParkingPlace parkingPlace
-                        in parkingPlacesResponse)
-                    {
-                        await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            ParkingPlaces.Add(parkingPlace);
-                        });
-                    }
-                }
-                catch (HttpRequestException ex)
-                {
-                    Debug.WriteLine(ex.StackTrace);
-                    await FeedbackService.Inform("Парковки не подгружены. " +
-                        "Перезайдите на страницу");
-                }
+                await Task.Delay(500);
+                ParkingPlaces.Add(parkingPlace);
             }
         }
 
@@ -73,10 +38,7 @@ namespace ParkingSolution.XamarinApp.ViewModels
         {
             ParkingPlaces = new ObservableCollection<SerializedParkingPlace>();
             Parking = serializedParking;
-            Task.Run(() =>
-            {
-                LoadParkingPlacesAsync();
-            });
+            LoadParkingPlacesAsync();
         }
 
         public AsyncCommand<SerializedParkingPlace> ReserveParkingPlaceCommand

@@ -50,6 +50,7 @@ namespace ParkingSolution.XamarinApp
             DependencyService.Register<ParkingDataStore>();
             DependencyService.Register<PaymentHistoryDataStore>();
             DependencyService.Register<UserDataStore>();
+            DependencyService.Register<ParkingParkingPlaceDataStore>();
 
             MainPage = new AppShell();
         }
