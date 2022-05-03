@@ -26,14 +26,7 @@ namespace ParkingSolution.XamarinApp.Services
             set
             {
                 App.Role = value;
-                if (value == null)
-                {
-                    _ = SecureStorage.Remove("Role");
-                }
-                else
-                {
-                    _ = SecureStorage.SetAsync("Role", value);
-                }
+                _ = SecureStorage.SetAsync("Role", value);
             }
         }
         public static string AuthorizationValue
