@@ -22,6 +22,7 @@ namespace ParkingSolution.XamarinApp.Views
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+            _viewModel.OnAppearing();
             try
             {
                 Plugin.Geolocator.Abstractions.Position position =
@@ -33,34 +34,27 @@ namespace ParkingSolution.XamarinApp.Views
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.StackTrace);
+                Debug.WriteLine(ex);
             }
-            _viewModel.OnAppearing();
         }
 
         private void OnPinClicked(object sender, PinClickedEventArgs e)
         {
-            (BindingContext as ParkingsViewModel)
-            .SelectedParking = (sender as Pin)
-            .BindingContext as ParkingHelper;
+            _viewModel.SelectedParking = (sender as Pin)
+                .BindingContext as ParkingHelper;
         }
 
         private void OnListItemClicked(object sender, EventArgs e)
         {
-            (BindingContext as ParkingsViewModel)
-          .SelectedParking = (sender as View)
-          .BindingContext as ParkingHelper;
+            _viewModel.SelectedParking = (sender as View)
+                .BindingContext as ParkingHelper;
         }
 
         private void OnParkingEditClick(object sender, EventArgs e)
         {
-            (BindingContext as ParkingsViewModel)
-        .GoToParkingEditCommand
-        .Execute(
-                ((sender as View)
-                    .BindingContext as ParkingHelper)
-                        .Parking
-                );
+            ParkingHelper parkingHelper = (sender as View)
+                .BindingContext as ParkingHelper;
+            _viewModel.GoToParkingEditCommand.Execute(parkingHelper.Parking);
         }
     }
 }
