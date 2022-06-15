@@ -29,7 +29,8 @@ namespace ParkingSolution.XamarinApp.Views
                     await CrossGeolocator.Current.GetPositionAsync();
                 ParkingsMap.MoveToRegion(
                     MapSpan.FromCenterAndRadius(
-                        new Position(position.Latitude, position.Longitude),
+                        new Position(
+                            Math.Round(position.Latitude, 4), Math.Round(position.Longitude, 4)),
                         Distance.FromKilometers(1)));
             }
             catch (Exception ex)

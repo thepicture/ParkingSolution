@@ -1,55 +1,35 @@
 ﻿using ParkingSolution.XamarinApp.Models.Helpers;
 using ParkingSolution.XamarinApp.Models.Serialized;
+using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
 
 namespace ParkingSolution.XamarinApp.ViewModels
 {
     public class ParkingsViewModel : BaseViewModel
     {
+        public IListConverter<SerializedParking, ParkingHelper> ParkingToPositionConverter =
+            DependencyService.Get<IListConverter<SerializedParking, ParkingHelper>>();
+
         private bool showAsMap = true;
         internal void OnAppearing()
         {
             IsRefreshing = true;
         }
 
-        private async void LoadParkingsAsync()
+        private async Task LoadParkingsAsync()
         {
             SelectedParking = null;
-            Parkings.Clear();
             IEnumerable<SerializedParking> parkings =
                 await ParkingDataStore.GetItemsAsync();
-            try
-            {
-                Geocoder geoCoder = new Geocoder();
-                foreach (SerializedParking parking in parkings)
-                {
-                    IEnumerable<Position> approximateLocations =
-                        await geoCoder
-                        .GetPositionsForAddressAsync(
-                            string.Format(parking.Address));
-                    Position position = approximateLocations
-                        .FirstOrDefault();
-                    Parkings.Add(new ParkingHelper
-                    {
-                        Address = parking.Address,
-                        Description = parking.ParkingType,
-                        Position = position,
-                        Parking = parking
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                await FeedbackService
-                    .InformError(ex);
-            }
+            IEnumerable<ParkingHelper> geolocatedParkings = 
+                await ParkingToPositionConverter.ConvertAllAsync(parkings);
+            Parkings = new ObservableCollection<ParkingHelper>(geolocatedParkings);
+
             IsRefreshing = false;
         }
 
@@ -197,16 +177,16 @@ namespace ParkingSolution.XamarinApp.ViewModels
             {
                 if (refreshCommand == null)
                 {
-                    refreshCommand = new Command(Refresh);
+                    refreshCommand = new Command(RefreshAsync);
                 }
 
                 return refreshCommand;
             }
         }
 
-        private void Refresh()
+        private async void RefreshAsync()
         {
-            LoadParkingsAsync();
+            await LoadParkingsAsync();
         }
 
         private Command goToAddParkingPageCommand;

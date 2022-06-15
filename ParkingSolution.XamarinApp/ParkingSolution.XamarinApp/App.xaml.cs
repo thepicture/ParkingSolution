@@ -42,6 +42,7 @@ namespace ParkingSolution.XamarinApp
                 .Resources
                 .MaterialConfiguration)Resources["CommonMaterial"]);
 
+            DependencyService.Register<ParkingListToPositionConverter>();
             DependencyService.Register<AndroidFeedbackService>();
             DependencyService.Register<LoginDataStore>();
             DependencyService.Register<RegistrationDataStore>();
