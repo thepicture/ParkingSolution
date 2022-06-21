@@ -9,7 +9,7 @@
              xmlns:services="clr-namespace:ParkingSolution.XamarinApp.Services"
              x:DataType="viewmodels:MyParkingPlacesViewModel"
              x:Class="ParkingSolution.XamarinApp.Views.MyParkingPlacesPage"
-             Title="Неоплаченные бронировки">
+             Title="Неоплаченные бронирования">
     <ContentPage.Resources>
         <converters:InvertBooleanValueConverter x:Key="InvertBoolean" />
     </ContentPage.Resources>
