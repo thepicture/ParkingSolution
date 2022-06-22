@@ -1,5 +1,6 @@
 ﻿using ParkingSolution.XamarinApp.Services;
 using ParkingSolution.XamarinApp.Views;
+using System;
 using Xamarin.Forms;
 
 namespace ParkingSolution.XamarinApp
@@ -17,14 +18,31 @@ namespace ParkingSolution.XamarinApp
 
             Items.Add(CommonTabBar);
 
+            LoadPanel();
+        }
+
+        private void LoadPanel()
+        {
             if (IsLoggedIn())
             {
                 SetShellStacksDependingOnRole();
             }
             else
             {
-                LoadLoginAndRegisterShell();
+                LoadWelcomePage();
             }
+        }
+
+        private void LoadWelcomePage()
+        {
+            CommonTabBar.Items.Clear();
+            CommonTabBar.Items.Add(new ShellContent
+            {
+                Route = nameof(WelcomePage),
+                Icon = "call_1",
+                Title = "Добро пожаловать",
+                ContentTemplate = new DataTemplate(typeof(WelcomePage))
+            });
         }
 
         public static void LoadLoginAndRegisterShell()
